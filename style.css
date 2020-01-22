@@ -123,7 +123,7 @@ span{
 }
 
 .intro p{
-  font-size: 300;
+  font-size: .9em;
   text-align: left;
 }
 
@@ -156,16 +156,23 @@ span{
 }
 
 #sum{
-  font-size: 23px;
+  font-size: 1em;
+  line-height: 1.7;
 }
 
 .case {
   font-family: 'Open Sans', sans-serif;
-  padding: 2em 11em 2em 11em;
+  padding: 2em 18em 2em 18em;
 
 }
-.case h1 {
-  font-size: 45px;
+.case h3 {
+  font-size: 1.7em;
   font-weight: 400;
   color: #474051;
+}
+
+.case p {
+  font-size: 1em;
+  padding-bottom: 3em;
+  line-height: 1.7;
 }
