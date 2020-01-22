@@ -176,3 +176,15 @@ span{
   padding-bottom: 3em;
   line-height: 1.7;
 }
+
+.fun {
+  font-family: 'Open Sans', sans-serif;
+  text-align: center;
+}
+
+.collection {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+
+}
