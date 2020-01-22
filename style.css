@@ -107,12 +107,12 @@ span{
 
 .intro h1{
   font-weight: 300;
-  font-size: 3em;
+  font-size: 3.5em;
 }
 
 .intro h5{
   font-weight: 400;
-  padding: 2em;
+  padding: 1.5em;
   font-size: 1em;
   text-transform: uppercase;
 }
@@ -124,5 +124,48 @@ span{
 
 .intro p{
   font-size: 300;
-  text-align: right;
+  text-align: left;
+}
+
+.summary{
+  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  padding: 5em 11em 5em 15em;
+}
+
+.summaryleft{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.deliverables, .year{
+  border-right: 2px solid grey;
+  position: relative;
+  right: 30%;
+}
+
+#sum{
+  font-size: 23px;
+}
+
+.case {
+  font-family: 'Open Sans', sans-serif;
+  padding: 2em 11em 2em 11em;
+
+}
+.case h1 {
+  font-size: 45px;
+  font-weight: 400;
+  color: #474051;
 }
