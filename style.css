@@ -13,9 +13,14 @@ nav{
   justify-content: space-between;
   align-items: center;
   font-family: 'Roboto', sans-serif;
-  margin-left: 10%;
-  margin-right: 10%;
+  padding-left: 10%;
+  padding-right: 10%;
   color: #1d44b8;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 999;
 }
 
 .logo{
@@ -40,30 +45,27 @@ nav{
   list-style: none;
 }
 
-.sticky {
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
-.sticky + .content {
-  padding-top: 60px;
-}
-
-.footer {
-  padding: 3em;
-  align-items: center;
+footer{
+  font-size: 2.3vh;
+  padding: 4em;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
   font-family: 'Open Sans', sans-serif;
   width: 100%;
+  text-align: center;
+
 }
 
-.footer a{
+.contact {
+  justify-content: space-around;
+}
+
+footer a{
   text-decoration: none;
+  padding: 2em;
 }
 
-.socials{
-  text-align: right;
-}
 
 .links {
   font-family: 'Open Sans', sans-serif;
@@ -87,13 +89,15 @@ a:active {
 }
 
 /* Index */
-
+.animation{
+  margin-top: 10vh;
+}
 .animation img{
   text-align: center;
   display: flex;
   margin-left: auto;
   margin-right: auto;
-  margin-top: -8vh;
+  padding-top:
 }
 
 span:before{
@@ -153,7 +157,7 @@ span{
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  width: 100%;
+  width: 80%;
   margin: 0 auto;
   grid-gap: 10px;
 }
@@ -170,6 +174,7 @@ span{
 }*/
 
 .intro{
+  padding-top: 12vh;
   font-family: 'Open Sans', sans-serif;
   text-align: center;
 }
@@ -292,7 +297,7 @@ figcaption{
 }
 
 .background2{
-  background-image: url(images/YFP/background.png);
+  background-image: url(images/YFP/background2.png);
   background-size: 100% 100%;
 }
 
