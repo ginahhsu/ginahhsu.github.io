@@ -306,7 +306,8 @@ figcaption{
 .fun {
   font-family: 'Open Sans', sans-serif;
   text-align: center;
-  padding: 2em;
+  padding: 6em;
+  font-size: 2.5em;
 }
 
 .collection {
