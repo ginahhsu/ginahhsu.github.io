@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="assets/favicon.png" />
 
   <!--Fonts-->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Muli:400,500,600|Roboto:100,300,400,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Montserrat:400,500|Muli:400,500,600|Roboto:100,300,400,500&display=swap" rel="stylesheet">
 
   <!-- css -->
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -18,10 +18,12 @@
 
 <body>
 
+
   <!-- Navigation -->
   <nav>
     <a href="index.html" class="logo">
-      <img src="assets/logo.svg" alt="personal logo" height="50%" width="60%"/>
+      <!--<img id="switch" src="assets/off.svg" alt="lightswitch off" height="60vh"/>-->
+      <img src="assets/logo.svg" alt="personal logo" height="90vh"/>
     </a>
     <ul class="nav-links">
       <li>
@@ -35,25 +37,26 @@
 
   <!-- animation -->
   <div class="animation">
-    <img src="videos/animation.svg" alt="welcome animation" height="55%" width="55%"/>
+    <img src="videos/animation.svg" alt="welcome animation" height="65%" width="65%"/>
     <h4 id="welcome"> welcome to my </h4>
     <span> </span>
   </div>
 
+
   <!-- work -->
   <div class="works-container">
     <a href="YFP.html">
-      <img class="image" src="images/yfp.jpg" alt="Young Funds Program work cover" height="100%" width="100%"/>
+      <img class="image" src="images/index/yfp.jpg" alt="Young Funds Program work cover" height="100%" width="100%"/>
     </a>
 
     <a href="Pawsitive.html">
-      <img class="image" src="images/pawsitive.png" alt="Pawsitive work cover" height="100%" width="100%"/>
+      <img class="image" src="images/index/pawsitive.png" alt="Pawsitive work cover" height="100%" width="100%"/>
     </a>
     <!--<a href="Personal.html">
     <img class="image" src="images/personal.png" alt="Personal Website work cover" height="100%" width="100%"/>
   </a>-->
   <a href="Play.html">
-    <img class="image" src="images/play.png" alt="Play work cover" height="100%" width="100%"/>
+    <img class="image" src="images/index/play.png" alt="Play work cover" height="100%" width="100%"/>
   </a>
 </div>
 
@@ -71,6 +74,21 @@
   </div>
 
   </div>
+
+  <script>
+  window.onscroll = function() {myFunction()};
+
+  var navbar = document.getElementById("navbar");
+  var sticky = navbar.offsetTop;
+
+  function myFunction() {
+    if (window.pageYOffset >= sticky) {
+      navbar.classList.add("sticky")
+    } else {
+      navbar.classList.remove("sticky");
+    }
+  }
+  </script>
 
 </body>
 </html>
