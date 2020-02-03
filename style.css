@@ -163,16 +163,6 @@ span{
 }
 
 /*works*/
-.background{
-  background-image: url(images/YFP/background.png);
-  background-size: 100% 100%;
-}
-/*
-.background2{
-  background-image: url(images/YFP/background.png);
-  background-size: 100% 100% !important;
-}*/
-
 .intro{
   padding-top: 12vh;
   font-family: 'Open Sans', sans-serif;
@@ -261,6 +251,15 @@ span{
   padding-right: 3em;
 }
 
+.grid4{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  height: 25vw;
+  grid-gap: 10px;
+  padding-top: 3em;
+}
+
 figcaption{
   text-align: center;
   font-size: 2em;
@@ -296,11 +295,32 @@ figcaption{
   font-size: 1em;
 }
 
-.background2{
+/*YFP*/
+
+.YFPbackground{
+  background-image: url(images/YFP/background.png);
+  background-size: 100% 100%;
+}
+
+.YFPbackground2{
   background-image: url(images/YFP/background2.png);
   background-size: 100% 100%;
 }
 
+/*Pawsitive*/
+.Pawbackground{
+  background-image: url(images/pawsitive/background.png);
+  background-size: 100% 100%;
+}
+
+.Pawbackground2{
+  background-image: url(images/pawsitive/background2.png);
+  background-size: 100% 100%;
+}
+
+#prototype{
+  text-align: center;
+}
 /* play */
 
 .fun {
