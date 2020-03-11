@@ -73,31 +73,31 @@ footer a{
 }
 
 a:link {
-  color: grey;
+  color: black;
 }
 
 a:visited {
-  color: grey;
+  color: black;
 }
 
 a:hover {
-  color: blue;
+  color: deeppink;
 }
 
 a:active {
-  color: blue;
+  color: deeppink;
 }
 
 /* Index */
 .animation{
-  margin-top: 10vh;
+  margin-top: 15vh;
 }
+
 .animation img{
-  text-align: center;
+  text-align: left;
   display: flex;
   margin-left: auto;
   margin-right: auto;
-  padding-top:
 }
 
 span:before{
@@ -159,7 +159,7 @@ span{
   grid-template-rows: 1fr 1fr;
   width: 80%;
   margin: 0 auto;
-  grid-gap: 10px;
+  grid-gap: 20px;
 }
 
 /*works*/
@@ -298,7 +298,7 @@ figcaption{
 /*YFP*/
 
 .YFPbackground{
-  background-image: url(images/YFP/background.png);
+  background-image: url(images/background1.png);
   background-size: 100% 100%;
 }
 
