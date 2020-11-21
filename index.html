@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="icon" type="image/png" href="assets/favicon2020.png" />
 
   <!--Google Analytics-->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158725385-1"></script>
@@ -15,94 +15,147 @@
   gtag('config', 'UA-158725385-1');
 </script>
 
+<!--fonts-->
+<link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Poppins:300" rel="stylesheet">
 
-<!--Fonts-->
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Montserrat:400,500|Muli:400,500,600|Roboto:100,300,400,500&display=swap" rel="stylesheet">
-
-<!-- css -->
+<!--css-->
 <link rel="stylesheet" type="text/css" href="style.css">
-<!--<link rel="stylesheet" type="text/css" href="index.css">-->
 
+<!--fontawesome-->
+<script src="https://kit.fontawesome.com/7aa06fc209.js" crossorigin="anonymous"></script>
 
 <title>Gina Huei Hsu's Personal Portfolio</title>
 
 </head>
 
 <body>
+  <div class="outer-container">
+
+    <!--navigation bar-->
+    <nav class="navbar">
+      <span class="navbar-toggle" id="js-navbar-toggle">
+        <i class="fas fa-bars" style="color:#707070;"></i>
+      </span>
+      <a href="index.html" class="logo"><img src="assets/logo.png" alt="personal logo" height="45vh"</img></a>
+      <ul class="main-nav" id="js-menu">
+        <li>
+          <a href="index.html" class="nav-links">work</a>
+        </li>
+        <li>
+          <a href="play.html" class="nav-links">play</a>
+        </li>
+        <li>
+          <a href="me.html" class="nav-links">me</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!--introduction-->
+    <div class="top container">
+      <div class="slide-up">
+
+        <h2>Hi! My name is</h2>
+        <h1>Gina <span id="name">Hsu</span></h1>
+        <h2>I'm a <span id="title"></span></h2>
+        <!--<h3>[JEE‧NUH SHOO]</h3>-->
+      <!--animating text-->
+      <script>
+      var arr=['product designer','aspiring yogi','problem solver','tetris superhuman','sociology enthusiast'];
+      var i=0;
+      var heading = document.querySelector('#title');
+
+      function slide(){
+        title.innerHTML = arr[i];
+        //opacity to 1
+        title.style.opacity = 1;
+
+        //after 2 seconds call next function
+        setTimeout (next,2000);
+      }
+
+      console.log(arr.length);
+
+      //next function
+      function next(){
+        console.log('after 2 secs');
+        //increase index for next item in array
+        i++;
+
+        if(i > arr.length -1) {
+          i=0;
+        }
+
+        console.log(i);
+        //opacity to 0
+        title.style.opacity = 0;
+
+        //after 1 second call slide fuction again
+        setTimeout(slide, 1000);
+      }
+      slide();
+      </script>
+    </div>
+
+      <svg height="450" width="300">
+        <ellipse cx="20" cy="320" rx="10" ry="10" style="fill:yellow;fill-opacity: 0; stroke:#CE796B;stroke-width:7" />
+        <ellipse cx="20" cy="360" rx="10" ry="10" style="fill:yellow;fill-opacity: 0; stroke:#CE796B;stroke-width:7" />
+        <ellipse cx="20" cy="400" rx="10" ry="10" style="fill:yellow;fill-opacity: 0; stroke:#CE796B;stroke-width:7" />
+      </svg>
+
+      <img class="landing" src="images/ux.png" alt="person creating website">
+
+    </div>
 
 
-  <!-- Navigation -->
-  <nav>
-    <a href="index.html" class="logo">
-      <!--<img id="switch" src="assets/off.svg" alt="lightswitch off" height="60vh"/>-->
-      <img src="assets/logo.svg" alt="personal logo" height="90vh"/>
-    </a>
-    <ul class="nav-links">
-      <li>
-        <a href="index.html">work</a>
-      </li>
-      <li>
-        <a href="me.html">me</a>
-      </li>
-    </ul>
-  </nav>
+    <!--projects-->
+    <div class="projects container">
+      <article class="project">
+        <a href="medley.html">
+          <img class="cover" src="images/covers/medley.jpg" />
+        </a>
+      </article>
+      <article class="project">
+        <a href="waterloo.html">
+          <img class="cover" src="images/covers/waterloo.jpg" />
+        </a>
+      </article>
+      <article class="project">
+        <a href="yfp.html">
+          <img class="cover" src="images/covers/yfp.jpg" />
+        </a>
+      </article>
+      <article class="project">
+        <a href="mentor-paging.html">
+          <img class="cover" src="Assets/mentor-paging-preview.png" />
+        </a>
+      </article>
+    </div>
 
-  <!-- animation -->
-  <div class="animation">
-    <img src="videos/animation.svg" alt="welcome animation" height="55%" width="55%"/>
-    <h4 id="welcome"> welcome to my </h4>
-    <span> </span>
+    <!--footer-->
+    <footer>
+      <div class="contact">
+        <a href="mailto:imginahsu@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/ginahueihsu/" target="blank">LinkedIn</a>
+        <a href="https://dribbble.com/ginahueihsu" target="blank">Dribble</a>
+      </div>
+      <div class="ending">
+        <p>Product designer + Aspiring yogi &#x1F9D8;</p>
+      </div>
+      <div class="resume">
+        <a href="images/resume2020.pdf" download target="blank">Resume</a>
+      </div>
+    </footer>
+
   </div>
 
+  <script>
+  let mainNav = document.getElementById('js-menu');
+  let navBarToggle = document.getElementById('js-navbar-toggle');
 
-  <!-- work -->
-  <div class="works-container">
-    <a href="YFP.html">
-      <img class="image" src="images/yfp.jpg" alt="Young Funds Program work cover" height="100%" width="100%"/>
-    </a>
-
-    <a href="Pawsitive.html">
-      <img class="image" src="images/pawsitive.png" alt="Pawsitive work cover" height="100%" width="100%"/>
-    </a>
-    <!--<a href="Personal.html">
-    <img class="image" src="images/personal.png" alt="Personal Website work cover" height="100%" width="100%"/>
-  </a>-->
-  <a href="play.html">
-    <img class="image" src="images/play.png" alt="Play work cover" height="100%" width="100%"/>
-  </a>
-</div>
-
-
-<!-- end -->
-
-<footer>
-  <div class="contact">
-    <a href="mailto:imginahsu@gmail.com">Email</a>
-    <a href="https://www.linkedin.com/in/ginahueihsu/" target="blank">LinkedIn</a>
-    <a href="https://dribbble.com/ginahueihsu" target="blank">Dribble</a>
-  </div>
-  <div class="ending">
-    <p>Product designer + Aspiring yogi &#x1F9D8;</p>
-  </div>
-  <div class="resume">
-    <a href="images/resume2020.pdf" download target="blank">Resume</a>
-  </div>
-</footer>
-
-<!--<script>
-window.onscroll = function() {myFunction()};
-
-var navbar = document.getElementById("navbar");
-var sticky = navbar.offsetTop;
-
-function myFunction() {
-if (window.pageYOffset >= sticky) {
-navbar.classList.add("sticky")
-} else {
-navbar.classList.remove("sticky");
-}
-}
-</script>-->
-
+  navBarToggle.addEventListener('click', function () {
+    mainNav.classList.toggle('active');
+  });
+  </script>
 </body>
+
 </html>

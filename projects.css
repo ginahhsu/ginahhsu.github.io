@@ -1,0 +1,155 @@
+/*works*/
+.intro{
+  padding-top: 12vh;
+  font-family: 'Open Sans', sans-serif;
+  text-align: center;
+}
+
+.intro h1{
+  font-weight: 300;
+  font-size: 3.5em;
+}
+
+.intro h5{
+  font-weight: 400;
+  padding: 1.5em;
+  font-size: 1em;
+  text-transform: uppercase;
+}
+
+.intro h3{
+  font-weight: 400;
+  font-size: 1.5em;
+}
+
+.intro p{
+  font-size: .9em;
+  text-align: left;
+}
+
+.summary{
+  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  padding: 5em 11em 5em 15em;
+}
+
+.summaryleft{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.deliverables, .year{
+  border-right: 2px solid grey;
+  position: relative;
+  right: 30%;
+}
+
+#sum{
+  font-size: 1em;
+  line-height: 1.7;
+}
+
+.case {
+  font-family: 'Open Sans', sans-serif;
+  padding: 2em 18em 1em 18em;
+
+}
+.case h3 {
+  font-size: 2em;
+  font-weight: 400;
+  color: #474051;
+}
+
+.case p {
+  font-size: 1em;
+  padding-bottom: 3em;
+  line-height: 1.7;
+}
+
+.grid3{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  height: 25vw;
+  grid-gap: 10px;
+  padding-left: 3em;
+  padding-right: 3em;
+}
+
+.grid4{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  height: 25vw;
+  grid-gap: 10px;
+  padding-top: 3em;
+}
+
+figcaption{
+  text-align: center;
+  font-size: 2em;
+  font-family: 'Open Sans', sans-serif;
+  padding-bottom: 3em;
+}
+
+.longdesc {
+  display: none;
+}
+
+.sitemap{
+  margin-left: 15%;
+  margin-right: auto;
+  width: 75%;
+}
+
+#wireframe{
+  height: 45vh;
+}
+
+.grid2{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  height: 40vw;
+  grid-gap: 10px;
+  padding-left: 3em;
+  padding-right: 3em;
+}
+
+.HF{
+  font-size: 1em;
+}
+
+/*YFP*/
+
+.YFPbackground{
+  background-image: url(images/background1.png);
+  background-size: 100% 100%;
+}
+
+.YFPbackground2{
+  background-image: url(images/YFP/background2.png);
+  background-size: 100% 100%;
+}
+
+/*Pawsitive*/
+.Pawbackground{
+  background-image: url(images/pawsitive/background.png);
+  background-size: 100% 100%;
+}
+
+.Pawbackground2{
+  background-image: url(images/pawsitive/background2.png);
+  background-size: 100% 100%;
+}
