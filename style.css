@@ -189,7 +189,7 @@ body {
     max-width: 1000px;
     display: grid;
     grid-template-columns: fit-content(100%);
-    grid-template-rows:repeat(1, minmax(500px, 1fr));
+    grid-template-rows:repeat(4, minmax(500px, 1fr));
     grid-gap: 3.5em;
   }
 
