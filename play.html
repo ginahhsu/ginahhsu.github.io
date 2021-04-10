@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-
-
-
-
+  <title>Gina Hsu | Product designer</title>
   <!--Google Analytics-->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158725385-1"></script>
   <script>
@@ -17,31 +14,25 @@
   gtag('js', new Date());
 
   gtag('config', 'UA-158725385-1');
-</script>
+  </script>
+  <!--End Google Analytics-->
 
-<!--fonts-->
-<link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Poppins:300" rel="stylesheet">
-
-<!--css-->
-<link rel="stylesheet" type="text/css" href="style.css">
-
-<!--fontawesome-->
-<script src="https://kit.fontawesome.com/7aa06fc209.js" crossorigin="anonymous"></script>
-
-<title>Gina Huei Hsu's Personal Portfolio</title>
-
+  <!--fonts-->
+  <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Poppins:oppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1|DM+Serif+Display" rel="stylesheet">
+  <!--stylesheet-->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <!--fontawesome-->
+  <script src="https://kit.fontawesome.com/7aa06fc209.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <div class="outer-container">
+
+<div class="container">
 
     <!--navigation bar-->
     <nav class="navbar">
-      <span class="navbar-toggle" id="js-navbar-toggle">
-        <i class="fas fa-bars" style="color:#707070;"></i>
-      </span>
       <a href="index.html" class="logo"><img src="assets/logo2020.png" alt="personal logo" height="45vh"</img></a>
-      <ul class="main-nav" id="js-menu">
+      <ul class="main-nav">
         <li>
           <a href="index.html" class="nav-links">work</a>
         </li>
@@ -54,166 +45,161 @@
       </ul>
     </nav>
 
-    <!--introduction-->
-    <div class="top container">
-      <div class="slide-up">
 
-        <h2>Nice to see you!</h2>
-        <h1>In my free time</h1>
-        <h2>I'm a <span id="title"></span></h2>
-        <!--<h3>[JEE‧NUH SHOO]</h3>-->
-        <!--animating text-->
-        <script>
-        var arr=['illustrator','world traveller','amateur chef','print designer'];
-        var i=0;
-        var heading = document.querySelector('#title');
+    <!--Landing-->
+    <div class="top-container">
+          <div class="introduction">
+            <h3 style="color:var(--text-brown);">Geen Shoe❣️</h3>
+            <h4><span style="color:#949494;"> Procreate Beginner / Illustrator /
+              Amateur Yogi / Sociology Enthustiast </span></h4>
+            <h1>In my free time, I'm a <span id="title"></span></h1>
 
-        function slide(){
-          title.innerHTML = arr[i];
-          //opacity to 1
-          title.style.opacity = 1;
+          <!--animating text-->
+          <script>
+          var arr=['.','Music Lover.','crochet hobbyist.','artist.','world travellor.'];
+          var i=0;
+          var heading = document.querySelector('#title');
 
-          //after 2 seconds call next function
-          setTimeout (next,2000);
-        }
+          function slide(){
+            title.innerHTML = arr[i];
+            //opacity to 1
+            title.style.opacity = 1;
 
-        console.log(arr.length);
-
-        //next function
-        function next(){
-          console.log('after 2 secs');
-          //increase index for next item in array
-          i++;
-
-          if(i > arr.length -1) {
-            i=0;
+            //after 2 seconds call next function
+            setTimeout (next,2000);
           }
 
-          console.log(i);
-          //opacity to 0
-          title.style.opacity = 0;
+          console.log(arr.length);
 
-          //after 1 second call slide fuction again
-          setTimeout(slide, 1000);
-        }
-        slide();
-        </script>
-      </div>
+          //next function
+          function next(){
+            console.log('after 2 secs');
+            //increase index for next item in array
+            i++;
 
-      <img class="landing" src="images/play.png" alt="person taking photos">
+            if(i > arr.length -1) {
+              i=0;
+            }
 
-    </div>
+            console.log(i);
+            //opacity to 0
+            title.style.opacity = 0;
 
-<!--on-screen nav
-    <nav class="onscreen">
-      <ul>
-        <li><a href="#section1">
-          <svg>
-            <rect x="50" rx="7" ry="7" width="12" height="75"
-            style="fill:#DACBBC;"/></svg>
-          </a>
-        </li>
+            //after 1 second call slide fuction again
+            setTimeout(slide, 1000);
+          }
+          slide();
+          </script>
+          <!--End animating text-->
+        </div>
 
-        <li><a href="#section2">
-          <svg>
-            <rect x="50" y="10" rx="7" ry="7" width="12" height="75"
-            style="fill:#DACBBC;"/></svg>
-          </a>
-        </li>
-
-        <li><a href="#section3">
-          <svg>
-            <rect x="50" y="10" rx="7" ry="7" width="12" height="75"
-            style="fill:#DACBBC;"/></svg>
-          </a>
-        </li>
-
-        <li><a href="#section4">
-          <svg>
-            <rect x="50" y="10" rx="7" ry="7" width="12" height="75"
-            style="fill:#DACBBC;"/></svg>
-          </a>
-        </li>
-      </ul>
-    </nav>
-
-    <script type="text/javascript">
-    let mainNavLinks = document.querySelectorAll("nav ul li a");
-    let mainSections = document.querySelectorAll("main section");
-
-    let lastId;
-    let cur = [];
-
-
-    window.addEventListener("scroll", event => {
-      let fromTop = window.scrollY;
-
-      mainNavLinks.forEach(link => {
-        let section = document.querySelector(link.hash);
-
-        if (
-          section.offsetTop <= fromTop &&
-          section.offsetTop + section.offsetHeight > fromTop
-        ) {
-          link.classList.add("current");
-        } else {
-          link.classList.remove("current");
-        }
-      });
-    });
-    </script>
-    -->
-
-    <!--projects-->
-    <div class="projects1 container">
-
-      <article class="project1">
-        <a href="graphics.html">
-          <img class="cover" src="images/covers/illustrations.png" />
-        </a>
-      </article>
-    </div>
-
-      <div class="projects2 container">
-      <article class="project2">
-        <a href="travel.html">
-          <img class="cover" src="images/covers/travel.png" width="90%"/>
-        </a>
-      </article>
-
-      <article class="project2">
-        <a href="print.html">
-          <img class="cover" src="images/covers/print.png" width="90%"/>
-        </a>
-      </article>
-
-    </div>
-
-    <!--footer-->
-    <footer>
-      <div class="contact">
-        <a href="mailto:imginahsu@gmail.com">Email</a>
-        <a href="https://www.linkedin.com/in/ginahueihsu/" target="blank">LinkedIn</a>
-        <a href="https://dribbble.com/ginahueihsu" target="blank">Dribble</a>
-      </div>
-      <div class="ending">
-        <p>Product designer + Aspiring yogi &#x1F9D8;</p>
-      </div>
-      <div class="resume">
-        <a href="images/resume2020.pdf" download target="blank">Resume</a>
-      </div>
-    </footer>
-
+          <img class="landing" src="images/play.png" alt="person taking photo">
   </div>
 
-  <script>
-  let mainNav = document.getElementById('js-menu');
-  let navBarToggle = document.getElementById('js-navbar-toggle');
 
-  navBarToggle.addEventListener('click', function () {
-    mainNav.classList.toggle('active');
-  });
-  </script>
+    <!--projects-->
+    <!--play-->
+    <div class="projects-container">
+
+      <!--project 1-->
+      <article class="card">
+        <div class="inner-border">
+            <div class="description">
+              <p class="tag">Hobby</p>
+              <p class="role">Artist</p>
+              <h2>Illustrations</h2>
+              <p class="byline">Doodles and other graphic work created with Procreate or Adobe Illustrator.</p>
+              <a href="graphics.html">View graphics<i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+            <a href="graphics.html">
+              <img class="thumbnail" src="images/covers/graphic-thumb.png" />
+            </a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="inner-border">
+            <div class="description">
+              <p class="tag">Interest</p>
+              <p class="role">Creator</p>
+              <h2>Motion</h2>
+              <p class="byline">Small animations, iteractions, and 3D models created using Adobe Illustrator, After Effects, and Blender.</p>
+              <a href="travel.html">View animations<i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+            <a href="travel.html">
+              <img class="thumbnail" src="images/covers/motion-thumb.png" />
+            </a>
+        </div>
+      </article>
+
+      <!--project 3-->
+      <article class="card">
+        <div class="inner-border">
+            <div class="description">
+              <p class="tag">Work</p>
+              <p class="role">Designer</p>
+              <h2>Print</h2>
+              <p class="byline">Posters, newspaper and photojournalism spreads I've created for work and clubs.</p>
+              <a href="print.html">View designs<i class="fas fa-long-arrow-alt-right"></i></a>
+            </div>
+            <a href="print.html">
+              <img class="thumbnail" src="images/covers/print-thumb.png" />
+            </a>
+        </div>
+      </article>
+
+    </div>
+</div>
+
+
+<!--Scroll back to top button-->
+<button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fas fa-chevron-up" style="color:#000000;"></i></button>
+
+<script>
+//Get the button
+var mybutton = document.getElementById("myBtn");
+
+/*When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}*/
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+<!--footer-->
+<footer>
+  <h4>Let's get in touch❣️</h4>
+  <div class="contact">
+    <a href="mailto:imginahsu@gmail.com" target="_blank"><i class="far fa-envelope"></i></a>
+    <a href="https://www.linkedin.com/in/ginahueihsu/" target="blank"><i class="fab fa-linkedin-in"></i></a>
+    <a href="https://dribbble.com/ginahueihsu" target="blank"><i class="fab fa-dribbble"></i></a>
+    <a href="https://instagram.com/simplygna" target="blank"><i class="fab fa-instagram"></i></a>
+    <a href="images/resume2021.pdf" target="_blank"><i class="far fa-file"></i></a>
+  </div>
+  <h5>Copyright © Gina Hsu 2021</h5>
+</footer>
+
+</div>
+
+<script>
+let mainNav = document.getElementById('js-menu');
+let navBarToggle = document.getElementById('js-navbar-toggle');
+
+navBarToggle.addEventListener('click', function () {
+  mainNav.classList.toggle('active');
+});
+</script>
 </body>
 
 </html>
