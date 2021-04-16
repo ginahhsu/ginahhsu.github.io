@@ -34,7 +34,7 @@
       <a href="index.html" class="logo"><img src="assets/logo2020.png" alt="personal logo" height="45vh"</img></a>
       <ul class="main-nav">
         <li>
-          <a href="index.html" class="nav-links">work</a>
+          <a href="#work" class="nav-links">work</a>
         </li>
         <li>
           <a href="play.html" class="nav-links">play</a>
@@ -50,64 +50,63 @@
     <div class="top-container">
           <div class="introduction">
             <h3 style="color:var(--text-brown);">Geen Shoe❣️</h3>
-            <h4><span style="color:#949494;"> Procreate Beginner / Illustrator /
-              Amateur Yogi / Sociology Enthustiast </span></h4>
-            <h1>In my free time, I'm a <span id="title"></span></h1>
+            <h5><span style="color:#949494;"> Procreate Beginner / Illustrator /
+              Amateur Yogi / Sociology Enthustiast </span></h5>
+            <h2>In my free time, I'm a <span id="title"></span></h2>
 
-          <!--animating text-->
-          <script>
-          var arr=['.','Music Lover.','crochet hobbyist.','artist.','world travellor.'];
-          var i=0;
-          var heading = document.querySelector('#title');
+            <!--animating text-->
+            <script>
+            var arr=['Nintendo enthustiast.','Music Lover.','crochet hobbyist.','artist.','world traveler.'];
+            var i=0;
+            var heading = document.querySelector('#title');
 
-          function slide(){
-            title.innerHTML = arr[i];
-            //opacity to 1
-            title.style.opacity = 1;
+            function slide(){
+              title.innerHTML = arr[i];
+              //opacity to 1
+              title.style.opacity = 1;
 
-            //after 2 seconds call next function
-            setTimeout (next,2000);
-          }
-
-          console.log(arr.length);
-
-          //next function
-          function next(){
-            console.log('after 2 secs');
-            //increase index for next item in array
-            i++;
-
-            if(i > arr.length -1) {
-              i=0;
+              //after 2 seconds call next function
+              setTimeout (next,2000);
             }
 
-            console.log(i);
-            //opacity to 0
-            title.style.opacity = 0;
+            console.log(arr.length);
 
-            //after 1 second call slide fuction again
-            setTimeout(slide, 1000);
-          }
-          slide();
-          </script>
-          <!--End animating text-->
+            //next function
+            function next(){
+              console.log('after 2 secs');
+              //increase index for next item in array
+              i++;
+
+              if(i > arr.length -1) {
+                i=0;
+              }
+
+              console.log(i);
+              //opacity to 0
+              title.style.opacity = 0;
+
+              //after 1 second call slide fuction again
+              setTimeout(slide, 1000);
+            }
+            slide();
+            </script>
+            <!--End animating text-->
         </div>
 
-          <img class="landing" src="images/play.png" alt="person taking photo">
+        <img class="landing" src="images/play.png" alt="person taking photo">
   </div>
 
 
     <!--projects-->
-    <!--play-->
-    <div class="projects-container">
+    <div class="projects-container" id="work">
 
       <!--project 1-->
       <article class="card">
-        <div class="inner-border">
+        <div class="inner-border" style="border-color:#FFDA66 !important;">
             <div class="description">
-              <p class="tag">Hobby</p>
+              <p class="tag">hobby</p>
               <p class="role">Artist</p>
-              <h2>Illustrations</h2>
+              <h1>Illustrations</h1>
               <p class="byline">Doodles and other graphic work created with Procreate or Adobe Illustrator.</p>
               <a href="graphics.html">View graphics<i class="fas fa-long-arrow-alt-right"></i></a>
             </div>
@@ -117,28 +116,30 @@
         </div>
       </article>
 
+
+    <!--project 2--> <!--
       <article class="card">
-        <div class="inner-border">
-            <div class="description">
-              <p class="tag">Interest</p>
-              <p class="role">Creator</p>
-              <h2>Motion</h2>
-              <p class="byline">Small animations, iteractions, and 3D models created using Adobe Illustrator, After Effects, and Blender.</p>
-              <a href="travel.html">View animations<i class="fas fa-long-arrow-alt-right"></i></a>
-            </div>
-            <a href="travel.html">
-              <img class="thumbnail" src="images/covers/motion-thumb.png" />
-            </a>
+        <div class="inner-border" style="border-color:#031F5D !important;">
+          <div class="description">
+            <p class="tag">interest</p>
+            <p class="role">Creator</p>
+            <h1>Motion</h1>
+            <p class="byline">Small animations, iteractions, and 3D models created using Adobe Illustrator, After Effects, and Blender.</p>
+            <a href="animations.html">View animations<i class="fas fa-long-arrow-alt-right"></i></a>
+          </div>
+          <a href="animations.html">
+            <img class="thumbnail" src="images/covers/motion-thumb.png" />
+          </a>
         </div>
-      </article>
+      </article>-->
 
       <!--project 3-->
       <article class="card">
         <div class="inner-border">
             <div class="description">
-              <p class="tag">Work</p>
+              <p class="tag">work</p>
               <p class="role">Designer</p>
-              <h2>Print</h2>
+              <h1>Print</h1>
               <p class="byline">Posters, newspaper and photojournalism spreads I've created for work and clubs.</p>
               <a href="print.html">View designs<i class="fas fa-long-arrow-alt-right"></i></a>
             </div>
@@ -159,17 +160,6 @@
 //Get the button
 var mybutton = document.getElementById("myBtn");
 
-/*When the user scrolls down 20px from the top of the document, show the button
-window.onscroll = function() {scrollFunction()};
-
-function scrollFunction() {
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    mybutton.style.display = "block";
-  } else {
-    mybutton.style.display = "none";
-  }
-}*/
-
 // When the user clicks on the button, scroll to the top of the document
 function topFunction() {
   document.body.scrollTop = 0;
@@ -179,7 +169,7 @@ function topFunction() {
 
 <!--footer-->
 <footer>
-  <h4>Let's get in touch❣️</h4>
+  <h5>Let's get in touch❣️</h5>
   <div class="contact">
     <a href="mailto:imginahsu@gmail.com" target="_blank"><i class="far fa-envelope"></i></a>
     <a href="https://www.linkedin.com/in/ginahueihsu/" target="blank"><i class="fab fa-linkedin-in"></i></a>
@@ -187,7 +177,7 @@ function topFunction() {
     <a href="https://instagram.com/simplygna" target="blank"><i class="fab fa-instagram"></i></a>
     <a href="images/resume2021.pdf" target="_blank"><i class="far fa-file"></i></a>
   </div>
-  <h5>Copyright © Gina Hsu 2021</h5>
+  <h6>Copyright © Gina Hsu 2021</h6>
 </footer>
 
 </div>
