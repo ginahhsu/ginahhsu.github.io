@@ -104,19 +104,19 @@
       </div>
 
       <figure class="photoselect">
-        <img id="imageToSwap_decide" src="images/projects/preppr/bootstrapper.jpg">
+        <img id="imageToSwap_pick" src="images/projects/preppr/bootstrapper.jpg">
         <div class="case distribute-items" id="photos">
-          <button value="bootstrapper.jpg" onclick="swapImage_decide(this)">The Bootstrapper</button>
-          <button value="activist.jpg" onclick="swapImage_decide(this)">The Activist</button>
-          <button value="enthustiast.jpg" onclick="swapImage_decide(this)">The Enthustiast</button>
+          <button value="bootstrapper.jpg" onclick="swapImage_pick(this)">The Bootstrapper</button>
+          <button value="activist.jpg" onclick="swapImage_pick(this)">The Activist</button>
+          <button value="enthustiast.jpg" onclick="swapImage_pick(this)">The Enthustiast</button>
         </div>
       </figure>
 
       <script>
       var photos = 'innovationmatrix.jpg';
 
-      function swapImage_decide(obj) {
-        var image = document.getElementById("imageToSwap_decide");
+      function swapImage_pick(obj) {
+        var image = document.getElementById("imageToSwap_pick");
 
         if (obj.parentElement.getAttribute('id') == "photos") {
           photos = obj.getAttribute('value')
