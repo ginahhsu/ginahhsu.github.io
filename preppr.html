@@ -90,45 +90,44 @@
              were required for the project, I mainly worked as a product designer to navigate through the design thinking of Preppr.
       </div>
 
-      <div class="divider"></div>
+    <div class="divider"></div>
 
       <div class="case">
         <h4 class="contribution">iteration one</h4>
-          <h4 id="ux">User Experience Researcher</h4>
-            <div class="callout">
-              <p>HMW facilitate healthy diets for people living alone?</p>
-            </div>
-          <h4 class="subheading">target users</h4>
+        <h4 id="ux">User Experience Researcher</h4>
+          <div class="callout">
+            <p>HMW facilitate healthy diets for people living alone?</p>
+          </div>
+        <h4 class="subheading">target users</h4>
           <p>Preppr's target users are people who live alone/cook for one. As we only knew a limited amount of people who fit this persona,
              we turned to Reddit to ask for their relationships with food. With over 100 responses on different threads, we established <a href="https://www.notion.so/User-Personas-87ba30aee02d480b8c2d2da8fba51b49" target="_blank">three user groups</a>.</p>
       </div>
 
-          <figure class="photoselect">
-            <img id="imageToSwap_decide" src="images/projects/preppr/bootstrapper.jpg">
-            <div class="case distribute-items" id="photos">
-              <button value="bootstrapper.jpg" onclick="swapImage_decide(this)">The Bootstrapper</button>
-              <button value="activist.jpg" onclick="swapImage_decide(this)">The Activist</button>
-              <button value="enthustiast.jpg" onclick="swapImage_decide(this)">The Enthustiast</button>
-            </div>
-          </figure>
+      <figure class="photoselect">
+        <img id="imageToSwap_decide" src="images/projects/preppr/bootstrapper.jpg">
+        <div class="case distribute-items" id="photos">
+          <button value="bootstrapper.jpg" onclick="swapImage_decide(this)">The Bootstrapper</button>
+          <button value="activist.jpg" onclick="swapImage_decide(this)">The Activist</button>
+          <button value="enthustiast.jpg" onclick="swapImage_decide(this)">The Enthustiast</button>
+        </div>
+      </figure>
 
-          <script>
-          var photos = 'innovationmatrix.jpg';
+      <script>
+      var photos = 'innovationmatrix.jpg';
 
-          function swapImage_decide(obj) {
-            var image = document.getElementById("imageToSwap_decide");
+      function swapImage_decide(obj) {
+        var image = document.getElementById("imageToSwap_decide");
 
-            if (obj.parentElement.getAttribute('id') == "photos") {
-              photos = obj.getAttribute('value')
-            }
+        if (obj.parentElement.getAttribute('id') == "photos") {
+          photos = obj.getAttribute('value')
+        }
 
-            image.src = "images/projects/preppr/" + photos;
-          };
-          </script>
+        image.src = "images/projects/preppr/" + photos;
+      };
+      </script>
 
-          <div class="case">
-
-          <h4 class="subheading">testing</h4>
+      <div class="case">
+        <h4 class="subheading">testing</h4>
           <div class="callout">
             <p><i class="fa fa-question-circle" aria-hidden="true"></i>Is this product solving an actual problem?</p>
           </div>
@@ -138,94 +137,103 @@
              started working on the script to be used later on. Even thought the testing was during Covid times, I was lucky enough to test our product in
              person with people who I live with.</p>
 
+        <h4 class="subheading">key findings</h4>
+          <p>From our testing, we found that certain functions we assumed would streamline cooking for one actually actually made it more difficult. With
+             this in mind, we changed our product requirements list for the next iteration. Visually, our biggest takeaway from from our A/B testing of what
+             people wanted to see on their home screen. User wise, we were able to deduce that the product has potential as people agreed with the pain points.</p>
+         <div class="callout">
+           <p><i class="fa fa-commenting" aria-hidden="true"></i>Mostly my concerns is picking foods that are quick to make, tasty, and that is not going to
+             send me into bankruptcy.There's a difference between
+             getting your daily fruit and veggies and killing yourself at the checkout counter.</p>
+         </div>
+       </div>
 
-          <h4 class="subheading">key findings</h4>
-            <p>From our testing, we found that certain functions we assumed would streamline cooking for one actually actually made it more difficult. With
-               this in mind, we changed our product requirements list for the next iteration. Visually, our biggest takeaway from from our A/B testing of what
-               people wanted to see on their home screen. User wise, we were able to deduce that the product has potential as people agreed with the pain points.</p>
-               <div class="callout">
-                 <p><i class="fa fa-commenting" aria-hidden="true"></i>Mostly my concerns is picking foods that are quick to make, tasty, and that is not going to
-                   send me into bankruptcy hunting down some rare super food that xyz blog says is essential to living a healthy life. There's a difference between
-                   getting your daily fruit and veggies and killing yourself at the checkout counter.</p>
-               </div>
-      </div>
-
-
-      <div class="divider"></div>
+    <div class="divider"></div>
 
       <div class="case">
         <h4 class="contribution">iteration two</h4>
-          <h4 id="bus">Business Analyst</h4>
+        <h4 id="bus">Business Analyst</h4>
           <div class="callout">
             <p><i class="fa fa-question-circle" aria-hidden="true"></i>How profitable is this application?</p>
           </div>
-          <h4 class="subheading">financial feasibility</h4>
-        <p>Being as saturated as the food and drink market is, we had to figure out how we could differenciate our app as well as where our revenue streams would come from.
-           Using a business to business (B2B) approach seemed more profitable than a business to consumer (B2C) one so we focused on developing multiple revenue streams through this.
-           As we did not have any concrete numbers, I had to make some assumptions based on research I found. To combat this problem, I made a key next to our costs where when one number was changed,
-           all of the <a href="https://docs.google.com/spreadsheets/d/17L6K1LBEYMmVfeJy_l98mJ27ddwfAf0JgdP_aDzAcbs/edit?usp=sharing" target="_blank">financial statments</a> would reflect the change.</p>
+        <h4 class="subheading">financial feasibility</h4>
+          <p>Being as saturated as the food and drink market is, we had to figure out how we could differenciate our app as well as where our revenue streams would come from.
+             Using a business to business (B2B) approach seemed more profitable than a business to consumer (B2C) one so we focused on developing multiple revenue streams through this.
+             As we did not have any concrete numbers, I had to make some assumptions based on research I found. To combat this problem, I made a key next to our costs where when one number was changed,
+             all of the <a href="https://docs.google.com/spreadsheets/d/17L6K1LBEYMmVfeJy_l98mJ27ddwfAf0JgdP_aDzAcbs/edit?usp=sharing" target="_blank">financial statments</a> would reflect the change.</p>
       </div>
 
-      <div class="divider"></div>
+    <div class="divider"></div>
 
       <img width="100%" class="singlephoto" src="images/projects/preppr/bmc.jpg" alt="Preppr Businss Model Canvas">
       <figcaption>Busines Model Canvas for Preppr.</figcaption>
 
-        <div class="case">
+      <div class="case">
         <p>To ensure financial stability, we not only wanted to work with existing grocery stores but also include features such as our own Preppr points and scraps buddy.
            While we do not get any direct revenue from consumers, having these differenciation features and multiple revenue streams can ensure longevity of our product.</p>
 
         <div class="divider"></div>
-          <h4 class="contribution">iteration three</h4>
-            <h4 id="design">Product Designer</h4>
-              <p>I picked up this project again after two iterations of design and testing in order to develop the high-fidelity prototype (I worked on the design in iteration one).
-                 While the initial designs had completed aspects of our product requirement list, the key features, branding, and cohesiveness just weren't there.</p>
-              <h4 class="subheading">information architecture</h4>
-                <p>Even up until the third iteration, the flow of our screens were still confusing to our users. To start fresh, the design team created a new flow based on our usability testing
-                   and our key features.</p>
-         </div>
-                   <img width="100%" src="images/projects/preppr/sitemap.jpg" alt="Preppr Sitemap">
-                   <figcaption>Basic sitemap for Preppr.</figcaption>
+
+        <h4 class="contribution">iteration three</h4>
+        <h4 id="design">Product Designer</h4>
+          <p>I picked up this project again after two iterations of design and testing in order to develop the high-fidelity prototype (I worked on the design in iteration one).
+             While the initial designs had completed aspects of our product requirement list, the key features, branding, and cohesiveness just weren't there.</p>
+        <h4 class="subheading">information architecture</h4>
+          <p>Even up until the third iteration, the flow of our screens were still confusing to our users. To start fresh, the design team created a new flow based on our usability testing
+             and our key features.</p>
+       </div>
+
+       <img width="100%" src="images/projects/preppr/sitemap.jpg" alt="Preppr Sitemap">
+       <figcaption>Basic sitemap for Preppr.</figcaption>
 
         <div class="case">
+          <div class="divider"></div>
 
-              <div class="divider"></div>
+            <h4 class="contribution" style="color: #527069 !important;">feature breakdowns and decisions</h4>
+            <h4>Recipe Exploration</h4>
+              <p>For many people, finding new recipes is the best part of cooking. For others, it's more trouble than it's worth. It was important for us
+                 to give users different outlets to find what they're in the mood for whether it's spontaneous, ingredient driven, or they're just craving a certain dish.</p>
 
-
-              <h4 class="contribution" style="color: #527069 !important;">feature breakdowns and decisions</h4>
-
-              <h4>Recipe Exploration</h4>
-                <p>For many people, finding new recipes is the best part of cooking. For others, it's more trouble than it's worth. It was important for us
-                   to give users different outlets to find what they're in the mood for whether it's spontaneous, ingredient driven, or they're just craving a certain dish.</p>
-
-                <h4 class="subheading">discover and search</h4>
-                <div class="callout-large">
-                  <p>A simple and straightforward interaction that directly addresses our users' goals of finding a recipe</p>
-                </div>
-                <div class="divider"></div>
-
-              <img width="100%" src="images/projects/preppr/search.gif" alt="Preppr's home and search pages">
-              <figcaption>Left: discover page, Right: search page.</figcaption>
-
-                    <p>These pages were designed with simplicity in mind. Being front and center, users can browse through our explore page and spark inspiration for their current or future meals.
-                      If they're looking for specific items, our search function easily finds any meals they're in the mood for.
-                    </p>
-
-
-              <h4 class="subheading">the scraps buddy</h4>
+            <h4 class="subheading">discover and search</h4>
               <div class="callout-large">
-                <p>An interactive and customizable way to create leftover meals</p>
+                <p>A simple and straightforward interaction that directly addresses our users' goals of finding a recipe</p>
               </div>
+            <div class="divider"></div>
 
-              <div class="divider"></div>
-              <img width="100%" src="images/projects/preppr/scraps.gif" alt="New recipe builder pages">
-              <figcaption>The Preppr Scraps Buddy; finding recipes with existing ingredients.</figcaption>
-
-                <p>For many of our users, using their existing ingredients is how they meal prep. Instead of having to individually Google ingredients, we created a fun and interactive method to
-                   find recipes not only based on your ingredients but also on your meal and cuisine.</p>
-
-              <h4 class="contribution">past iterations</h4>
+            <div class="center">
+              <video width="35%" autoplay loop muted>
+                <source src="images/projects/preppr/home.mp4" type="video/mp4" />
+              </video>
+              &nbsp; &nbsp;
+              <video width="35%" autoplay loop muted>
+                <source src="images/projects/preppr/search.mp4" type="video/mp4" />
+              </video>
             </div>
+          <figcaption>Left: discover page, Right: search page.</figcaption>
+
+            <p>These pages were designed with simplicity in mind. Being front and center, users can browse through our explore page and spark inspiration for their current or future meals.
+              If they're looking for specific items, our search function easily finds any meals they're in the mood for.
+            </p>
+
+          <h4 class="subheading">the scraps buddy</h4>
+            <div class="callout-large">
+              <p>An interactive and customizable way to create leftover meals</p>
+            </div>
+            <div class="divider"></div>
+
+            <div class="center">
+              <video width="35%" autoplay loop muted>
+                <source src="images/projects/preppr/scraps.mp4" type="video/mp4" />
+                  </video>
+            </div>
+
+            <figcaption>The Preppr Scraps Buddy; finding recipes with existing ingredients.</figcaption>
+
+              <p>For many of our users, using their existing ingredients is how they meal prep. Instead of having to individually Google ingredients, we created a fun and interactive method to
+                 find recipes not only based on your ingredients but also on your meal and cuisine.</p>
+
+            <h4 class="contribution">past iterations</h4>
+          </div>
 
               <img width="100%" src="images/projects/preppr/recipebuilder.jpg" alt="Original recipe builder pages">
 
@@ -242,24 +250,55 @@
                 <p>Don't reinvent the wheel, just realign it</p>
               </div>
 
-              <img width="100%" src="images/projects/preppr/list.gif" alt="grocery list">
+              <div class="center">
+                <video width="35%" autoplay loop muted>
+                  <source src="images/projects/preppr/list.mp4" type="video/mp4" />
+                </video>
+              </div>
+
               <figcaption>Grocery list page.</figcaption>
+
+                <p>From our reseach, we found that most people prefered the standard checklist for grocery shopping. With that information, we decided not use a new style but stick with what people
+                   were familiar with. We chose to include standard features like the checkbox crossing off the ingredient but also unique features like sorting by recipe.  </p>
+
+                   <div class="divider"></div>
 
               <h4 class="subheading">intergrated shopping</h4>
               <div class="callout-large">
                 <p>Prioritizing in-app functionality</p>
               </div>
 
-              <img width="100%" src="images/projects/preppr/shop.gif" alt="in-app grocery shopping">
+              <div class="center">
+                <video width="35%" autoplay loop muted>
+                  <source src="images/projects/preppr/shop.mp4" type="video/mp4" />
+                </video>
+              </div>
               <figcaption>In-app grocery shopping function.</figcaption>
+
+              <p>The pain points that we wanted to solve were time and money. By including an intergrated shopping function, users can save time by grocery shopping online and money by meal planning.
+                 In terms of functionality, we chose to create an in-app browsing system to streamline the grocery shopping process.
+              </p>
+
+              <div class="divider"></div>
 
               <h4>Meal Planning</h4>
               <div class="callout-large">
                 <p>Multiple streams to add meals</p>
               </div>
 
-              <img width="100%" src="images/projects/preppr/mealplan.gif" alt="in-app grocery shopping">
-              <figcaption>In-app grocery shopping function.</figcaption>
+              <div class="center">
+                <video width="35%" autoplay loop muted>
+                  <source src="images/projects/preppr/mealplan.mp4" type="video/mp4" />
+                </video>
+                &nbsp; &nbsp;
+                <video width="35%" autoplay loop muted>
+                  <source src="images/projects/preppr/mealplan2.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <figcaption>Ways to add meals to meal plan.</figcaption>
+
+              <p>Meal planning was a key feature of Preppr so we wanted to make sure users had multiple ways to use it. Whether users want to quickly add their favourite meals on the meal plan page or
+                 add individual recipes from the browse, using the function will be simple and intergrated. Using popups, the task wouldn't seem too intrusive and users would understand it's a fast interaction. </p>
 
               <h4 class="contribution">past iterations</h4>
             </div>
@@ -268,6 +307,9 @@
             <figcaption>Previous meal plan design.</figcaption>
 
             <div class="case">
+              <p>The previous iteraction, we had also used popups as a way to add the meals. However, the weakest point of this design was how long it would take for users to add their meals.
+                 By allowing users to add multiple meals at once, it saves them a lot of time and our auto meal sort system also streamlines the process.</p>
+
 
               <h4>Customization</h4>
 
@@ -276,45 +318,68 @@
               <div class="callout-large">
                 <p>Personalized needs for every individual</p>
               </div>
-              <h4 class="contribution">past iterations</h4>
+
+              <div class="center">
+                <video width="35%" autoplay loop muted>
+                  <source src="images/projects/preppr/onboarding.mp4" type="video/mp4" />
+                </video>
+                &nbsp; &nbsp;
+                <video width="35%" autoplay loop muted>
+                  <source src="images/projects/preppr/preferences.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <figcaption>Onboarding page and account preferences.</figcaption>
+
+              <p>Everyone has a different relationship with food so we wanted our users to be able to specify their preferences. By having it in our onboarding, our users wil feel like the
+                 app is catering to their needs. If users change what their goals are, the account preferences allows them to modify their choices.</p>
 
               <h4 class="subheading">ingredient substitutes</h4>
               <div class="callout-large">
                 <p>A quick and non-intrusive way to avoid running to the store</p>
               </div>
 
+              <div class="center">
+                <video width="35%" autoplay loop muted>
+                  <source src="images/projects/preppr/substitute.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <figcaption>Process of substituting items on recipe.</figcaption>
 
+              <p>One of the frustrating things we found about cooking healthy is not having a certain ingredient. Our substitution feature allows users to know what they can use instead and
+                 bypass this frustration.</p>
 
               <h4 class="subheading">design system and branding</h4>
-                <p>To kickstart the ideation process, we used a mindmap to start linking related words and ideas together. Once the blood was flowing, we split off and used a technique called crazy 8s
-                   where within 8 minutes, each of us had to come up with as many ideas as we could. Some of the ones I thought of included a myer-briggs style quiz with resources, a reproductive health application, and some sort of social media campaign.
-                   However, we had to focus on the big question: <em>is this feasible?</em></p>
-      </div>
+            </div>
+
+              <img width="100%" class="singlephoto" src="images/projects/preppr/designsystem.png" alt="Preppr Businss Model Canvas">
+              <figcaption>Components from Preppr's design system.</figcaption>
+
+            <div class="case">
+
+                <p>In the implementation stage, my teammate and I created our design system in order to create cohesive componenets for our branding. In order to give our application a fun and playful brand,
+                   we went with a bright yellow as our primary colour and a burt orange as our secondary. The mix of photography and graphics icons also creates a lively personality to keep users engaged.</p>
 
 
       <div class="divider"></div>
 
-        <div class="case">
             <h4>Next Steps</h4>
               <div class="callout-large">
                 <p>Inventory, ingredient lifeline, loyalty program, partnerships</p>
               </div>
-                <p>While Medley's characters and diagrams give the website personality, the execution still isn't what we hoped it would be.
-                   An appropriate next step for this project would be to allow for more user iteraction with the activities. This would not only make the site more engaging
-                   but given the right content, more educational. After that, implementing our map and creating our care pack would increase our value proposition.</p>
+                <p>For the future, Preppr has a few more features to implement. The main one is an easy way for users to implement their current ingredients. Once that feature is implemented, our Scraps buddy
+                   can even further curate recipes for the user. Having the inventory can also allow users to get ingredient lifelines to teach how long specifc ingredients are good for. In terms of business,
+                   our next steps include implementing our full-fledged loyalty program as well as creating more partnerships,</p>
+
+                   <div class="divider"></div>
 
             <h4>Takeaways</h4>
             <div class="callout-large">
               <p>Holistic design, heuristics, KPIs, emotional branding</p>
             </div>
-            <p>While I really loved this project and the real world social impact it provided, one of my biggest qualms was the lack of LGBTQ+ members within our group members.
-               We did a lot of research in order to overcome this problem but I wish we interview people in the community on top of our survey. That being said, our survey and research
-               allowed me to impactfully tell the stories of LGBTQ+ sex. Another element I learned from this project is the importance of logical thinking and adaptability, especially in
-               group settings. Knowing when to look at the big picture over focusing on minor details can save a lot of time and energy better spent elsewhere. </p>
+            <p>One of my biggest learning moments for this project was picking a Key Performance Indicator (KPI) for our business and designing to meet that goal. Our original idea was too broad and for our first two interations, we lacked direction.
+               Figuring out our that and our North Star Metric (NSM) allowed us to narrow in on all aspects of Preppr and design a product that people would actually want to use. Beyond that, I also learned how to incorporate hueristic evaluations and
+               emotional branding in order to create a functional and aesthetic product.</p>
 
-            <div class="callout">
-               <p>I hope that Medley sparks change in the sex education curriculum or that companies will provide better services to the LGBTQ+ community.</p>
-             </div>
           </div>
         </div>
       </div>

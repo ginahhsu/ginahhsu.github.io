@@ -497,19 +497,13 @@ figcaption {
   .requirements li {
     padding-bottom: 0.5rem;
   }
-  /*.case h3 {
-    font-size: 2em;
-    font-weight: 400;
-    color: #474051;
-    margin-bottom: 10px;
-  }
 
-
-  .case p {
-    font-size: 1em;
-    padding-bottom: 3em;
-    line-height: 1.7;
-  }*/
+  .center {
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+}
 
   .longdesc {
     display: none;
@@ -519,6 +513,10 @@ figcaption {
     margin-left: 15%;
     margin-right: auto;
     width: 75%;
+    margin-bottom: 5%;
+  }
+
+  .video {
     margin-bottom: 5%;
   }
 
@@ -702,7 +700,6 @@ figcaption {
   .myphoto {
     width: 50%;
     border-radius: 40px;
-    z-index: 5;
    }
 
   .about {
