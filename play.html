@@ -34,13 +34,16 @@
       <a href="index.html" class="logo"><img src="assets/logo2020.png" alt="personal logo" height="45vh"</img></a>
       <ul class="main-nav">
         <li>
-          <a href="#work" class="nav-links">work</a>
+          <a href="index.html" class="nav-links">work</a>
         </li>
         <li>
           <a href="play.html" class="nav-links">play</a>
         </li>
         <li>
           <a href="me.html" class="nav-links">me</a>
+        </li>
+        <li>
+          <a href="images/resume2021.pdf" target="_blank" class="nav-links"> resume</a>
         </li>
       </ul>
     </nav>
@@ -50,46 +53,13 @@
     <div class="top-container">
           <div class="introduction">
             <h3 style="color:var(--text-brown);">Geen Shoe❣️</h3>
-            <h5><span style="color:#949494;"> Procreate Beginner / Illustrator /
-              Amateur Yogi / Sociology Enthustiast </span></h5>
-            <h2>In my free time, I'm a <span id="title"></span></h2>
+            <h5><span style="color:#949494;"> Illustrator / Photographer / Creative Director
+               </span></h5>
+            <h2>In my free time, I'm a <span id="play"></span></h2>
+            <script type="text/javascript" src="scripts/main.js"></script>
 
-            <!--animating text-->
-            <script>
-            var arr=['Nintendo enthustiast.','Music Lover.','crochet hobbyist.','artist.','world traveler.'];
-            var i=0;
-            var heading = document.querySelector('#title');
 
-            function slide(){
-              title.innerHTML = arr[i];
-              //opacity to 1
-              title.style.opacity = 1;
 
-              //after 2 seconds call next function
-              setTimeout (next,2000);
-            }
-
-            console.log(arr.length);
-
-            //next function
-            function next(){
-              console.log('after 2 secs');
-              //increase index for next item in array
-              i++;
-
-              if(i > arr.length -1) {
-                i=0;
-              }
-
-              console.log(i);
-              //opacity to 0
-              title.style.opacity = 0;
-
-              //after 1 second call slide fuction again
-              setTimeout(slide, 1000);
-            }
-            slide();
-            </script>
             <!--End animating text-->
         </div>
 
@@ -156,16 +126,7 @@
 <!--Scroll back to top button-->
 <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fas fa-chevron-up" style="color:#000000;"></i></button>
 
-<script>
-//Get the button
-var mybutton = document.getElementById("myBtn");
-
-// When the user clicks on the button, scroll to the top of the document
-function topFunction() {
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-}
-</script>
+<script type="text/javascript" src="scripts/main.js"></script>
 
 <!--footer-->
 <footer>
@@ -182,14 +143,6 @@ function topFunction() {
 
 </div>
 
-<script>
-let mainNav = document.getElementById('js-menu');
-let navBarToggle = document.getElementById('js-navbar-toggle');
-
-navBarToggle.addEventListener('click', function () {
-  mainNav.classList.toggle('active');
-});
-</script>
 </body>
 
 </html>

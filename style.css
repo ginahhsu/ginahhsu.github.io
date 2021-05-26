@@ -83,7 +83,6 @@ li {
   text-decoration: none;
 }
 
-/*not sure why my link color isn't changing*/
 a:link, a:visited, a {
   Font-Family: 'Poppins', Sans-Serif;
   text-decoration: none;
@@ -94,16 +93,19 @@ a:link, a:visited, a {
   font-family: 'DM Serif Display', serif;
   font-size: 1.3rem;
   font-weight: lighter;
+  color: var(--text-dark);
 }
 
 .role {
   font-Family: 'Poppins', Sans-Serif;
   font-size: 0.9rem;
   text-transform: uppercase;
+  color: var(--text-dark);
 }
 
 .byline {
   font-Family: 'Poppins', Sans-Serif;
+  color: var(--text-dark);
 }
 
 p {
@@ -218,14 +220,59 @@ figcaption {
 
 .landing {
   width: 50%;
+  height: auto;
  }
 
-#title {
+#home {
     opacity: 0;
     transition: opacity 1s linear;
     font-weight: 700;
   }
 
+#play {
+    opacity: 0;
+    transition: opacity 1s linear;
+    font-weight: 700;
+  }
+
+/********PROGRESS NAV**********/
+
+.toc {
+  position: fixed;
+  left: 3em;
+  top: 7em;
+  padding: 1em;
+  width: 14em;
+  line-height: 2; }
+
+  .toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0; }
+  .toc ul ul {
+    padding-left: 2em; }
+  .toc li a {
+    display: inline-block;
+    color: var(--text-grey);
+    text-decoration: none;
+    -webkit-transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); }
+  .toc li.visible > a {
+    color: var(--text-dark);
+    -webkit-transform: translate(5px);
+        -ms-transform: translate(5px);
+            transform: translate(5px); }
+
+.toc-marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; }
+  .toc-marker path {
+    -webkit-transition: all 0.3s ease;
+            transition: all 0.3s ease; }
 
 /*******PROJECTS AND PLAY*******/
   .projects-container {
@@ -700,6 +747,8 @@ figcaption {
   .myphoto {
     width: 50%;
     border-radius: 40px;
+    height: 50%;
+    margin-top: 2em;
    }
 
   .about {

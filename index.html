@@ -19,8 +19,9 @@
 
   <!--fonts-->
   <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Poppins:oppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1|DM+Serif+Display" rel="stylesheet">
-  <!--stylesheet-->
+  <!--stylesheet and Javascript-->
   <link rel="stylesheet" type="text/css" href="style.css">
+
   <!--fontawesome-->
   <script src="https://kit.fontawesome.com/7aa06fc209.js" crossorigin="anonymous"></script>
 </head>
@@ -29,7 +30,7 @@
 
 <div class="container">
 
-    <!--navigation bar-->
+    <!--Navigation bar-->
     <nav class="navbar">
       <a href="index.html" class="logo"><img src="assets/logo2020.png" alt="personal logo" height="45vh"</img></a>
       <ul class="main-nav">
@@ -42,72 +43,37 @@
         <li>
           <a href="me.html" class="nav-links">me</a>
         </li>
+        <li>
+          <a href="images/resume2021.pdf" target="_blank" class="nav-links">resume</a>
+        </li>
       </ul>
     </nav>
 
 
     <!--Landing-->
     <div class="top-container">
-          <div class="introduction">
-            <h3 style="color:var(--text-brown);">Gina Hsu❣️</h3>
-            <h5><span style="color:#949494;"> <a href="#work">Product Designer </a> / <a href=graphics.html>Illustrator </a> /
-              <a href="http://uwimprint.ca/">Creative Director</a> / <a href="images/prostitution_laws_in_Canada.pdf" target="_blank">Sociology Fan</a></span></h5>
-            <h2>Creating empowering digital <span id="title"></span></h2>
-
-          <!--animating text-->
-          <script>
-          var arr=['designs.','branding.','experiences.','products.','interactions.'];
-          var i=0;
-          var heading = document.querySelector('#title');
-
-          function slide(){
-            title.innerHTML = arr[i];
-            //opacity to 1
-            title.style.opacity = 1;
-
-            //after 2 seconds call next function
-            setTimeout (next,2000);
-          }
-
-          console.log(arr.length);
-
-          //next function
-          function next(){
-            console.log('after 2 secs');
-            //increase index for next item in array
-            i++;
-
-            if(i > arr.length -1) {
-              i=0;
-            }
-
-            console.log(i);
-            //opacity to 0
-            title.style.opacity = 0;
-
-            //after 1 second call slide fuction again
-            setTimeout(slide, 1000);
-          }
-          slide();
-          </script>
-          <!--End animating text-->
-        </div>
-
-          <img class="landing" src="images/ux.png" alt="person creating website">
-  </div>
+      <div class="introduction">
+        <h3 style="color:var(--text-brown);">Gina Hsu❣️</h3>
+        <h5><span style="color:#949494;"> <a href="#work">Product Designer </a> & <a href=play.html>Multimedia Artist</a></h5>
+        <h2>Creating empowering digital <span id="home"></span></h2>
+        <script type="text/javascript" src="scripts/main.js"></script>
+      </div>
+        <img class="landing" src="images/ux.png" alt="person creating website">
+    </div>
 
 
     <!--projects-->
     <div class="projects-container" id="work">
 
       <!--project 1-->
+      <a href="preppr.html">
       <article class="card">
         <div class="inner-border" style="border-color:#FFDA66 !important;">
             <div class="description">
               <p class="tag">project</p>
               <p class="role">product designer • business analyst • ux researcher</p>
               <h1>Preppr</h1>
-              <p class="byline">Addressing the SDG of healthy living and well-being, Preppr simplifies healthy cooking for one and reduces food waste. </p>
+              <p class="byline">Answering the UN's goal of healthy living, Preppr simplifies healthy cooking for one and reduces food waste. </p>
               <a href="preppr.html">View Project<i class="fas fa-long-arrow-alt-right"></i></a>
             </div>
           <a href="medley.html">
@@ -115,9 +81,10 @@
           </a>
         </div>
       </article>
-
+      </a>
 
       <!--project 2-->
+      <a href="waterloo.html">
       <article class="card">
         <div class="inner-border" style="border-color:#031F5D !important;">
           <div class="description">
@@ -132,15 +99,17 @@
           </a>
         </div>
       </article>
+      </a>
 
       <!--project 3-->
+      <a href="medley.html">
       <article class="card">
         <div class="inner-border">
             <div class="description">
               <p class="tag">rsa competition</p>
               <p class="role">product designer</p>
               <h1>Medley</h1>
-              <p class="byline">Submission for the RSA competition brief redistributing health, Medley reinvents LGBTQ+ sexual education.</p>
+              <p class="byline">Highly Commended for the 2020-21 RSA Student Design Awards, Medley reinvents LGBTQ+ sex education. </p>
               <a href="medley.html">View submission<i class="fas fa-long-arrow-alt-right"></i></a>
             </div>
             <a href="medley.html">
@@ -148,8 +117,10 @@
             </a>
         </div>
       </article>
+      </a>
 
       <!--project 4-->
+      <a href="stamplet.html">
       <article class="card">
         <div class="inner-border" style="border-color:#D5E4E2 !important">
           <div class="description">
@@ -164,6 +135,7 @@
           </a>
         </div>
       </article>
+      </a>
 
     </div>
 </div>
@@ -171,17 +143,6 @@
 
 <!--Scroll back to top button-->
 <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fas fa-chevron-up" style="color:#000000;"></i></button>
-
-<script>
-//Get the button
-var mybutton = document.getElementById("myBtn");
-
-// When the user clicks on the button, scroll to the top of the document
-function topFunction() {
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-}
-</script>
 
 <!--footer-->
 <footer>
@@ -198,14 +159,6 @@ function topFunction() {
 
 </div>
 
-<script>
-let mainNav = document.getElementById('js-menu');
-let navBarToggle = document.getElementById('js-navbar-toggle');
-
-navBarToggle.addEventListener('click', function () {
-  mainNav.classList.toggle('active');
-});
-</script>
 </body>
 
 </html>
