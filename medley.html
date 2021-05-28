@@ -21,6 +21,8 @@
   <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Poppins:oppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1|DM+Serif+Display" rel="stylesheet">
   <!--stylesheet-->
   <link rel="stylesheet" type="text/css" href="style.css">
+
+
   <!--fontawesome-->
   <script src="https://kit.fontawesome.com/7aa06fc209.js" crossorigin="anonymous"></script>
 </head>
@@ -34,13 +36,16 @@
       <a href="index.html" class="logo"><img src="assets/logo2020.png" alt="personal logo" height="45vh"</img></a>
       <ul class="main-nav">
         <li>
-          <a href="#work" class="nav-links">work</a>
+          <a href="index.html" class="nav-links">work</a>
         </li>
         <li>
           <a href="play.html" class="nav-links">play</a>
         </li>
         <li>
           <a href="me.html" class="nav-links">me</a>
+        </li>
+        <li>
+          <a href="images/resume2021.pdf" target="_blank" class="nav-links"> resume</a>
         </li>
       </ul>
     </nav>
@@ -76,24 +81,55 @@
       </div>
     </div>
 
+<!--progress nav-->
+<nav class="toc">
+	<ul>
+		<li><a href="#problem">Problem</a></li>
+		  <ul>
+        <li><a href="#contributions">My Contributions</a></li>
+      </ul>
+    </li>
+		<li><a href="#understand">Phase 1: Understand</a></li>
+		<li><a href="#define">Phase 2: Define</a></li>
+		<li><a href="#diverge">Phase 3: Diverge</a></li>
+		<li><a href="#decide">Phase 4: Decide</a></li>
+    <li><a href="#prototype">Phase 5: Prototype</a></li>
+      <ul>
+        <li><a href="#feature1">Feature 1</a></li>
+        <li><a href="#feature2">Feature 2</a></li>
+      </ul>
+    <li><a href="#validate">Phase 6: Validate</a></li>
+    <li><a href="#reiterate">Phase 5.1: Reiterate</a></li>
+    <li><a href="#next">Next Steps</a></li>
+    <li><a href="#takeaway">Takeaways</a></li>
+	</ul>
+  <svg class="toc-marker" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+    <path stroke="#CE796B" stroke-width="3" fill="transparent" stroke-dasharray="0, 0, 0, 1000" stroke-linecap="round" stroke-linejoin="round" transform="translate(-0.5, -0.5)" />
+  </svg>
+</nav>
+
+<!--case start-->
     <div class="case-container">
       <div class="case">
-        <h4>The Problem</h4>
-          <p>Created for the RSA student design competition to tackle the brief “How might we design systems that provide seamless and cost-effective access
-           to quality health services for underserved communities?”, Medley addresses the lack of LGBTQ+
-           sex education in Canada.</p>
-        <div class="callout-large">
-          <p>Medley is a website that aims to comprehensively educate youth about inclusive sexual education.</p>
-        </div>
+        <section id="problem">
+          <h4>The Problem</h4>
+            <p>Created for the RSA student design competition to tackle the brief “How might we design systems that provide seamless and cost-effective access
+             to quality health services for underserved communities?”, Medley addresses the lack of LGBTQ+ sex education in Canada.</p>
+          <div class="callout-large">
+            <p>Medley is a website that aims to comprehensively educate youth about inclusive sexual education.</p>
+          </div>
+        </section>
 
+        <section id="contributions">
         <h4 class="subheading">my contributions</h4>
-          <p>As a project designer for Medley, I collaborated with teammates to create an end-to-end hi-fidelity website mockup.
-             Using design and business thinking to navigate through the design sprint methodology, I helped to create the branding, wireframes,
-             and prototype for Medley. I also assisted with the usability testing through script writing and conducting interviews.</p>
+          <p>As a project designer for Medley, I collaborated with teammates to create an end-to-end hi-fidelity website mockup. In order to navigate through the IDEO design sprint methodology,
+            I used design and business thinking to create the branding, wireframes, and prototype for Medley. I also assisted with usability testing through scriptwriting and conducting interviews.</p>
+        </section>
       </div>
 
       <div class="divider"></div>
 
+    <section id="understand">
       <div class="case">
         <h4>Phase 1: Understand</h4>
           <div class="callout">
@@ -101,13 +137,13 @@
           </div>
             <p>The right to comprehensive sex education is recognized within international human rights treaties, yet even first-world countries like Canada
                lack inclusive sex education. For LGBTQ+ youth, learning sex education through social media and pornography can often feel like the
-               only option. Teaching proper sex education can be a proactive way to address and prevent root causes of negative health problems. Still, existing solutions
+               only option. Teaching proper sex education can be a proactive way to address and prevent the root causes of negative health problems. Still, existing solutions
                like heteronormative-focused school curriculums are not enough. To better understand the problem from business, user, competitor, and technological angles, our
                first step was to research and expand our knowledge base.</p>
       </div>
 
       <figure class="photoselect">
-        <img id="imageToSwap" src="images/projects/medley/empathymap.jpg">
+        <img id="imageToSwap" src="images/projects/medley/hmw.jpg">
           <div class="case distribute-items" id="photos">
             <button value="hmw.jpg" onclick="swapImage(this)">How Might We</button>
             <button value="empathymap.jpg" onclick="swapImage(this)">Empathy Map</button>
@@ -115,20 +151,6 @@
             <button value="survey.png" onclick="swapImage(this)">Survey Testing</button>
           </div>
       </figure>
-
-      <script>
-      var photos = 'hmw.jpg';
-
-      function swapImage(obj) {
-        var image = document.getElementById("imageToSwap");
-
-        if (obj.parentElement.getAttribute('id') == "photos") {
-          photos = obj.getAttribute('value')
-        }
-
-        image.src = "images/projects/medley/" + photos;
-      };
-      </script>
 
       <div class="divider"></div>
 
@@ -142,7 +164,10 @@
 
       <div class="divider"></div>
 
+    </section>
+
       <div class="case">
+        <section id="define">
         <h4>Phase 2: Define</h4>
         <p>Even with the information we were able to gather on the pain points of LGBTQ+ sex education, the problem was still too broad to be effectively solved. In turn,
           we shifted our attention to establishing focus.</p>
@@ -158,29 +183,32 @@
               <p><i class="fa fa-commenting" aria-hidden="true"></i>"Being bi, I obviously knew how sex with a man and woman "worked", but when I first started dating a woman I had
                 no idea how anything worked... even though I'm a woman."</p>
             </div>
-
         <div class="divider"></div>
+      </section>
 
+
+        <section id="diverge">
           <h4>Phase 3: Diverge</h4>
             <p>To kickstart the ideation process, we used a mindmap to start linking related words and ideas together. Once the blood was flowing, we split off and used a technique called crazy 8s
-               where within 8 minutes, each of us had to come up with as many ideas as we could. Some of the ones I thought of included a myer-briggs style quiz with resources, a reproductive health application, and some sort of social media campaign.
+               where within 8 minutes, each of us had to come up with as many ideas as we could. Some of the ones I thought of included a Myer-Briggs-style quiz with resources, a reproductive health application, and some sort of social media campaign.
                However, we had to focus on the big question: <em>is this feasible?</em></p>
       </div>
 
       <img width="100%" src="images/projects/medley/mindmap.gif" alt="">
 
       <div class="divider"></div>
+    </section>
 
+    <section id="decide">
       <div class="case">
         <h4>Phase 4: Decide</h4>
-        <p>Using an innovation matrix, we looked at the feasibility of each idea from the crazy 8s activity and specifically at its effectivness in real world situations. Not only
+        <p>Using an innovation matrix, we looked at the feasibility of each idea from the crazy 8s activity and specifically at its effectiveness in real-world situations. Not only
           did we want a unique idea that could solve the brief, we wanted an idea that would make a positive
           impact within the LGBTQ+ community. More importantly, we wanted our product to be useful in teaching LGBTQ+ youth comprehensive
-          sex education. My ideas were showcased on the pink sticky notes. Generally they were high on impact but
-          only with further refinement would the idea be completely feasibile.</p>
+          sex education. My ideas were showcased on the pink sticky notes. Generally, they were high on impact but
+          only with further refinement would the idea be completely feasible.</p>
       </div>
 
-<!--This one doesn't work idk why-->
       <figure class="photoselect">
         <img id="imageToSwap_decide" src="images/projects/medley/innovationmatrix.jpg">
         <div class="case distribute-items" id="photos">
@@ -188,20 +216,6 @@
           <button value="voting.jpg" onclick="swapImage_decide(this)">Voting</button>
         </div>
       </figure>
-
-      <script>
-      var photos = 'innovationmatrix.jpg';
-
-      function swapImage_decide(obj) {
-        var image = document.getElementById("imageToSwap_decide");
-
-        if (obj.parentElement.getAttribute('id') == "photos") {
-          photos = obj.getAttribute('value')
-        }
-
-        image.src = "images/projects/medley/" + photos;
-      };
-      </script>
 
       <div class="divider"></div>
 
@@ -212,16 +226,19 @@
             <p>Our solution: Medley, an interactive website teaching explicit sex education, giving resources, and providing LGBTQ+ youth with a safe space to explore.</p>
           </div>
       </div>
+    </section>
+
 
       <div class="divider"></div>
 
       <div class="case">
+        <section id="prototype">
         <h4>Phase 5: Prototype</h4>
           <p>In line with the design sprint format, our group started to formulate plans for the user experience and user interface of our product. However, before partaking
              in any big steps we first wanted to collectively create our branding aesthetic and our website flow. We ended up going with a fun and colourful brand that would focus on interactive
              elements to engage consumers. <b>Fun fact:</b> being a legal studies student, here is when I did research on the legality of our product (i.e. not obstructing obscenity laws).</p>
         <h4 class="subheading">information architecture</h4>
-          <p>Hierarchy is important in many senses of UI design but our focus was on the experience of our product. By creating a sitemap, we were able to view what we topics were to be covered
+          <p>Hierarchy is important in many senses of UI design but our focus was on the experience of our product. By creating a sitemap, we were able to view what topics were to be covered
             and ensure they were impactful enough for our target audience.</p>
       </div>
 
@@ -236,9 +253,11 @@
           <p>Once our collaborative work was completed, we branched off into different roles to work on different sections of the project. Our business team worked
              on the <a href="https://drive.google.com/drive/folders/1ZY4SLzJRdBoGO4pMDN9YDh8TB8Ei6hJp?usp=sharing" target="_blank">business viability</a> of the product while I worked with others on the UX/UI of the product. Due to the sensitivity of the product, we wanted to
              implement a couple of features to help increase safety and education in the least intrusive ways possible.</p>
+           </section>
 
           <div class="divider"></div>
 
+          <section id="feature1">
           <h4 class="contribution">feature one</h4>
           <div class="callout-large">
             <p>Explicit diagrams to facilitate interactive learning.</p>
@@ -249,15 +268,17 @@
           <div class="video"><video width="500px" autoplay loop muted style="margin-right: 3rem;"><source src="images/projects/medley/interactive.mp4" type="video/mp4"</></video></div>
           <div class="content">
             <p>
-              While learning how to put a condom on a banana may be sufficient in the governments eyes, we wanted Medley to help phase out the stigmas surrounding sex.
-              To facilitate this as well as to make explicit sex education attainable, we created click through diagrams to talk about topics like fingering, coming out, and
-              STIs. Using gender neutral terms, we aimed not alienate anyone and help everyone in the LGBTQ+ community feel included.
+              While learning how to put a condom on a banana may be sufficient in the government's eyes, we wanted Medley to help phase out the stigmas surrounding sex.
+              To facilitate this as well as to make explicit sex education attainable, we created click-through diagrams to talk about topics like fingering, coming out, and
+              STIs. Using gender-neutral terms, we aimed not to alienate anyone and help everyone in the LGBTQ+ community feel included.
             </p>
           </div>
         </div>
+      </section>
 
 
         <div class="case">
+          <section id="feature2">
           <h4 class="contribution">feature two</h4>
           <div class="callout-large">
             <p>Quick exit for those from unsupportive homes.</p>
@@ -275,17 +296,18 @@
           <div class="video"><video width="500px" autoplay loop muted style="margin-left: 3rem";><source src="images/projects/medley/quickleave.mp4" type="video/mp4"</></video>
         </div>
       </div>
+    </section>
 
         <div class="divider"></div>
 
+        <section id="validate">
         <div class="case">
-
           <h4>Phase 6: Validate</h4>
           <div class="callout">
             <p><i class="fa fa-commenting" aria-hidden="true"></i>"The mental model I made in my mind was disrupted when the labels weren't what I expected"</p>
           </div>
           <p>To make sure that our product was actually helpful to the LGBTQ+ community, we sought out participants who were willing to test out our prototype.
-             As this project was created during the pandemic, we gathered feedback virtually through video calls and had our users go through a cognative walkthrough.
+             As this project was created during the pandemic, we gathered feedback virtually through video calls and had our users go through a cognitive walkthrough.
              Our main goals for the usability testing was to find out: <li>Was our content useful?</li> <li>Was it captivating?</li> <li>Would you use it?</li></p>
 
           <h4 class="contribution">takeaways</h4>
@@ -294,49 +316,55 @@
           </div>
           <p>While our concept was shining through and the content was well written, we had problems with our usability heuristics and overall branding. The lack
             of branding and the monotone look made the site seem dull while the inconsistent navigation confused our users. Taking a step back and looking at Medley,
-            we created a new plan of action to address our products pain points in order to make it more accessible and fun.</p>
+            we created a new plan of action to address our product's pain points in order to make it more accessible and fun.</p>
           </div>
           <img width="100%" src="images/projects/medley/navcritique.jpg" alt="">
           <figcaption>User testing feedback for our navigation bar.</figcaption>
 
           <div class="divider"></div>
           <div class="divider"></div>
+        </section>
 
-
+        <section id="reiterate">
           <div class="case">
-            <h4>Back to phase 5</h4>
+
+            <h4>Phase 5.1: Reiterate</h4>
               <p>With our plan created, our team wanted to mainly focus on three aspects: branding, usability heuristics, and content breakdown. This was also the final step
                  for our allotted time so we wanted to make the product as polished as possible.</p>
 
             <h4 class="contribution">previous iteration</h4>
               <p>In our last iteration, we had barely scratched the surface when it came to branding. Although we had our different colours and characters, we weren't making the best
-                 use of the space. This time, we tried to use our branding elements in order to divide up the content and break it down into easy to read sections.</p>
+                 use of the space. This time, we tried to use our branding elements in order to divide up the content and break it down into easy-to-read sections.</p>
           </div>
 
           <img width="100%" src="images/projects/medley/version1.2.jpg" alt="">
           <figcaption>V1 versus V2 of our vaginal sex page.</figcaption>
+        </section>
 
           <div class="divider"></div>
 
           <div class="case">
+            <section id="next">
             <h4>Next Steps</h4>
               <div class="callout-large">
-                <p>More iteractions, care pack creation, map implementation</p>
+                <p>More iteractions, map implementation, policy change</p>
               </div>
                 <p>While Medley's characters and diagrams give the website personality, the execution still isn't what we hoped it would be.
-                   An appropriate next step for this project would be to allow for more user iteraction with the activities. This would not only make the site more engaging
-                   but given the right content, more educational. After that, implementing our map and creating our care pack would increase our value proposition.</p>
-
+                   An appropriate next step for this project would be to allow for more user interaction with the activities. This would not only make the site more engaging
+                   but given the right content, more educational. After that, implementing our map to connect with local resources and adding an aspect of lobbying for policy change
+                   can allow for greater impact.</p>
+                 </section>
             <div class="divider"></div>
 
+            <section id="takeaway">
             <h4>Takeaways</h4>
             <div class="callout-large">
               <p>User research, storytelling, logical thinking, adaptability</p>
             </div>
-            <p>While I really loved this project and the real world social impact it provided, one of my biggest qualms was the lack of LGBTQ+ members within our group members.
+            <p>While I really loved this project and the real-world social impact it provided, one of my biggest qualms was the lack of LGBTQ+ members within our group members.
                We did a lot of research in order to overcome this problem but I wish we interview people in the community on top of our survey. That being said, our survey and research
                allowed me to impactfully tell the stories of LGBTQ+ sex. Another element I learned from this project is the importance of logical thinking and adaptability, especially in
-               group settings. Knowing when to look at the big picture over focusing on minor details can save a lot of time and energy better spent elsewhere. </p>
+               group settings. Knowing when to look at the big picture over-focusing on minor details can save a lot of time and energy better spent elsewhere. </p>
 
             <div class="callout">
                <p>I hope that Medley sparks change in the sex education curriculum or that companies will provide better services to the LGBTQ+ community.</p>
@@ -344,23 +372,15 @@
         </div>
       </div>
 
-
         <div class="end-divider"></div>
+
 
 
         <!--Scroll back to top button-->
         <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fas fa-chevron-up" style="color:#000000;"></i></button>
 
-        <script>
-        //Get the button
-        var mybutton = document.getElementById("myBtn");
-
-        // When the user clicks on the button, scroll to the top of the document
-        function topFunction() {
-          document.body.scrollTop = 0;
-          document.documentElement.scrollTop = 0;
-        }
-        </script>
+        <script type="text/javascript" src="scripts/main.js"></script>
+        <script type="text/javascript" src="scripts/medley.js"></script>
 
         <!--footer-->
         <footer>
@@ -369,22 +389,13 @@
             <a href="mailto:imginahsu@gmail.com" target="_blank"><i class="far fa-envelope"></i></a>
             <a href="https://www.linkedin.com/in/ginahueihsu/" target="blank"><i class="fab fa-linkedin-in"></i></a>
             <a href="https://dribbble.com/ginahueihsu" target="blank"><i class="fab fa-dribbble"></i></a>
-            <a href="https://instagram.com/simplygna" target="blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://instagram.com/g.doesdesigns" target="blank"><i class="fab fa-instagram"></i></a>
             <a href="images/resume2021.pdf" target="_blank"><i class="far fa-file"></i></a>
           </div>
           <h6>Copyright © Gina Hsu 2021</h6>
         </footer>
 
       </div>
-
-      <script>
-      let mainNav = document.getElementById('js-menu');
-      let navBarToggle = document.getElementById('js-navbar-toggle');
-
-      navBarToggle.addEventListener('click', function () {
-        mainNav.classList.toggle('active');
-      });
-      </script>
 
   </body>
 

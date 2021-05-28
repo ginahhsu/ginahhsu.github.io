@@ -34,13 +34,16 @@
       <a href="index.html" class="logo"><img src="assets/logo2020.png" alt="personal logo" height="45vh"</img></a>
       <ul class="main-nav">
         <li>
-          <a href="#work" class="nav-links">work</a>
+          <a href="index.html" class="nav-links">work</a>
         </li>
         <li>
           <a href="play.html" class="nav-links">play</a>
         </li>
         <li>
           <a href="me.html" class="nav-links">me</a>
+        </li>
+        <li>
+          <a href="images/resume2021.pdf" target="_blank" class="nav-links"> resume</a>
         </li>
       </ul>
     </nav>
@@ -76,50 +79,83 @@
       </div>
     </div>
 
+    <!--progress nav-->
+    <nav class="toc">
+    	<ul>
+    		<li><a href="#problem">Problem</a></li>
+    		  <ul>
+            <li><a href="#contribution">My Contributions</a></li>
+          </ul>
+        </li>
+    		<li><a href="#target">Target Users</a></li>
+    		<li><a href="#ideation">Ideation</a></li>
+    		<li><a href="#requirements">Product Requirements</a></li>
+        <ul>
+          <li><a href="#feature1">Feature 1</a></li>
+          <li><a href="#feature2">Feature 2</a></li>
+          <li><a href="#feature3">Feature 3</a></li>
+        </ul>
+        <li><a href="#prototype">Phase 5: Prototype</a></li>
+        <li><a href="#takeaway">Takeaways</a></li>
+    	</ul>
+      <svg class="toc-marker" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+        <path stroke="#CE796B" stroke-width="3" fill="transparent" stroke-dasharray="0, 0, 0, 1000" stroke-linecap="round" stroke-linejoin="round" transform="translate(-0.5, -0.5)" />
+      </svg>
+    </nav>
+
     <div class="case-container">
       <div class="case">
-        <h4>The Problem</h4>
+        <section id="problem">
+          <h4>The Problem</h4>
           <p>While people are stuck at home due to the coronavirus, travelling may seem like nothing more than a dream. Nevertheless, when things return
              back to a sense of normal, Airbnb wants to create new experiences for people who travel together. Our goal for the 48 hour
              College + Airbnb Creative Jam was to provide travellers with a place to document, organize, and share their travel experiences.</p>
         <div class="callout-large">
           <p>Stamplet allows friends and family to collaboratively document, organize, and share their travel experiences.</p>
         </div>
+      </section>
 
+      <section id="contribution">
         <h4 class="subheading">my contributions</h4>
           <p>As Stamplet was created in the span of 48 hours, my role as a UX/UI designer mainly consisted of designing and refining wireframes into prototypes.
-             Before reaching that stage, I was in charge of researching initial pain points, target audience, and finally my team and I brainstormed solutions.</p>
+             Before reaching that stage, I was in charge of researching initial pain points, target audience, and finally, my team and I brainstormed solutions.</p>
+           </section>
       </div>
 
       <div class="divider"></div>
 
       <div class="case">
+        <section id="target">
         <h4>Target Users</h4>
         <h4 class="subheading">travellers of all ages</h4>
       </div>
 
       <img width="100%" src="images/projects/stamplet/target.jpg" alt="">
-
+    </section>
       <div class="divider"></div>
 
+      <section id="ideation">
       <div class="case">
         <h4>Ideation</h4>
-        <p>Looking at the points we wanted to solve, my teammate and I decided to individually start the ideation process. Using pen and paper, we gave ourselves a two hour limit to create low-fidelity
+        <p>Looking at the points we wanted to solve, my teammate and I decided to individually start the ideation process. Using pen and paper, we gave ourselves a two-hour limit to create low-fidelity
            wireframes of what we thought would solve the pain points of the challenge. Using the freshwatching technique, I wanted to use the business model of Facebook, specifically Facebook groups,
            and combine it with Airbnb's existing value proposition. The specific value proposition I wanted from Facebook was the ability to socialize and post articles of things they found interesting.</p>
       </div>
+    </section>
 
            <!--Pen and paper low-fi wireframes-->
 
       <div class="divider"></div>
-
+      <section id="requirements">
       <div class="case">
         <h4>Product Requirements</h4>
           <p>Taking into account our target user's tasks, we picked out the key features we wanted for Stamplet:</p>
       </div>
+    </section>
 
 
       <div class="case">
+        <section id="feature1">
           <h4 class="contribution">feature one</h4>
           <div class="callout-large">
             <p>Posting images/videos both during and after the event</p>
@@ -129,12 +165,14 @@
             <div class="video"><video width="250px" autoplay loop muted style="margin-right: 3rem;"><source src="images/projects/stamplet/addphoto.mp4" type="video/mp4"</></video></div>
             <div class="content">
               <p>
-                To ensure that users of all ages could use our application, we wanted to have the options to instantly add photos and/or videos to your collection or to add it later
-                on. Doing this, we can allow for instantatnous posting while also accomodating those who are less tech savy or prefer to post all together.
+              To ensure that users of all ages could use our application, we wanted to have the option to instantly add photos and/or videos to your collection or to add it later on.
+              Doing this, we can allow for instantaneous posting while also accomodating those who are less tech savvy or prefer to post together.
               </p>
             </div>
           </div>
+        </section>
 
+          <section id="feature2">
           <h4 class="contribution">feature two</h4>
           <div class="callout-large">
             <p>Gaining inspiration for trips beforehand</p>
@@ -145,13 +183,15 @@
               <p>
                 While some people prefer going the spontaneous route when planning for trips, we wanted users to be able to find inspiration of what to do and where to stay beforehand.
                  Using a bookmarking system, users can quickly find their saved items in the auto-sorted country cards. As this hackathon was in collaboration with Airbnb, we wanted their
-                 experiences and accomodations to be embedded into our application for a smooth browsing process.
+                 experiences and accommodations to be embedded into our application for a smooth browsing process.
               </p>
             </div>
             <div class="video"><video width="250px" autoplay loop muted style="margin-left: 3rem";><source src="images/projects/stamplet/inspo.mp4" type="video/mp4"</></video>
           </div>
         </div>
+      </section>
 
+        <section id="feature3">
             <h4 class="contribution">feature three</h4>
             <div class="callout-large">
               <p>An archive system to store past experiences</p>
@@ -168,11 +208,17 @@
               </p>
             </div>
           </div>
+        </section>
+      </div>
+
+
 
         <div class="divider"></div>
 
           <div class="divider"></div>
+          <section id="prototype">
 
+          <div class="case">
             <h4>Prototype</h4>
               <p>With all the key features and components picked out, we hopped onto the new collaboration setting for AdobeXD. The pages were split up between our team and
                  then we were off. Within the 2 day timeline, we designed out over 30 hi-fidelity screens linked together in a working prototype.</p>
@@ -189,11 +235,14 @@
             <div class="divider"></div>
 
             <div class="case">
-              <p>We made sure to communicate throughout the process by calling each other with updates of our progress as well as other aspects of visual design and user experience.
-                 When it came to linking the pages, we did the sections we designed and went over it a couple times to ensure we had the whole flow down.
+              <p>We made sure to communicate throughout the process by calling each other with updates on our progress as well as other aspects of visual design and user experience.
+                 When it came to linking the pages, we did the sections we designed and went over it a couple of times to ensure we had the whole flow down.
               </p>
-
+</div>
+            </section>
               <div class="divider"></div>
+              <div class="case">
+                <section id="takeaway">
 
             <h4>Takeaways</h4>
             <div class="callout-large">
@@ -202,6 +251,7 @@
             <p>Hackathons are always so fun to do because you're able to see the final product in such a small amount of time. However, this time constraint also taught me the difficulty
                of brainstorming functions that solve pain points. In the future, using HMW statements to iterate the main functions can be good for ensuring usability. On top of that,
                this was my first time using some sort of design system which was really exciting. One point of contention for Stamplet is the lack of touch area testing on mobile. </p>
+             </section>
         </div>
       </div>
 
@@ -211,17 +261,7 @@
 
         <!--Scroll back to top button-->
         <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fas fa-chevron-up" style="color:#000000;"></i></button>
-
-        <script>
-        //Get the button
-        var mybutton = document.getElementById("myBtn");
-
-        // When the user clicks on the button, scroll to the top of the document
-        function topFunction() {
-          document.body.scrollTop = 0;
-          document.documentElement.scrollTop = 0;
-        }
-        </script>
+        <script type="text/javascript" src="scripts/stamplet.js"></script>
 
         <!--footer-->
         <footer>
@@ -230,7 +270,7 @@
             <a href="mailto:imginahsu@gmail.com" target="_blank"><i class="far fa-envelope"></i></a>
             <a href="https://www.linkedin.com/in/ginahueihsu/" target="blank"><i class="fab fa-linkedin-in"></i></a>
             <a href="https://dribbble.com/ginahueihsu" target="blank"><i class="fab fa-dribbble"></i></a>
-            <a href="https://instagram.com/simplygna" target="blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://instagram.com/g.doesdesigns" target="blank"><i class="fab fa-instagram"></i></a>
             <a href="images/resume2021.pdf" target="_blank"><i class="far fa-file"></i></a>
           </div>
           <h6>Copyright © Gina Hsu 2021</h6>
@@ -238,14 +278,6 @@
 
       </div>
 
-      <script>
-      let mainNav = document.getElementById('js-menu');
-      let navBarToggle = document.getElementById('js-navbar-toggle');
-
-      navBarToggle.addEventListener('click', function () {
-        mainNav.classList.toggle('active');
-      });
-      </script>
 
   </body>
 
