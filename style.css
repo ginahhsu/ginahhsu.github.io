@@ -243,7 +243,12 @@ figcaption {
   top: 7em;
   padding: 1em;
   width: 14em;
-  line-height: 2; }
+  opacity: 0;
+  line-height: 2;
+  -webkit-transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+          transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
 
   .toc ul {
     list-style: none;
@@ -370,8 +375,8 @@ figcaption {
 
   /*******WORK*******/
   .intro-container {
-    padding-left: 7%;
-    padding-right: 7%;
+    padding-left: 13%;
+    padding-right: 13%;
   }
 
   .intro {
@@ -387,22 +392,24 @@ figcaption {
 
   .summary{
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-    padding: 7em 15em 3em 15em;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 7em;
+    column-gap: 2em;
+  }
+
+  .year {
+
   }
 
   .summaryleft{
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: minmax(auto, 50%) 50%;
+    grid-gap: 2rem;
     line-height: 1.7;
   }
 
   .deliverables, .year{
-    border-right: 2px solid grey;
-    position: relative;
-    right: 30%;
+    border-right: 1.5px solid grey;
   }
 
   .sum-pic {
@@ -450,7 +457,7 @@ figcaption {
   }
 
   .case-container {
-    padding-top: 5%;
+    padding-top: 10%;
     padding-left: 20%;
     padding-right: 20%;
   }
