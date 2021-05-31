@@ -149,8 +149,8 @@ figcaption {
 /*******MAIN CONTAINER*******/
 .container {
   display: block;
-  align-content: center;
   margin: auto;
+  max-width: 1280px;
 }
 
 /*******NAVBAR*******/
@@ -159,10 +159,8 @@ figcaption {
   justify-content: space-between;
   height: 100px;
   align-items: center;
-  padding-left: 13%;
-  padding-right:13%;
   position: sticky; top: 0px;
-  background-image: linear-gradient(to top, rgba(245, 241, 237,0), rgba(245, 241, 237,1));
+  /*background-image: linear-gradient(to top, rgba(245, 241, 237,0), rgba(245, 241, 237,1));*/
   z-index: 99;
 }
 
@@ -201,17 +199,15 @@ figcaption {
 /*******LANDING*******/
 .top-container {
   padding-top: 6%;
-  margin-left: 18%;
-  margin-right: 18%;
+  margin: 0em 6em;
   line-height: 1.4;
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
 }
 
 .introduction {
   margin-top: 5%;
-  max-width: 50%;
+  flex:1;
 }
 
 .introduction h4 {
@@ -219,7 +215,7 @@ figcaption {
 }
 
 .landing {
-  width: 50%;
+  flex:1;
   height: auto;
  }
 
@@ -280,34 +276,54 @@ figcaption {
             transition: all 0.3s ease; }
 
 /*******PROJECTS AND PLAY*******/
-  .projects-container {
-    display: block;
-    margin: 5% 18% 5% 18%;
-  }
+.projects-container {
+  display: block;
+  align-content: center;
+  margin: 5% 7%;
+}
 
-  .card {
-    width: 100%;
-    background-color: var(--card-colour);
-    border-radius: 20px;
-    box-shadow: 0 1px 7px rgba(0, 0, 0, 0.15);
-    position: relative;
-    justify-content: space-between;
-    transition: all 0.3s ease-in-out;
-    margin: 0rem 0rem 5rem 0rem;
-    display: flex;
-  }
+.card {
+  display: flex;
+  flex-basis: 100%;
+  background-color: var(--card-colour);
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  position: relative;
+  flex-wrap: wrap;
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 5em;
+}
 
-  .inner-border {
-    border: 4px solid #F2A797;
-    position: relative;
-    width: 95%;
-    height: 95%;
-    margin: 3%;
-    border-radius: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-  }
+.card-border {
+  display: flex;
+  position: relative;
+  border: 4px solid #F2A797;
+  border-radius: 20px;
+  margin: 2em;
+  flex-wrap: wrap;
+}
+
+.content-1{
+  flex: 4 1 15em;
+  margin: 2.5em;
+}
+
+.content-2 {
+  flex: 2 1 20em;
+
+}
+
+.content-2 img {
+  position: relative;
+  max-width: 100%;
+  min-height: 100%;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+  object-position: 50% 50%;
+  top: -1em;
+  right: 1em;
+}
 
   .card::after {
     content: '';
@@ -323,14 +339,7 @@ figcaption {
     transform: scale(1.03);
   }
 
-  .description {
-    margin-top: 4%;
-    margin-left: 3%;
-    margin-bottom: 4%;
-    max-width: 50%;
-  }
-
-  .description h1 {
+  .content-1 h1 {
     padding: 8px 0px 24px 0px;
   }
 
@@ -357,10 +366,9 @@ figcaption {
 }
 
   .thumbnail {
+    flex: 1;
     position: absolute;
     float: right;
-    display: flex;
-    flex:1.2;
     max-width: 45%;
     align-items:center;
     right: 1%;
@@ -458,8 +466,8 @@ figcaption {
 
   .case-container {
     padding-top: 10%;
-    padding-left: 20%;
-    padding-right: 20%;
+    padding-left: 10%;
+    padding-right: 10%;
   }
 
   .case {

@@ -1,163 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <title>Gina Hsu | Product designer</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A portfolio collection of digital design work done by Gina Hsu.">
+  <!--favicon-->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-  <title>Gina Hsu | Product designer</title>
   <!--Google Analytics-->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158725385-1"></script>
   <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'UA-158725385-1');
   </script>
-  <!--End Google Analytics-->
-
   <!--fonts-->
   <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Poppins:oppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1|DM+Serif+Display" rel="stylesheet">
   <!--stylesheet and Javascript-->
   <link rel="stylesheet" type="text/css" href="style.css">
-
+  <script type="text/javascript" src="scripts/main.js"></script>
   <!--fontawesome-->
   <script src="https://kit.fontawesome.com/7aa06fc209.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
 
-<div class="container">
+  <div class="container">
 
     <!--Navigation bar-->
     <nav class="navbar">
       <a href="index.html" class="logo"><img src="assets/logo2020.png" alt="personal logo" height="45vh"</img></a>
       <ul class="main-nav">
-        <li>
-          <a href="#work" class="nav-links">work</a>
-        </li>
-        <li>
-          <a href="play.html" class="nav-links">play</a>
-        </li>
-        <li>
-          <a href="me.html" class="nav-links">me</a>
-        </li>
-        <li>
-          <a href="images/resume2021.pdf" target="_blank" class="nav-links">resume</a>
-        </li>
+        <li><a href="#work" class="nav-links">work</a></li>
+        <li><a href="play.html" class="nav-links">play</a></li>
+        <li><a href="me.html" class="nav-links">me</a></li>
+        <li><a href="images/resume2021.pdf" target="_blank" class="nav-links">resume</a></li>
       </ul>
     </nav>
-
 
     <!--Landing-->
     <div class="top-container">
       <div class="introduction">
         <h3 style="color:var(--text-brown);">Gina Hsu❣️</h3>
-        <h5><span style="color:#949494;"> <a href="#work">Product Designer </a> & <a href=play.html>Multimedia Artist</a></h5>
+        <h5><span style="color:#949494;"> <a href="#work">Product Designer</a> & <a href=play.html>Multimedia Artist</a></h5>
         <h2>Creating empowering digital <span id="home"></span></h2>
-        <script type="text/javascript" src="scripts/main.js"></script>
+        <script type="text/javascript" src="scripts/index.js"></script>
       </div>
-        <img class="landing" src="images/ux.png" alt="person creating website">
+      <img class="landing" src="images/ux.png" alt="person creating website" width="50%">
     </div>
-
 
     <!--projects-->
     <div class="projects-container" id="work">
 
-      <!--project 1-->
-      <a href="preppr.html">
-      <article class="card">
-        <div class="inner-border" style="border-color:#FFDA66 !important;">
-            <div class="description">
-              <p class="tag">project</p>
-              <p class="role">product designer • business analyst • ux researcher</p>
-              <h1>Preppr</h1>
-              <p class="byline">Answering the UN's goal of healthy living, Preppr simplifies healthy cooking for one and reduces food waste. </p>
-              <a href="preppr.html">View Project<i class="fas fa-long-arrow-alt-right"></i></a>
-            </div>
-          <a href="medley.html">
-            <img class="thumbnail" src="images/covers/preppr-thumb.png" />
-          </a>
+    <!--project 1-->
+    <a href="preppr.html">
+      <div class="card">
+        <div class="card-border" style="border-color:#FFDA66 !important;">
+          <article class="content-1">
+            <p class="tag">project</p>
+            <p class="role">product designer • business analyst • ux researcher</p>
+            <h1>Preppr</h1>
+            <p class="byline">Answering the UN's goal of healthy living, Preppr simplifies healthy cooking for one while reducing food waste. </p>
+            <a href="preppr.html">View Project<i class="fas fa-long-arrow-alt-right"></i></a>
+          </article>
+          <article class="content-2">
+            <a href="preppr.html"><img
+            src="images/covers/preppr-thumb-large.png"></a>
+          </article>
         </div>
-      </article>
-      </a>
+      </div>
+    </a>
 
       <!--project 2-->
       <a href="waterloo.html">
-      <article class="card">
-        <div class="inner-border" style="border-color:#031F5D !important;">
-          <div class="description">
-            <p class="tag">intern</p>
-            <p class="role">product designer • web developer</p>
-            <h1 id="uw">UW International</h1>
-            <p class="byline">Tasked to redesign and create webpages for the University of Waterloo's International department.</p>
-            <a href="waterloo.html">View internship<i class="fas fa-long-arrow-alt-right"></i></a>
+        <div class="card">
+          <div class="card-border" style="border-color:#031F5D !important;">
+            <article class="content-1">
+              <p class="tag">internship</p>
+              <p class="role">product designer • web developer</p>
+              <h1>UW International</h1>
+              <p class="byline">Tasked to redesign and create webpages for the University of Waterloo's International department. </p>
+              <a href="waterloo.html">View Internship<i class="fas fa-long-arrow-alt-right"></i></a>
+            </article>
+            <article class="content-2">
+              <a href="waterloo.html"><img
+              src="images/covers/waterloo-thumb.png"></a>
+            </article>
           </div>
-          <a href="waterloo.html">
-            <img class="thumbnail" src="images/covers/waterloo-thumb.png"/>
-          </a>
         </div>
-      </article>
       </a>
 
       <!--project 3-->
       <a href="medley.html">
-      <article class="card">
-        <div class="inner-border">
-            <div class="description">
+        <div class="card">
+          <div class="card-border">
+            <article class="content-1">
               <p class="tag">rsa competition</p>
               <p class="role">product designer</p>
               <h1>Medley</h1>
-              <p class="byline">Highly Commended for the 2020-21 RSA Student Design Awards, Medley reinvents LGBTQ+ sex education. </p>
-              <a href="medley.html">View submission<i class="fas fa-long-arrow-alt-right"></i></a>
-            </div>
-            <a href="medley.html">
-              <img class="thumbnail" src="images/covers/medley-thumb.png" />
-            </a>
+              <p class="byline">Highly Commended for the RSA Student Design Awards, Medley reinvents LGBTQ+ sex education. </p>
+              <a href="waterloo.html">View submission<i class="fas fa-long-arrow-alt-right"></i></a>
+            </article>
+            <article class="content-2">
+              <a href="medley.html"><img
+              src="images/covers/medley-thumb.png"></a>
+            </article>
+          </div>
         </div>
-      </article>
       </a>
 
       <!--project 4-->
       <a href="stamplet.html">
-      <article class="card">
-        <div class="inner-border" style="border-color:#D5E4E2 !important">
-          <div class="description">
-            <p class="role">UX/UI designer</p>
-            <p class="tag">hackathon</p>
-            <h1>Stamplet</h1>
-            <p class="byline">Designed for the Airbnb Creative Jam, Stamplet connects travellers around the world during tough times.</p>
-            <a href="stamplet.html">View sprint<i class="fas fa-long-arrow-alt-right"></i></a>
+        <div class="card">
+          <div class="card-border" style="border-color:#D5E4E2 !important;">
+            <article class="content-1">
+              <p class="tag">hackathon</p>
+              <p class="role">UX/UI designer</p>
+              <h1>Stamplet</h1>
+              <p class="byline">Designed for the Airbnb Creative Jam, Stamplet connects travellers around the world during tough times. </p>
+              <a href="stamplet.html">View sprint<i class="fas fa-long-arrow-alt-right"></i></a>
+            </article>
+            <article class="content-2">
+              <a href="stamplet.html"><img
+              src="images/covers/stamplet-thumb.png"></a>
+            </article>
           </div>
-          <a href="stamplet.html">
-            <img class="thumbnail" src="images/covers/stamplet-thumb.png" />
-          </a>
         </div>
-      </article>
       </a>
 
     </div>
-</div>
-
-
-<!--Scroll back to top button-->
-<button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fas fa-chevron-up" style="color:#000000;"></i></button>
-
-<!--footer-->
-<footer>
-  <h5>Let's get in touch❣️</h5>
-  <div class="contact">
-    <a href="mailto:imginahsu@gmail.com" target="_blank"><i class="far fa-envelope"></i></a>
-    <a href="https://www.linkedin.com/in/ginahueihsu/" target="blank"><i class="fab fa-linkedin-in"></i></a>
-    <a href="https://dribbble.com/ginahueihsu" target="blank"><i class="fab fa-dribbble"></i></a>
-    <a href="https://instagram.com/simplygna" target="blank"><i class="fab fa-instagram"></i></a>
-    <a href="images/resume2021.pdf" target="_blank"><i class="far fa-file"></i></a>
   </div>
-  <h6>Copyright © Gina Hsu 2021</h6>
-</footer>
 
-</div>
+  <!--Scroll back to top button-->
+  <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fas fa-chevron-up" style="color:#000000;"></i></button>
+
+  <!--footer-->
+  <footer>
+    <h5>Let's get in touch❣️</h5>
+    <div class="contact">
+      <a href="mailto:imginahsu@gmail.com" target="_blank"><i class="far fa-envelope"></i></a>
+      <a href="https://www.linkedin.com/in/ginahueihsu/" target="blank"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://dribbble.com/ginahueihsu" target="blank"><i class="fab fa-dribbble"></i></a>
+      <a href="https://instagram.com/g.doesdesigns" target="blank"><i class="fab fa-instagram"></i></a>
+      <a href="images/resume2021.pdf" target="_blank"><i class="far fa-file"></i></a>
+    </div>
+    <h6>Copyright © Gina Hsu 2021</h6>
+  </footer>
 
 </body>
 
