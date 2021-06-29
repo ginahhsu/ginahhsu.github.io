@@ -310,7 +310,10 @@ figcaption {
 
 .content-2 {
   flex: 2 1 20em;
+}
 
+.waterloo {
+  flex: 2 1 18em !important;
 }
 
 .content-2 img {
@@ -466,8 +469,8 @@ figcaption {
 
   .case-container {
     padding-top: 10%;
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-left: 17%;
+    padding-right: 17%;
   }
 
   .case {
