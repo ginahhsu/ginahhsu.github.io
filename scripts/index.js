@@ -1,4 +1,4 @@
-Home changing title
+//Home changing title
 var arr=['designs.','branding.','experiences.','products.','interactions.'];
 var i=0;
 var heading = document.querySelector('#home');
