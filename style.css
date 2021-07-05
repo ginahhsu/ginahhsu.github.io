@@ -21,6 +21,8 @@ body {
   --text-dark: #272727;
   --text-grey: #949494;
   --text-brown: #513f2d;
+  --text-green: #527069;
+  --text-red: #F5CAC3;
 
 }
 
@@ -196,6 +198,17 @@ figcaption {
   color: #CE796B;
 }
 
+.container {
+}
+
+.back {
+  position: absolute;
+  z-index: -10;
+  top: 0;
+  right: 0;
+  max-height: 50%;
+}
+
 /*******LANDING*******/
 .top-container {
   padding-top: 6%;
@@ -223,6 +236,7 @@ figcaption {
     opacity: 0;
     transition: opacity 1s linear;
     font-weight: 700;
+    color: var(--text-dark);
   }
 
 #play {
