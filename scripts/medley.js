@@ -193,13 +193,38 @@ function swapImage(obj) {
   image.src = "images/projects/medley/" + photos;
 };
 
-
-
 ////////////Medley photo swap #2///////////////
 var photos = 'innovationmatrix.jpg';
 
 function swapImage_decide(obj) {
   var image = document.getElementById("imageToSwap_decide");
+
+  if (obj.parentElement.getAttribute('id') == "photos") {
+    photos = obj.getAttribute('value')
+  }
+
+  image.src = "images/projects/medley/" + photos;
+};
+
+////////////Medley photo swap #3///////////////
+var photos = 'user1.jpg';
+
+function imagePick(obj) {
+  var image = document.getElementById("imagePick");
+
+  if (obj.parentElement.getAttribute('id') == "photos") {
+    photos = obj.getAttribute('value')
+  }
+
+  image.src = "images/projects/medley/" + photos;
+};
+
+
+////////////Medley photo swap #4///////////////
+var photos = 'competitor.jpg';
+
+function swapPhoto(obj) {
+  var image = document.getElementById("swapPhoto");
 
   if (obj.parentElement.getAttribute('id') == "photos") {
     photos = obj.getAttribute('value')
