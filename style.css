@@ -18,6 +18,7 @@ body {
   --beige-darker: rgb(247,237,226, 0.8);
   --hover: #CE796B;
   --links: #527069;
+  --button: rgb(245, 202, 195, 0.4);
   --text-dark: #272727;
   --text-grey: #949494;
   --text-brown: #513f2d;
@@ -115,6 +116,11 @@ p {
 }
 
 .callout-large p {
+  font-size: 1.3em;
+  color: var(--text-dark);
+}
+
+.callout-large-wide p {
   font-size: 1.3em;
   color: var(--text-dark);
 }
@@ -400,8 +406,9 @@ figcaption {
 
   /*******WORK*******/
   .intro-container {
-    padding-left: 13%;
-    padding-right: 13%;
+
+    padding-left: 12%;
+    padding-right: 12%;
   }
 
   .intro {
@@ -420,6 +427,7 @@ figcaption {
     grid-template-columns: repeat(2, 1fr);
     margin-top: 7em;
     column-gap: 2em;
+
   }
 
   .year {
@@ -428,8 +436,8 @@ figcaption {
 
   .summaryleft{
     display: grid;
-    grid-template-columns: minmax(auto, 50%) 50%;
-    grid-gap: 2rem;
+    grid-template-columns: minmax(auto, 45%) 45%;
+    grid-gap: 3rem;
     line-height: 1.7;
   }
 
@@ -445,6 +453,13 @@ figcaption {
   .callout-large {
     background-color: var(--beige-darker);
     padding: 2rem 2rem 1rem 2rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .callout-large-wide {
+    background-color: var(--button);
+    padding: 2rem 2rem 2rem 2rem;
     border-radius: 1rem;
     margin-bottom: 1rem;
   }
@@ -483,8 +498,8 @@ figcaption {
 
   .case-container {
     padding-top: 10%;
-    padding-left: 17%;
-    padding-right: 17%;
+    padding-left: 15%;
+    padding-right: 15%;
   }
 
   .case {
