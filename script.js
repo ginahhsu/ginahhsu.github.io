@@ -52,12 +52,12 @@ if (highlightsList) {
       setTimeout(() => {
         index = 0;
         render(false);
-      }, 700);
+      }, 900);
     }
   };
 
   render(false);
-  const start = () => { timer = setInterval(advance, 2800); };
+  const start = () => { timer = setInterval(advance, 3400); };
   const stop = () => clearInterval(timer);
 
   start();
