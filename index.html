@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gina Hsu — Product Designer</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="page">
+
+  <aside class="sticky-panel">
+    <div class="panel-inner">
+      <p class="panel-hello">Hey, I&rsquo;m Gina!</p>
+      <h1 class="panel-tagline">A Product Designer who shapes complex systems into simple experiences.</h1>
+      <p class="panel-links">
+        <a href="https://drive.google.com/file/d/162CuTL-8AqN-aqvD_BA8g_rzkkiVSXLy/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
+        <span>/</span>
+        <a href="https://www.linkedin.com/in/ginahueihsu/" target="_blank" rel="noopener">LinkedIn</a>
+        <span>/</span>
+        <a href="mailto:hello@ginahsu.co">Email</a>
+      </p>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <nav class="tabs">
+      <button class="tab active" data-filter="all">All</button>
+      <button class="tab" data-filter="about">About</button>
+      <button class="tab" data-filter="projects">Projects</button>
+      <button class="tab" data-filter="for-fun">For fun</button>
+    </nav>
+
+    <div class="masonry">
+
+      <div class="col">
+
+        <a class="card card-purple" href="./ultrabasic" data-category="projects">
+          <div class="card-top">
+            <p class="card-label">UI design &bull; UX Strategy &bull; E-commerce</p>
+            <h2 class="card-title">Modernizing the seat selection experience</h2>
+          </div>
+          <img class="card-bg-img phone-mockup" src="assets/phone-mockup.png" alt="Baggage allowance screen from the seat selection flow">
+          <span class="card-btn">Seat selection <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+
+        <div class="card card-highlights" data-category="about">
+          <p class="card-eyebrow">Highlights</p>
+          <ul class="highlights-list">
+            <li><strong>5+ years of experience</strong>, specializing in B2C commerce and self-serve</li>
+            <li>Currently working in travel as a <strong>Senior Product Designer at WestJet</strong></li>
+            <li>Studying for <strong>accessibility design certification</strong></li>
+          </ul>
+        </div>
+
+        <div class="mini-row">
+          <a class="card card-mini card-mini-tan" href="./3d" data-category="for-fun">
+            <img src="assets/sandwich.png" alt="3D printed dim sum illustration">
+            <p class="mini-title">3D<br>Print</p>
+            <span class="card-btn small">Side quests <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+          <a class="card card-mini card-mini-cream" href="./showcase" data-category="for-fun">
+            <p class="mini-title">Roots collective<br>Turn Tool<br>Graphics</p>
+            <span class="card-btn small">Showcase <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="col">
+
+        <a class="card card-orange" href="./rootscollective" data-category="projects">
+          <div class="card-top">
+            <p class="card-label">UI design &bull; Branding &bull; Design system</p>
+            <h2 class="card-title">Building a design system and website from the ground up</h2>
+          </div>
+          <img class="card-bg-img" src="assets/tablet-mockup.png" alt="Roots Collective website mockup on a laptop">
+          <span class="card-btn">H.R. MacMillan Space Centre <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+
+        <a class="card card-teal" href="./turntool" data-category="projects">
+          <div class="card-top">
+            <p class="card-label">UX design &bull; UI design &bull; E-commerce</p>
+            <h2 class="card-title">Designing two products in six months</h2>
+          </div>
+          <img class="card-bg-img" src="assets/dashboard-screenshot.png" alt="Flight zone management dashboard on a laptop">
+          <span class="card-btn">UltraBasic and Extended Comfort <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+
+        <a class="card card-photo" href="./aboutme" data-category="about">
+          <img src="assets/gina-photo.png" alt="Photo of Gina outdoors overlooking a mountain valley">
+          <span class="card-btn">About <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
