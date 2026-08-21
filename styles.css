@@ -98,6 +98,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   background-image: url('assets/background-grid.svg');
   background-repeat: repeat;
   background-position: 0 0;
+  background-size: 865px 1403px;
   padding: 40px 40px 100px;
 }
 
