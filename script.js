@@ -14,6 +14,34 @@ document.querySelectorAll('a.card').forEach((card) => {
   });
 });
 
+// Highlights card: auto-advancing, one item spotlighted at a time.
+const highlightsList = document.querySelector('.highlights-list');
+if (highlightsList) {
+  const items = [...highlightsList.children];
+  const viewport = highlightsList.parentElement;
+  let activeIndex = 0;
+  let timer;
+
+  const showItem = (index) => {
+    activeIndex = index;
+    items.forEach((li, i) => li.classList.toggle('active', i === activeIndex));
+    highlightsList.style.transform = `translateY(-${items[activeIndex].offsetTop}px)`;
+  };
+
+  const advance = () => showItem((activeIndex + 1) % items.length);
+
+  const start = () => {
+    timer = setInterval(advance, 2800);
+  };
+  const stop = () => clearInterval(timer);
+
+  showItem(0);
+  start();
+
+  viewport.addEventListener('mouseenter', stop);
+  viewport.addEventListener('mouseleave', start);
+}
+
 // Tab filtering (All / About / Projects / For fun).
 const tabs = document.querySelectorAll('.tab');
 const cards = document.querySelectorAll('[data-category]');

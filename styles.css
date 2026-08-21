@@ -223,7 +223,10 @@ a.card:hover {
 
 /* ---- Highlights card ---- */
 .card-highlights {
+  height: 300px;
   padding: 24px;
+  display: flex;
+  flex-direction: column;
 }
 
 .card-eyebrow {
@@ -231,17 +234,37 @@ a.card:hover {
   font-weight: 600;
   font-size: 15px;
   margin: 0 0 16px;
+  flex: none;
+}
+
+.highlights-viewport {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
 }
 
 .highlights-list {
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  font-size: 15px;
-  line-height: 1.45;
+  gap: 20px;
+  font-family: Inter, "Inter Placeholder", sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.4;
+  transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.highlights-list strong { font-weight: 700; }
+.highlights-list li {
+  opacity: 0.32;
+  transition: opacity 0.5s ease;
+}
+
+.highlights-list li.active {
+  opacity: 1;
+}
 
 /* ---- Mini cards ---- */
 .mini-row {
