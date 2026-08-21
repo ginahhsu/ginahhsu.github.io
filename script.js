@@ -15,65 +15,41 @@ document.querySelectorAll('a.card').forEach((card) => {
 });
 
 // Highlights card: auto-advancing, one bold item + one dimmed item visible at a time, looping.
-const highlightsList = document.querySelector('.highlights-list');
-if (highlightsList) {
-  const count = highlightsList.children.length;
-
-  // Duplicate the list so the last item can scroll seamlessly back into the first.
-  [...highlightsList.children].forEach((li) => {
-    const clone = li.cloneNode(true);
-    clone.setAttribute('aria-hidden', 'true');
-    highlightsList.appendChild(clone);
-  });
-
-  const items = [...highlightsList.children];
-  const viewport = highlightsList.parentElement;
+// Two fixed-height boxes crossfade their text content on each tick - no scrolling/clipping
+// window to keep in sync, so there's no way for the box and its text to fall out of alignment.
+const highlightsViewport = document.querySelector('.highlights-viewport');
+if (highlightsViewport) {
+  const data = [...document.querySelectorAll('.highlights-data li')].map((li) => li.textContent.trim());
+  const activeEl = highlightsViewport.querySelector('.is-active');
+  const nextEl = highlightsViewport.querySelector('.is-next');
   let index = 0;
   let timer;
 
-  const render = (animate) => {
-    highlightsList.style.transition = animate ? '' : 'none';
-    viewport.style.transition = animate ? '' : 'none';
-
-    items.forEach((li, i) => li.classList.toggle('active', i === index));
-
-    const activeTop = items[index].offsetTop;
-    const next = items[index + 1];
-    viewport.style.height = `${(next.offsetTop + next.offsetHeight) - activeTop}px`;
-    highlightsList.style.transform = `translateY(-${activeTop}px)`;
-
-    if (!animate) void highlightsList.offsetHeight; // force reflow before re-enabling transitions
+  const setText = () => {
+    activeEl.textContent = data[index % data.length];
+    nextEl.textContent = data[(index + 1) % data.length];
   };
+
+  setText();
 
   const advance = () => {
-    index += 1;
-    render(true);
-    if (index === count) {
-      setTimeout(() => {
-        index = 0;
-        render(false);
-      }, 900);
-    }
+    activeEl.classList.add('is-swapping');
+    nextEl.classList.add('is-swapping');
+    setTimeout(() => {
+      index += 1;
+      setText();
+      void activeEl.offsetHeight; // force reflow so removing the class re-triggers the transition
+      activeEl.classList.remove('is-swapping');
+      nextEl.classList.remove('is-swapping');
+    }, 400);
   };
 
-  render(false);
   const start = () => { timer = setInterval(advance, 3400); };
   const stop = () => clearInterval(timer);
 
-  // Re-measure once webfonts finish loading, since that can shift line wraps/heights.
-  const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
-  fontsReady.then(() => render(false));
-
-  // Re-measure on resize so the clipped height stays accurate at any viewport width.
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => render(false), 150);
-  });
-
   start();
-  viewport.addEventListener('mouseenter', stop);
-  viewport.addEventListener('mouseleave', start);
+  highlightsViewport.addEventListener('mouseenter', stop);
+  highlightsViewport.addEventListener('mouseleave', start);
 }
 
 // Tab filtering (All / About / Projects / For fun).
