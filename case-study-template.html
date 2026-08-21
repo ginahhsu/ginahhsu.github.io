@@ -1,0 +1,157 @@
+<!--
+  CASE STUDY TEMPLATE — not linked from the site, just a starting point.
+
+  To use: copy this file to `<slug>.html`, replace every [BRACKETED]
+  placeholder, swap the asset paths, delete any section/figure this
+  project doesn't need, and link a card on index.html to it.
+
+  Every visual style lives in case-study.css under these classes:
+  cs-hero, cs-meta, cs-stat, cs-hero-images, cs-section, cs-callout,
+  cs-block, cs-figure, cs-panel-row, cs-touchpoints, cs-triplet,
+  cs-pair, cs-collage, cs-footer. Reuse them rather than adding new
+  one-off styles so every case study stays visually consistent.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[Project Title] — Gina Hsu</title>
+<link rel="stylesheet" href="case-study.css">
+</head>
+<body>
+
+<header class="cs-topbar">
+  <a class="cs-close" href="index.html" aria-label="Close case study">&times;</a>
+</header>
+
+<main class="cs-main">
+
+  <!-- ---- Hero: title, one-line summary, quick facts, and (optional) headline stats ---- -->
+  <section class="cs-hero">
+    <h1>[Project Title]</h1>
+    <p class="cs-subtitle">[One-sentence summary of what this project was and the outcome you drove.]</p>
+
+    <div class="cs-meta">
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Role</span>
+        <span class="cs-meta-value">[Your role]</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Timeline</span>
+        <span class="cs-meta-value">[Duration]</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Platforms</span>
+        <span class="cs-meta-value">[e.g. Web, Mobile]</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Areas</span>
+        <span class="cs-meta-value">[e.g. Strategy, Design]</span>
+      </div>
+      <!-- Delete the two .cs-stat blocks below if this project has no headline metrics -->
+      <div class="cs-stat">
+        <span class="cs-stat-value">[Number]</span>
+        <span class="cs-stat-label">[what it measures]</span>
+      </div>
+      <div class="cs-stat">
+        <span class="cs-stat-value">[Number]</span>
+        <span class="cs-stat-label">[what it measures]</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---- Hero images: a wide shot + a narrower supporting shot ---- -->
+  <div class="cs-hero-images">
+    <div class="cs-hero-desktop-wrap">
+      <img src="[assets/PROJECT/hero-main.png]" alt="[Describe the primary screen]">
+    </div>
+    <div class="cs-hero-phones-wrap">
+      <img src="[assets/PROJECT/hero-detail.png]" alt="[Describe the supporting screen]">
+    </div>
+  </div>
+
+  <!-- ---- Background ---- -->
+  <section class="cs-section">
+    <h2>Background</h2>
+    <p>[2-4 sentences: what prompted this project, who it was for, and what you were responsible for.]</p>
+    <!-- Optional pull-quote summarizing the core problem in one line. Delete if not needed. -->
+    <div class="cs-callout">[One-line framing of the core problem you were solving]</div>
+  </section>
+
+  <!-- ---- The challenge: repeat .cs-block for as many challenges as you have ---- -->
+  <section class="cs-section">
+    <h2>The challenge</h2>
+    <p>[1-2 sentences introducing the constraints you were working within.]</p>
+
+    <div class="cs-block">
+      <p class="cs-block-label">Challenge #1</p>
+      <h3>[Short challenge title]</h3>
+      <p>[1-2 sentences describing the challenge.]</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Challenge #2</p>
+      <h3>[Short challenge title]</h3>
+      <p>[1-2 sentences describing the challenge.]</p>
+    </div>
+  </section>
+
+  <!-- ---- Optional supporting figure (diagram, map, research artifact) ---- -->
+  <figure class="cs-figure">
+    <img src="[assets/PROJECT/diagram.png]" alt="[Describe the diagram]">
+    <figcaption>[Caption describing what this shows]</figcaption>
+  </figure>
+
+  <!-- ---- Discovery / process ---- -->
+  <section class="cs-section">
+    <h2>The Discovery</h2>
+    <h3 class="cs-h1-style">[Process sub-heading]</h3>
+    <p>[Describe how you investigated the problem — research, audits, stakeholder input, etc.]</p>
+
+    <div class="cs-block">
+      <p class="cs-block-label">Research insight #1</p>
+      <h3>[Insight title]</h3>
+      <p>[What you learned and why it mattered.]</p>
+    </div>
+  </section>
+
+  <!-- ---- Vision / solution, with before/after or option comparisons ---- -->
+  <section class="cs-section">
+    <h2>The Vision</h2>
+    <h3 class="cs-h1-style">[Solution sub-heading]</h3>
+    <p>[Describe the principles or approach that guided the design.]</p>
+  </section>
+
+  <!-- Two images side by side, e.g. before/after or two key screens -->
+  <figure class="cs-figure">
+    <div class="cs-panel-row">
+      <img src="[assets/PROJECT/solution-1.png]" alt="[Describe]">
+      <img src="[assets/PROJECT/solution-2.png]" alt="[Describe]">
+    </div>
+    <figcaption>[Caption]</figcaption>
+  </figure>
+
+  <!-- ---- Impact ---- -->
+  <section class="cs-section">
+    <h2>Impact</h2>
+    <p>[What changed as a result — for the user, the business, or both.]</p>
+    <div class="cs-callout">[One sentence summarizing the outcome]</div>
+  </section>
+
+  <!-- ---- Takeaways: repeat h4/p pairs for as many reflections as you have ---- -->
+  <section class="cs-section">
+    <h2>Takeaways</h2>
+
+    <h4 style="margin-top: 0;">[Takeaway title]</h4>
+    <p>[What you learned, in your own voice.]</p>
+
+    <h4>[Takeaway title]</h4>
+    <p>[What you learned, in your own voice.]</p>
+  </section>
+
+  <footer class="cs-footer">Gina Hsu 2025</footer>
+
+</main>
+
+</body>
+</html>
