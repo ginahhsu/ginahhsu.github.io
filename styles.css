@@ -6,7 +6,7 @@
   --panel: rgb(46, 27, 21);
   --white: rgb(253, 251, 248);
   --card: rgba(253, 249, 245, 0.72);
-  --panel-width: 400px;
+  --panel-width: clamp(280px, 26vw, 420px);
   --gap: 28px;
   --radius: 26px;
 }
