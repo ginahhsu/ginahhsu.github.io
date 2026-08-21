@@ -2,8 +2,6 @@
 
 :root {
   --bg: rgb(249, 224, 214);
-  --grid-line: rgb(232, 165, 148);
-  --accent-line: rgba(196, 62, 47, 0.35);
   --ink: rgb(48, 30, 24);
   --panel: rgb(46, 27, 21);
   --white: rgb(253, 251, 248);
@@ -97,12 +95,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   flex: 1;
   min-width: 0;
   background-color: var(--bg);
-  background-image:
-    linear-gradient(to right, var(--grid-line) 0.5px, transparent 0.5px),
-    linear-gradient(var(--grid-line) 0.5px, transparent 0.5px),
-    linear-gradient(135deg, transparent 48%, var(--accent-line) 48.4%, var(--accent-line) 48.8%, transparent 49.2%),
-    linear-gradient(150deg, transparent 48%, var(--accent-line) 48.4%, var(--accent-line) 48.8%, transparent 49.2%);
-  background-size: 48px 48px, 48px 48px, 96px 96px, 96px 96px;
+  background-image: url('assets/background-grid.svg');
+  background-repeat: repeat;
+  background-position: 0 0;
   padding: 40px 40px 100px;
 }
 
