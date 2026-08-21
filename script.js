@@ -60,6 +60,17 @@ if (highlightsList) {
   const start = () => { timer = setInterval(advance, 3400); };
   const stop = () => clearInterval(timer);
 
+  // Re-measure once webfonts finish loading, since that can shift line wraps/heights.
+  const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+  fontsReady.then(() => render(false));
+
+  // Re-measure on resize so the clipped height stays accurate at any viewport width.
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => render(false), 150);
+  });
+
   start();
   viewport.addEventListener('mouseenter', stop);
   viewport.addEventListener('mouseleave', start);

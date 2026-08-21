@@ -141,6 +141,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   grid-template-columns: 1fr 1.1fr;
   gap: var(--gap);
   align-items: start;
+  max-width: 1160px;
 }
 
 .col {
@@ -207,11 +208,13 @@ a.card:hover {
 .card-purple .card-bg-img.phone-mockup {
   bottom: -20px;
   width: 44%;
+  max-width: 200px;
 }
 
 .card-orange .card-bg-img,
 .card-teal .card-bg-img {
   width: 86%;
+  max-width: 450px;
   bottom: -6px;
   border-radius: 8px 8px 0 0;
   box-shadow: 0 -6px 20px rgba(0,0,0,0.08);
@@ -374,5 +377,14 @@ a.card:hover {
     padding: 9px 16px;
     font-size: 13px;
     white-space: nowrap;
+  }
+}
+
+@media (max-width: 360px) {
+  .tabs { gap: 2px; padding: 5px; }
+
+  .tab {
+    padding: 8px 11px;
+    font-size: 12px;
   }
 }
