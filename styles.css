@@ -171,6 +171,15 @@ ul { margin: 0; padding: 0; list-style: none; }
   transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+/* Real edge-bending refraction via an SVG displacement filter, layered on top of the
+   plain blur above. Browsers that don't render SVG filters inside backdrop-filter
+   (older Safari/Firefox) just keep the blur - no breakage, just no bend. */
+@supports (backdrop-filter: url(#glass-distortion) blur(1px)) {
+  .card {
+    backdrop-filter: url(#glass-distortion) blur(20px) saturate(200%);
+  }
+}
+
 .card::before {
   content: "";
   position: absolute;
