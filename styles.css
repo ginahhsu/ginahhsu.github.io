@@ -5,7 +5,7 @@
   --ink: rgb(48, 30, 24);
   --panel: rgb(46, 27, 21);
   --white: rgb(253, 251, 248);
-  --card: rgba(253, 249, 245, 0.72);
+  --card: rgba(255, 255, 255, 0.25);
   --panel-width: clamp(280px, 26vw, 420px);
   --gap: 28px;
   --radius: 26px;
@@ -298,8 +298,8 @@ a.card:hover {
   object-fit: contain;
 }
 
-.card-mini-tan { background: rgba(230, 202, 160, 0.55); }
-.card-mini-cream { background: rgba(255, 247, 231, 0.55); }
+.card-mini-tan { background: rgba(255, 255, 255, 0.25); }
+.card-mini-cream { background: rgba(255, 255, 255, 0.25); }
 
 .mini-title {
   font-family: Inter, "Inter Placeholder", sans-serif;
