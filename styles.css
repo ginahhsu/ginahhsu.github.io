@@ -107,11 +107,11 @@ ul { margin: 0; padding: 0; list-style: none; }
   justify-content: center;
   width: fit-content;
   max-width: 100%;
-  gap: 6px;
+  gap: 4px;
   background: var(--panel);
   border-radius: 100px;
-  padding: 8px;
-  margin: 0 auto 36px;
+  padding: 5px;
+  margin: 0 auto 32px;
 }
 
 .tab {
@@ -119,9 +119,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   background: transparent;
   color: var(--white);
   opacity: 0.75;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
-  padding: 14px 34px;
+  padding: 9px 20px;
   border-radius: 100px;
   transition: background-color 0.2s ease, opacity 0.2s ease;
 }
