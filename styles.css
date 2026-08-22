@@ -153,15 +153,22 @@ ul { margin: 0; padding: 0; list-style: none; }
 .card {
   position: relative;
   display: block;
-  border-radius: var(--radius);
+  border-radius: calc(var(--radius) + 6px);
   overflow: hidden;
-  background: var(--card);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.6) inset, 0 8px 30px rgba(48, 30, 24, 0.10);
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.22) 100%),
+    var(--card);
+  backdrop-filter: blur(34px) saturate(200%);
+  -webkit-backdrop-filter: blur(34px) saturate(200%);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+    inset 0 -12px 20px -14px rgba(255, 255, 255, 0.5),
+    inset 0 14px 24px -18px rgba(48, 30, 24, 0.35),
+    0 10px 30px rgba(48, 30, 24, 0.14),
+    0 2px 8px rgba(48, 30, 24, 0.08);
   color: var(--ink);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .card::before {
@@ -170,12 +177,20 @@ ul { margin: 0; padding: 0; list-style: none; }
   inset: 0;
   z-index: 5;
   pointer-events: none;
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.08) 18%, rgba(255, 255, 255, 0) 40%);
+  background:
+    radial-gradient(130% 70% at 12% -10%, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 22%);
 }
 
 a.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.6) inset, 0 16px 34px rgba(48, 30, 24, 0.20);
+  transform: translateY(-5px) scale(1.012);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 -12px 20px -14px rgba(255, 255, 255, 0.55),
+    inset 0 14px 24px -18px rgba(48, 30, 24, 0.35),
+    0 20px 46px rgba(48, 30, 24, 0.22),
+    0 4px 12px rgba(48, 30, 24, 0.1);
 }
 
 .card[data-category].hidden { display: none; }
