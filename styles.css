@@ -5,7 +5,7 @@
   --ink: rgb(48, 30, 24);
   --panel: rgb(46, 27, 21);
   --white: rgb(253, 251, 248);
-  --card: rgba(255, 255, 255, 0.25);
+  --card: rgba(255, 255, 255, 0.1);
   --panel-width: clamp(280px, 26vw, 420px);
   --gap: 28px;
   --radius: 26px;
@@ -156,10 +156,10 @@ ul { margin: 0; padding: 0; list-style: none; }
   border-radius: calc(var(--radius) + 6px);
   overflow: hidden;
   background:
-    linear-gradient(160deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.22) 100%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 45%, rgba(255, 255, 255, 0.1) 100%),
     var(--card);
-  backdrop-filter: blur(34px) saturate(200%);
-  -webkit-backdrop-filter: blur(34px) saturate(200%);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
   box-shadow:
     inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
     inset 0 0 0 1px rgba(255, 255, 255, 0.15),
@@ -176,7 +176,7 @@ ul { margin: 0; padding: 0; list-style: none; }
    (older Safari/Firefox) just keep the blur - no breakage, just no bend. */
 @supports (backdrop-filter: url(#glass-distortion) blur(1px)) {
   .card {
-    backdrop-filter: url(#glass-distortion) blur(20px) saturate(200%);
+    backdrop-filter: url(#glass-distortion) blur(10px) saturate(200%);
   }
 }
 
