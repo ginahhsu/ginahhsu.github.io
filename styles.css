@@ -263,15 +263,9 @@ a.card:hover {
 }
 
 .highlights-line.is-active {
-  height: 48px;
+  height: 72px;
   font-size: 17px;
   opacity: 1;
-}
-
-.highlights-line.is-next {
-  height: 40px;
-  font-size: 14px;
-  opacity: 0.32;
 }
 
 .highlights-line.is-swapping {

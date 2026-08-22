@@ -14,33 +14,29 @@ document.querySelectorAll('a.card').forEach((card) => {
   });
 });
 
-// Highlights card: auto-advancing, one bold item + one dimmed item visible at a time, looping.
-// Two fixed-height boxes crossfade their text content on each tick - no scrolling/clipping
-// window to keep in sync, so there's no way for the box and its text to fall out of alignment.
+// Highlights card: auto-advancing, one full attribute at a time, crossfading in place.
+// A single fixed-height box swaps its text content on each tick - sized to fit every
+// attribute in full, so nothing ever truncates.
 const highlightsViewport = document.querySelector('.highlights-viewport');
 if (highlightsViewport) {
   const data = [...document.querySelectorAll('.highlights-data li')].map((li) => li.textContent.trim());
   const activeEl = highlightsViewport.querySelector('.is-active');
-  const nextEl = highlightsViewport.querySelector('.is-next');
   let index = 0;
   let timer;
 
   const setText = () => {
     activeEl.textContent = data[index % data.length];
-    nextEl.textContent = data[(index + 1) % data.length];
   };
 
   setText();
 
   const advance = () => {
     activeEl.classList.add('is-swapping');
-    nextEl.classList.add('is-swapping');
     setTimeout(() => {
       index += 1;
       setText();
       void activeEl.offsetHeight; // force reflow so removing the class re-triggers the transition
       activeEl.classList.remove('is-swapping');
-      nextEl.classList.remove('is-swapping');
     }, 400);
   };
 
