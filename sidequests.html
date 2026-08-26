@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Side quests — Gina Hsu</title>
+<link rel="stylesheet" href="case-study.css">
+<style>
+  .sq-reader {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sq-reader img {
+    flex: 0 0 auto;
+    height: 420px;
+    width: auto;
+    border-radius: 10px;
+    scroll-snap-align: start;
+    cursor: zoom-in;
+    box-shadow: 0 6px 20px rgba(48, 30, 24, 0.14);
+  }
+
+  .sq-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .sq-gallery img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    background: #eee;
+    cursor: zoom-in;
+  }
+
+  .sq-gallery-feature {
+    grid-column: 1 / -1;
+  }
+
+  .sq-gallery-feature img {
+    aspect-ratio: 16 / 9;
+  }
+
+  @media (max-width: 640px) {
+    .sq-gallery { grid-template-columns: repeat(2, 1fr); }
+    .sq-reader img { height: 300px; }
+  }
+
+  .sq-lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 16, 12, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    z-index: 50;
+    cursor: zoom-out;
+  }
+
+  .sq-lightbox.is-open { display: flex; }
+
+  .sq-lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 6px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  }
+
+  .sq-lightbox-close {
+    position: fixed;
+    top: 24px;
+    right: 28px;
+    width: 40px;
+    height: 40px;
+    border-radius: 100px;
+    background: rgba(253, 251, 248, 0.9);
+    color: var(--cs-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    line-height: 1;
+  }
+</style>
+</head>
+<body>
+
+<header class="cs-topbar">
+  <a class="cs-close" href="index.html" aria-label="Close">&times;</a>
+</header>
+
+<main class="cs-main">
+
+  <section class="cs-hero">
+    <h1>Side quests</h1>
+  </section>
+
+  <section class="cs-section" style="padding-top: 0;">
+    <p>A couple of hobbies I get up to outside of product design work.</p>
+  </section>
+
+  <section class="cs-section" id="print-design" style="padding-top: 0;">
+    <h2>Print design</h2>
+    <h3 class="cs-h1-style">Imprint — UWaterloo's student newspaper</h3>
+    <p>Layout and editorial design for Imprint, the University of Waterloo's independent student newspaper. A few spreads from an issue — tap any page to zoom in.</p>
+
+    <div class="sq-reader" data-lightbox-group="print">
+      <img src="assets/sidequests/imprint-cover.jpg" alt="Imprint's 10 year challenge infographic cover">
+      <img src="assets/sidequests/imprint-spread-1.jpg" alt="Imprint newspaper spread — Three Black Lives Matter protests over the KW region">
+      <img src="assets/sidequests/imprint-spread-2.jpg" alt="Imprint newspaper spread — Our favourite study spots and the Oscars">
+      <img src="assets/sidequests/imprint-spread-3.jpg" alt="Imprint newspaper spread — Waterlost campus map illustration">
+      <img src="assets/sidequests/imprint-spread-4.jpg" alt="Imprint newspaper spread — WUSA and UW launch support fund for students">
+      <img src="assets/sidequests/imprint-spread-5.jpg" alt="Imprint newspaper spread — Life on campus photo collage">
+      <img src="assets/sidequests/imprint-spread-6.jpg" alt="Imprint newspaper spread — Sports and health, changing the flow in Waterloo">
+      <img src="assets/sidequests/imprint-spread-7.jpg" alt="Imprint newspaper spread — Healthy body, healthy mind">
+    </div>
+  </section>
+
+  <section class="cs-section" id="3d-section">
+    <h2>3D</h2>
+    <h3 class="cs-h1-style">3D modelling and animation</h3>
+    <p>Blender renders — mostly dim sum, Kirby, and tiny rooms.</p>
+
+    <div class="sq-gallery" data-lightbox-group="3d">
+      <img src="assets/sidequests/3d-dimsum-sandwich.png" alt="3D rendered bamboo steamer with dim sum sandwiches">
+      <img src="assets/sidequests/3d-dimsum-dumplings.png" alt="3D rendered bamboo steamer with soup dumplings">
+      <img src="assets/sidequests/3d-dimsum-2.png" alt="3D rendered bamboo steamer with folded dumplings">
+      <div class="sq-gallery-feature">
+        <img src="assets/sidequests/3d-kirby-lanterns.png" alt="3D rendered Kirby surrounded by red paper lanterns">
+      </div>
+      <img src="assets/sidequests/3d-room-night.png" alt="3D isometric room render, lit up at night">
+      <img src="assets/sidequests/3d-room-day.png" alt="3D isometric room render, daytime lighting">
+      <img src="assets/sidequests/3d-plant.png" alt="3D rendered plant on a windowsill">
+      <img src="assets/sidequests/3d-lamp-figure.png" alt="3D rendered lamp shaped like a small creature">
+      <img src="assets/sidequests/3d-dimsum-1.png" alt="3D rendered bamboo steamer with dumplings, close up">
+      <div class="sq-gallery-feature">
+        <img src="assets/sidequests/3d-kirby-stump.png" alt="3D rendered Kirby sitting on a tree stump with onigiri and a drink">
+      </div>
+    </div>
+  </section>
+
+  <footer class="cs-footer">Gina Hsu 2025</footer>
+
+</main>
+
+<div class="sq-lightbox" id="sqLightbox">
+  <span class="sq-lightbox-close" aria-hidden="true">&times;</span>
+  <img id="sqLightboxImg" src="" alt="">
+</div>
+
+<script>
+  const lightbox = document.getElementById('sqLightbox');
+  const lightboxImg = document.getElementById('sqLightboxImg');
+
+  document.querySelectorAll('[data-lightbox-group] img').forEach((img) => {
+    img.addEventListener('click', () => {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add('is-open');
+    });
+  });
+
+  lightbox.addEventListener('click', () => {
+    lightbox.classList.remove('is-open');
+    lightboxImg.src = '';
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      lightbox.classList.remove('is-open');
+      lightboxImg.src = '';
+    }
+  });
+</script>
+
+</body>
+</html>
