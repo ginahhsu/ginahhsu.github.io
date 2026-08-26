@@ -8,17 +8,9 @@
 </head>
 <body>
 
-<svg style="position: absolute; width: 0; height: 0; overflow: hidden" aria-hidden="true">
-  <defs>
-    <filter id="glass-distortion" x="-20%" y="-20%" width="140%" height="140%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="11" result="noise" />
-      <feGaussianBlur in="noise" stdDeviation="4" result="softNoise" />
-      <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="38" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-  </defs>
-</svg>
-
 <div class="page">
+
+  <div class="bg-grid" aria-hidden="true"></div>
 
   <aside class="sticky-panel">
     <div class="panel-inner">
@@ -40,71 +32,94 @@
       <button class="tab active" data-filter="all">All</button>
       <button class="tab" data-filter="about">About</button>
       <button class="tab" data-filter="projects">Projects</button>
-      <button class="tab" data-filter="for-fun">For fun</button>
+      <button class="tab" data-filter="for-fun">Exploration</button>
     </nav>
 
     <div class="masonry">
 
       <div class="col">
 
-        <a class="card card-purple" href="./seatselection.html" data-category="projects">
+        <a class="card card-teal" href="./ultrabasic.html" style="view-transition-name: vt-ultrabasic" data-category="projects">
+          <div class="card-glass"></div>
           <div class="card-top">
-            <p class="card-label">UI design &bull; UX Strategy &bull; E-commerce</p>
-            <h2 class="card-title">Modernizing the seat selection experience</h2>
+            <p class="card-label">Product Strategy &bull; Team Leadership &bull; E-commerce</p>
+            <h2 class="card-title" style="view-transition-name: vt-ultrabasic-headline">Designing strategic user experiences for the launch of two product offerings.</h2>
           </div>
-          <img class="card-bg-img phone-mockup" src="assets/phone-mockup.png" alt="Baggage allowance screen from the seat selection flow">
-          <span class="card-btn">Seat selection <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <img class="card-bg-img" src="assets/ultrabasic/hero-desktop.png" alt="Desktop booking flow showing UltraBasic and Extended Comfort fare options" style="view-transition-name: vt-ultrabasic-image">
+          <span class="card-btn">UltraBasic and Extended Comfort <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>
 
         <div class="card card-highlights" data-category="about">
+          <div class="card-glass"></div>
           <p class="card-eyebrow">Highlights</p>
           <div class="highlights-viewport">
             <p class="highlights-line is-active"></p>
           </div>
+          <div class="highlights-dots"></div>
           <ul class="highlights-data" hidden>
-            <li>5+ years of experience, specializing in B2C commerce and self-serve</li>
-            <li>Currently working in travel as a Senior Product Designer at WestJet</li>
-            <li>Pursuing IAAP Web Accessibility Specialist certification</li>
-            <li>Leading end-to-end design for airline e-commerce experiences</li>
+            <li>5+ years of experience in designing B2C commerce, internal software, and brand experiences</li>
+            <li>Currently working in travel as a Senior Product Designer at WestJet airline</li>
+            <li>Passionate about crafting inclusive digital experiences. Pursuing Web Accessibility (WCAG) Specialist certification</li>
+            <li>Leading the end-to-end design for WestJet e-commerce experiences from book to loyalty</li>
             <li>Bachelors of Global Business and Digital Arts from the University of Waterloo</li>
           </ul>
         </div>
 
-        <div class="mini-row">
-          <a class="card card-mini card-mini-tan" href="./3d" data-category="for-fun">
-            <img src="assets/sandwich.png" alt="3D printed dim sum illustration">
-            <p class="mini-title">3D<br>Print</p>
-            <span class="card-btn small">Side quests <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </a>
-          <a class="card card-mini card-mini-cream" href="./showcase" data-category="for-fun">
-            <p class="mini-title">Roots collective<br>Turn Tool<br>Graphics</p>
-            <span class="card-btn small">Showcase <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </a>
-        </div>
+        <a class="card card-purple" href="./seatselection.html" data-category="projects">
+          <div class="card-glass"></div>
+          <div class="card-top">
+            <p class="card-label">UX Strategy &bull; Systems Thinking &bull; E-commerce &bull; Design Systems</p>
+            <h2 class="card-title">Modernizing the seat selection experience</h2>
+          </div>
+          <img class="card-bg-img phone-mockup" src="assets/phone-mockup.png" alt="Baggage allowance screen from the seat selection flow">
+          <span class="card-btn">&#128274; Seat selection <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
 
       </div>
 
       <div class="col">
 
-        <a class="card card-orange" href="./rootscollective.html" data-category="projects">
+        <a class="card card-sky" href="./turntool.html" style="view-transition-name: vt-turntool" data-category="projects">
+          <div class="card-glass"></div>
           <div class="card-top">
-            <p class="card-label">UI design &bull; Branding &bull; Design system</p>
-            <h2 class="card-title">Building a design system and website from the ground up</h2>
+            <p class="card-label">0&rarr;1 Product Design &bull; IA &bull; Dashboards</p>
+            <h2 class="card-title" style="view-transition-name: vt-turntool-headline">Designing dashboards to monitor airplane arrivals and departures.</h2>
           </div>
-          <img class="card-bg-img" src="assets/tablet-mockup.png" alt="Roots Collective website mockup on a laptop">
+          <img class="card-bg-img" src="assets/turntool/hero-main.png" alt="Turn Tool multi-flight overview dashboard" style="view-transition-name: vt-turntool-image">
+          <span class="card-btn">Turn Tool <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+
+        <a class="card card-orange" href="./spacecentre.html" style="view-transition-name: vt-spacecentre" data-category="projects">
+          <div class="card-glass"></div>
+          <div class="card-top">
+            <p class="card-label">Design Systems &bull; Brand Strategy &bull; UX Strategy</p>
+            <h2 class="card-title" style="view-transition-name: vt-spacecentre-headline">Building a Design System and Website from the Ground Up</h2>
+          </div>
+          <div class="card-laptop-frame" style="view-transition-name: vt-spacecentre-image">
+            <div class="cs-laptop-screen">
+              <img src="assets/spacecentre/hero-homepage.png" alt="H.R. MacMillan Space Centre redesigned homepage">
+            </div>
+            <div class="cs-laptop-base"></div>
+          </div>
           <span class="card-btn">H.R. MacMillan Space Centre <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>
 
-        <a class="card card-teal" href="./ultrabasic.html" data-category="projects">
-          <div class="card-top">
-            <p class="card-label">UX design &bull; UI design &bull; E-commerce</p>
-            <h2 class="card-title">Designing two products in six months</h2>
-          </div>
-          <img class="card-bg-img" src="assets/dashboard-screenshot.png" alt="Flight zone management dashboard on a laptop">
-          <span class="card-btn">UltraBasic and Extended Comfort <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </a>
+        <div class="mini-row">
+          <a class="card card-mini card-mini-tan" href="./sidequests.html" data-category="for-fun">
+            <div class="card-glass"></div>
+            <img src="assets/sandwich.png" alt="3D printed dim sum illustration">
+            <p class="mini-title">Print &amp;<br>3D</p>
+            <span class="card-btn small">Side quests <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+          <a class="card card-mini card-mini-cream" href="./showcase.html" data-category="for-fun">
+            <div class="card-glass"></div>
+            <p class="mini-title">Roots collective<br>Graphics</p>
+            <span class="card-btn small">Showcase <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+        </div>
 
-        <a class="card card-photo" href="./aboutme" data-category="about">
+        <a class="card card-photo" href="aboutme.html" data-category="about">
+          <div class="card-glass"></div>
           <img src="assets/gina-photo.png" alt="Photo of Gina outdoors overlooking a mountain valley">
           <span class="card-btn">About <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>

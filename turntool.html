@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turn Tool — Gina Hsu</title>
+<link rel="stylesheet" href="case-study.css">
+</head>
+<body>
+
+<header class="cs-topbar">
+  <a class="cs-close" href="index.html" aria-label="Close case study">&times;</a>
+</header>
+
+<main class="cs-main">
+
+  <section class="cs-hero" style="view-transition-name: vt-turntool">
+    <h1>Turn Tool</h1>
+    <p class="cs-subtitle" style="view-transition-name: vt-turntool-headline">Designing dashboards to monitor airplane arrivals and departures.</p>
+
+    <div class="cs-meta">
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Role</span>
+        <span class="cs-meta-value">UX/UI Designer</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Timeline</span>
+        <span class="cs-meta-value">5 months</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Platforms</span>
+        <span class="cs-meta-value">Web application</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Areas</span>
+        <span class="cs-meta-value">Design, Dashboards, IA</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="cs-hero-images">
+    <div class="cs-hero-desktop-wrap">
+      <img src="assets/turntool/hero-main.png" alt="Turn Tool multi-flight overview dashboard" style="view-transition-name: vt-turntool-image">
+    </div>
+    <div class="cs-hero-phones-wrap">
+      <img src="assets/turntool/hero-detail.png" alt="Turn Tool detailed flight view">
+    </div>
+  </div>
+
+  <section class="cs-section">
+    <h2>TL;DR</h2>
+    <div class="cs-tldr">
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Problem</span>
+        <p>Operational staff tracked flights across multiple disconnected tools and browser tabs, so delays got missed and gate agents fielded a constant stream of status calls.</p>
+      </div>
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Approach</span>
+        <p>Designed a single multi-flight dashboard — information hierarchy, milestone tracking, and in-context commenting — validated through interviews and prototype testing with 50+ operational staff.</p>
+      </div>
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Outcome</span>
+        <p>Milestone-linked comments and bulk multi-flight updates replaced the copy-paste workflow zone managers relied on, and automated delay-code suggestions cut manual entry across the board.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <h2>Background</h2>
+    <p>Every day, thousands of planes take off and land, connecting people and places worldwide. Behind these operations, teams manage complex schedules and logistics to keep an airport running smoothly. Despite their efforts, juggling multiple tools and scattered information sources created significant challenges, often leading to inefficiencies and delays. I was the sole designer on Turn Tool's Multi Flight View, owning the experience end to end — research, information architecture, interaction design, and prototype testing — alongside a product manager and engineering team.</p>
+    <div class="cs-callout">Before Turn Tool, coordinating a delayed flight meant tab-switching, phone calls, and staff yelling across a basement room.</div>
+  </section>
+
+  <section class="cs-section">
+    <h2>The challenge</h2>
+    <p>Our primary objective was to develop a single, comprehensive dashboard that operational staff could rely on when flights were at risk of delays. The current workflow consisted of a basement room where staff would yell across the room to communicate needs.</p>
+
+    <div class="cs-block">
+      <p class="cs-block-label">Goal #1</p>
+      <h3>Centralizing all flight data</h3>
+      <p>Combine all airplane flight data into one platform for operational staff to monitor airplane turns and ensure flights are on time.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Goal #2</p>
+      <h3>Simplifying decision making</h3>
+      <p>Provide the right data at the right time to make the decision-making process more intuitive and less stressful for operational staff.</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <h2>The Discovery</h2>
+    <h3 class="cs-h1-style">Gaining workflow insights</h3>
+    <p>To build an efficient product, we began by conducting in-depth interviews with Zone Managers and Operations Control Center Coordinators. Our goal was to gain a deep understanding of their pain points and daily challenges, ensuring that Turn Tool would address their real needs and streamline their workflows.</p>
+
+    <div class="cs-block">
+      <p class="cs-block-label">Pain point #1</p>
+      <h3>Fragmented data sources</h3>
+      <p>Staff had to use multiple software programs to gather different sets of data, slowing down their ability to make quick decisions.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Pain point #2</p>
+      <h3>High call volume for turn updates</h3>
+      <p>When delays occurred, the lack of clear information often led to a high number of calls to Gate Agents, disrupting their workflow.</p>
+    </div>
+  </section>
+
+  <figure class="cs-figure">
+    <img src="assets/turntool/discovery-iterations.png" alt="Early iteration variations of dashboards showing multiple flights">
+    <figcaption>First iteration variations of dashboards showing multiple flights.</figcaption>
+  </figure>
+
+  <section class="cs-section">
+    <h2>The Journey</h2>
+    <h3 class="cs-h1-style">Showing the right information at the right time</h3>
+    <p>The current Turn Tool only allowed one flight to be viewed at a time. To view multiple flights, staff would keep multiple tabs open and try to navigate through all of them. The new design needed to compile information together at a high level while still allowing staff to dig further into a specific problem.</p>
+
+    <h4 style="margin-top: 0;">User testing and realignment</h4>
+    <p>We tested the design with over 50 operational staff through a semi-guided prototype. Users liked the ability to personalize their views, as well as the status indicators that gave quick insight into key milestones. However, there was concern that it took too many clicks to get to certain details.</p>
+
+    <div class="cs-block">
+      <p class="cs-block-label">Opportunity #1</p>
+      <h3>Optimizing navigation</h3>
+      <p>I streamlined navigation to minimize the back-and-forth when viewing flight details, reducing the cognitive load on users.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Opportunity #2</p>
+      <h3>Keeping information always showing</h3>
+      <p>I restructured the content so the most critical information was always visible and easily accessible.</p>
+    </div>
+
+    <h4>New data</h4>
+    <p>Through testing, we also learned of more data points that staff wanted included to improve their decision making. It turned out to be a lot more information, so I ran a workshop with Product Owners and operational staff to figure out a hierarchy.</p>
+  </section>
+
+  <!-- TODO: swap in real screenshots of prototype testing sessions. Suggested files:
+       assets/turntool/journey-testing-1.png, assets/turntool/journey-testing-2.png -->
+  <figure class="cs-figure">
+    <div class="cs-panel-row">
+      <img src="assets/turntool/journey-testing-1.png" alt="Prototype testing session with operational staff">
+      <img src="assets/turntool/journey-testing-2.png" alt="Prototype testing session with operational staff">
+    </div>
+    <figcaption>Prototype testing Turn Tool with operational staff.</figcaption>
+  </figure>
+
+  <section class="cs-section">
+    <h2>The Product</h2>
+    <h3 class="cs-h1-style">Enhancing decision-making speed</h3>
+    <p>In the next design iteration, I placed greater emphasis on intuitive navigation, automation, and content hierarchy to further streamline the experience.</p>
+
+    <div class="cs-block">
+      <p class="cs-block-label">Design Decision</p>
+      <h3>Simplified navigation</h3>
+      <p>On the flight overview page, I removed unnecessary navigation elements and enhanced the list and tile views to provide a more comprehensive snapshot of the airport's operational status — including estimated arrival and departure time, which milestone the flight was on, and a progress bar for milestone completion.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Design Decision</p>
+      <h3>Focused task management</h3>
+      <p>In the detailed flight view, I introduced a dropdown for navigating between critical flights, allowing staff to stay focused on their current task while remaining alert to new developments through notifications.</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <h2>Key Decisions</h2>
+    <p>Two calls shaped how the dashboard actually got used, not just how it looked in the prototype.</p>
+
+    <div class="cs-decision">
+      <h3>Surface every requested data point vs. build a hierarchy</h3>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Considered</span>
+        <p>Testing surfaced far more data points than planned, and the straightforward path was to add them all — staff had asked for each one.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Decision</span>
+        <p>I ran a workshop with Product Owners and operational staff to prioritize the requests into a hierarchy, rather than shipping every field that came out of testing.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Tradeoff</span>
+        <p>Some requested data didn't make the default view — in exchange for a dashboard staff could still scan quickly under time pressure, instead of one that mirrored every individual request.</p>
+      </div>
+    </div>
+
+    <div class="cs-decision">
+      <h3>Per-flight commenting vs. bulk multi-flight updates</h3>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Considered</span>
+        <p>Keeping comments scoped to one flight at a time matched the existing data model and required no new interaction pattern.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Decision</span>
+        <p>Built bulk commenting so zone managers could post one update across every flight it applied to, directly from the overview page.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Tradeoff</span>
+        <p>More complex comment handling to support a bulk action — in exchange for eliminating the copy-paste-per-flight workflow zone managers were relying on before.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TODO: swap in real screenshots. Suggested files:
+       assets/turntool/product-tiles-list.png (tile/list overview)
+       assets/turntool/product-flight-dropdown.png (flight dropdown navigation) -->
+  <figure class="cs-figure">
+    <div class="cs-panel-row">
+      <img src="assets/turntool/product-tiles-list.png" alt="Tiles and list view of flight overview">
+      <img src="assets/turntool/product-flight-dropdown.png" alt="Dropdown navigation between flights at risk of delay">
+    </div>
+    <figcaption>Tile and list views give a snapshot of every flight; the dropdown navigates between the flights most at risk of delay.</figcaption>
+  </figure>
+
+  <section class="cs-section">
+    <h2>What shipped</h2>
+    <div class="cs-block">
+      <p class="cs-block-label">Feature</p>
+      <h3>Integrated communication</h3>
+      <p>Comments were linked directly to milestones, reducing the need for disruptive calls to Gate Agents to figure out why a flight was delayed. Delay reasons also became more accurate, since the automated system made commenting more intuitive and mandatory.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Feature</p>
+      <h3>Multi-flight communication</h3>
+      <p>Zone managers typically copied and pasted the same update across each flight they were managing. Now they can add a comment from the overview page and comment on multiple flights at once.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Feature</p>
+      <h3>Automated delay management</h3>
+      <p>A new column surfaces automatic delay code recommendations, minimizing manual input and potential errors, and letting staff respond more quickly to issues.</p>
+    </div>
+  </section>
+
+  <!-- TODO: swap in real screenshots. Suggested files:
+       assets/turntool/product-comments.png, assets/turntool/product-multi-comment.png -->
+  <figure class="cs-figure">
+    <div class="cs-panel-row">
+      <img src="assets/turntool/product-comments.png" alt="Comments linked directly to flight milestones">
+      <img src="assets/turntool/product-multi-comment.png" alt="Adding a comment to multiple flights at once">
+    </div>
+    <figcaption>Milestone-linked comments, and adding one comment across multiple flights at once.</figcaption>
+  </figure>
+
+  <section class="cs-section">
+    <h2>Impact</h2>
+    <p><!-- TODO: if you have any post-launch numbers — adoption across zones, drop in gate-agent calls, time-to-decision, delay-code accuracy — lead with those instead of this framing. A senior reader weighs a measured outcome far more than a described one. -->Turn Tool replaced a workflow built on tab-switching and phone calls with one dashboard: milestone-linked comments cut the disruptive calls to Gate Agents, bulk commenting removed the copy-paste routine zone managers relied on, and automated delay-code suggestions reduced manual entry across the board.</p>
+    <div class="cs-callout">Milestone-linked comments and bulk updates replaced the copy-paste-per-flight workflow zone managers had been relying on.</div>
+  </section>
+
+  <section class="cs-section">
+    <h2>Takeaways</h2>
+
+    <h4 style="margin-top: 0;">The right people</h4>
+    <p>While we had some idea of what staff would need to make decisions, user testing broadened our audience and surfaced a lot of unique scenarios that needed more data than we'd planned for. Working directly with an Operations Manager gave us further insight into their daily tasks and how to really support them.</p>
+
+    <h4>User testing with new technology</h4>
+    <p>For this user test, I tried Figma variables for the first time. It was my first time building a dynamic prototype at this scale, and while it worked successfully after a lot of trial and error, it was slow and clunky. It was great for showing developers what I was thinking for the interactions, but I wouldn't use it for user testing again — it's already an unfamiliar environment for testers without adding a laggy prototype on top of it.</p>
+  </section>
+
+  <!-- TODO: swap in real screenshot. Suggested file: assets/turntool/takeaway-figma-variables.png -->
+  <figure class="cs-figure">
+    <img src="assets/turntool/takeaway-figma-variables.png" alt="Figma variables used to build a dynamic prototype">
+    <figcaption>Experimenting with Figma variables to build a dynamic prototype.</figcaption>
+  </figure>
+
+  <footer class="cs-footer">Gina Hsu 2025</footer>
+
+</main>
+
+<script src="toc.js"></script>
+</body>
+</html>

@@ -7,9 +7,18 @@
 
   Every visual style lives in case-study.css under these classes:
   cs-hero, cs-meta, cs-stat, cs-hero-images, cs-section, cs-callout,
-  cs-block, cs-figure, cs-panel-row, cs-touchpoints, cs-triplet,
-  cs-pair, cs-collage, cs-footer. Reuse them rather than adding new
-  one-off styles so every case study stays visually consistent.
+  cs-tldr, cs-decision, cs-block, cs-figure, cs-panel-row,
+  cs-touchpoints, cs-triplet, cs-pair, cs-collage, cs-footer. Reuse
+  them rather than adding new one-off styles so every case study
+  stays visually consistent.
+
+  SENIOR-LEVEL SIGNAL: the TL;DR and Key Decisions sections below are
+  not optional filler — they're what separates a senior-read case
+  study from a mid-level one. A hiring manager skimming should get
+  problem/approach/outcome in the TL;DR alone, and the Key Decisions
+  section should show judgment (an alternative you rejected and why),
+  not just a log of what shipped. Write those before fleshing out the
+  narrative sections — they force you to know what the point is.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +44,7 @@
     <div class="cs-meta">
       <div class="cs-meta-item">
         <span class="cs-meta-label">Role</span>
-        <span class="cs-meta-value">[Your role]</span>
+        <span class="cs-meta-value">[Your role — if you were one of several designers, name your specific slice, e.g. "Lead Designer, patient side"]</span>
       </div>
       <div class="cs-meta-item">
         <span class="cs-meta-label">Timeline</span>
@@ -70,6 +79,25 @@
       <img src="[assets/PROJECT/hero-detail.png]" alt="[Describe the supporting screen]">
     </div>
   </div>
+
+  <!-- ---- TL;DR: problem/approach/outcome in three lines, for someone skimming ---- -->
+  <section class="cs-section">
+    <h2>TL;DR</h2>
+    <div class="cs-tldr">
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Problem</span>
+        <p>[The problem in one sentence — no context-setting, just the problem.]</p>
+      </div>
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Approach</span>
+        <p>[What you actually did, in one sentence.]</p>
+      </div>
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Outcome</span>
+        <p>[The result — a metric if you have one, otherwise the concrete change in the world.]</p>
+      </div>
+    </div>
+  </section>
 
   <!-- ---- Background ---- -->
   <section class="cs-section">
@@ -130,6 +158,34 @@
     </div>
     <figcaption>[Caption]</figcaption>
   </figure>
+
+  <!-- ---- Key decisions: this is the section that reads as senior. Pick
+       2-4 real forks in the road — not every choice, just the ones where
+       a reasonable person could have gone the other way. Name what you
+       rejected, not just what you shipped. Delete this whole section
+       before you'd rather cut it than fake it. ---- -->
+  <section class="cs-section">
+    <h2>Key Decisions</h2>
+    <p>[1 sentence framing why these particular calls mattered.]</p>
+
+    <div class="cs-decision">
+      <h3>[Decision title, e.g. "9 order states vs. a simplified 3-state model"]</h3>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Considered</span>
+        <p>[The simpler/cheaper/faster alternative — and why it was tempting.]</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Decision</span>
+        <p>[What you actually chose to build instead.]</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Tradeoff</span>
+        <p>[What it cost you (time, complexity, maintenance) in exchange for what it bought (clarity, trust, revenue).]</p>
+      </div>
+    </div>
+
+    <!-- Repeat .cs-decision for each fork in the road, 2-4 total -->
+  </section>
 
   <!-- ---- Impact ---- -->
   <section class="cs-section">

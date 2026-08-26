@@ -1,4 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&family=Roboto:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap');
+
+/* Mirrors the opt-in in styles.css - both the outgoing and incoming
+   document need it for the cross-document transition to fire. */
+@view-transition {
+  navigation: auto;
+}
+
+/* Mirrors styles.css exactly - see the comments there for why this specific
+   curve/duration/stagger. Both documents need identical rules for the
+   morph to look the same landing here as it did leaving the homepage. */
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cs-root-out {
+  to { opacity: 0; transform: scale(1.015); }
+}
+@keyframes cs-root-in {
+  from { opacity: 0; transform: scale(0.985); }
+}
+::view-transition-old(root) {
+  animation: 0.32s cubic-bezier(0.4, 0, 1, 1) both cs-root-out;
+}
+::view-transition-new(root) {
+  animation: 0.5s cubic-bezier(0.16, 1, 0.3, 1) 60ms both cs-root-in;
+}
 
 :root {
   --cs-bg: rgb(253, 251, 248);
@@ -15,17 +44,25 @@ html, body {
   padding: 0;
   background: var(--cs-bg);
   color: var(--cs-ink);
-  font-family: Inter, "Inter Placeholder", sans-serif;
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
 }
 
 a { color: inherit; }
+
+/* For links inline within body copy (About page bio, etc.) - color: inherit
+   alone makes them indistinguishable from surrounding text, so an
+   underline is the non-color signal that it's a link. */
+.cs-inline-link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 
 .cs-topbar {
   position: sticky;
   top: 0;
   display: flex;
-  justify-content: center;
-  padding: 28px 0;
+  justify-content: flex-start;
+  padding: 28px 24px;
   background: var(--cs-bg);
   z-index: 10;
 }
@@ -54,6 +91,7 @@ a { color: inherit; }
 
 /* ---- Hero ---- */
 .cs-hero h1 {
+  font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-size: 34px;
   font-weight: 800;
   letter-spacing: -0.3px;
@@ -132,6 +170,50 @@ a { color: inherit; }
 
 .cs-hero-desktop-wrap img { width: 82%; }
 
+/* CSS laptop mockup for hero screenshots that don't already have a device
+   frame baked into the image itself (Turn Tool and UltraBasic's hero PNGs
+   are pre-rendered inside a photographic laptop/iMac mockup; this is for
+   raw flat screenshots that need the same "sitting in a computer" framing
+   built with plain CSS instead). Wrap the img: <div class="cs-laptop-frame">
+   <img>...</div> in place of a bare img directly inside .cs-hero-desktop-wrap. */
+.cs-laptop-frame {
+  width: 82%;
+}
+
+.cs-laptop-screen {
+  background: #1c1c1e;
+  border-radius: 13px 13px 3px 3px;
+  padding: 12px 12px 8px;
+  box-shadow: 0 24px 44px rgba(48, 30, 24, 0.28);
+}
+
+.cs-laptop-screen img {
+  display: block;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.cs-laptop-base {
+  width: 112%;
+  margin: 0 -6%;
+  height: 12px;
+  background: linear-gradient(180deg, #d8d8da 0%, #b6b6ba 100%);
+  border-radius: 0 0 8px 8px;
+  position: relative;
+}
+
+.cs-laptop-base::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 15%;
+  height: 4px;
+  background: #98989c;
+  border-radius: 0 0 5px 5px;
+}
+
 .cs-hero-phones-wrap {
   display: flex;
   align-items: flex-end;
@@ -151,6 +233,7 @@ a { color: inherit; }
 }
 
 .cs-section h2 {
+  font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
@@ -160,6 +243,7 @@ a { color: inherit; }
 }
 
 .cs-section h3.cs-h1-style {
+  font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-size: 26px;
   font-weight: 800;
   letter-spacing: -0.2px;
@@ -173,6 +257,7 @@ a { color: inherit; }
 }
 
 .cs-section h4 {
+  font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-size: 18px;
   font-weight: 700;
   margin: 32px 0 12px;
@@ -205,6 +290,7 @@ a { color: inherit; }
 }
 
 .cs-block h3 {
+  font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-size: 17px;
   font-weight: 700;
   margin: 0 0 8px;
@@ -214,6 +300,79 @@ a { color: inherit; }
   font-size: 15px;
   line-height: 1.55;
   margin: 0;
+  color: var(--cs-ink);
+}
+
+/* ---- TL;DR ---- */
+.cs-tldr {
+  border: 1px solid var(--cs-line);
+  border-radius: 18px;
+  overflow: hidden;
+  margin: 4px 0 8px;
+}
+
+.cs-tldr-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 16px;
+  padding: 20px 24px;
+}
+
+.cs-tldr-row + .cs-tldr-row { border-top: 1px solid var(--cs-line); }
+
+.cs-tldr-label {
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cs-muted);
+  padding-top: 2px;
+}
+
+.cs-tldr-row p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+/* ---- Key decisions (considered / decision / tradeoff) ---- */
+.cs-decision {
+  background: var(--cs-pink);
+  border-radius: 18px;
+  padding: 26px 28px;
+  margin: 0 0 16px;
+}
+
+.cs-decision h3 {
+  font-family: Raleway, "Raleway Placeholder", sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  margin: 0 0 16px;
+}
+
+.cs-decision-row {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 14px;
+  margin: 0 0 12px;
+}
+
+.cs-decision-row:last-child { margin-bottom: 0; }
+
+.cs-decision-tag {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cs-muted);
+  padding-top: 2px;
+}
+
+.cs-decision-row p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
   color: var(--cs-ink);
 }
 
@@ -315,6 +474,21 @@ a { color: inherit; }
   margin: 40px 0;
 }
 
+/* For a triplet mixing desktop + mobile screenshots: desktop shots get
+   noticeably more width than the mobile one, roughly matching how much
+   wider a real desktop viewport is than a phone, so mobile doesn't read
+   at the same visual size as desktop by accident. Add is-mobile to the
+   one mobile screenshot's <img>. */
+.cs-triplet.has-mobile {
+  grid-template-columns: 1.3fr 1.3fr 1fr;
+  align-items: end;
+}
+
+.cs-triplet.has-mobile img.is-mobile {
+  max-width: 220px;
+  margin: 0 auto;
+}
+
 .cs-triplet img,
 .cs-pair img {
   width: 100%;
@@ -345,6 +519,62 @@ a { color: inherit; }
   color: var(--cs-muted);
 }
 
+/* ---- Table of contents ----
+   Fixed bottom-left scroll-spy nav, built from each page's own h2 section
+   headings by toc.js. Hidden below 1300px - there isn't reliably enough
+   margin next to the 700px content column for it to sit without crowding
+   or overlapping before that. */
+.cs-toc {
+  display: none;
+  position: fixed;
+  left: 32px;
+  bottom: 32px;
+  width: 200px;
+}
+
+.cs-toc-label {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cs-muted);
+  margin: 0 0 14px;
+}
+
+.cs-toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  border-left: 1px solid var(--cs-line);
+}
+
+.cs-toc a {
+  display: block;
+  padding: 1px 0 1px 16px;
+  margin-left: -1px;
+  border-left: 1px solid transparent;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--cs-muted);
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.cs-toc a:hover { color: var(--cs-ink); }
+
+.cs-toc a.is-active {
+  color: var(--cs-ink);
+  font-weight: 600;
+  border-left-color: var(--cs-ink);
+}
+
+@media (min-width: 1300px) {
+  .cs-toc { display: block; }
+}
+
 /* ---- Responsive ---- */
 @media (max-width: 640px) {
   .cs-hero h1 { font-size: 26px; }
@@ -354,4 +584,6 @@ a { color: inherit; }
   .cs-triplet { grid-template-columns: 1fr; }
   .cs-pair { grid-template-columns: 1fr; }
   .cs-meta { gap: 20px 28px; }
+  .cs-tldr-row { grid-template-columns: 1fr; gap: 4px; }
+  .cs-decision-row { grid-template-columns: 1fr; gap: 4px; }
 }

@@ -1,11 +1,67 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&family=Roboto:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+
+/* Opt this document into cross-document view transitions, so navigating to
+   a case study (and back) morphs rather than cutting instantly. Unsupported
+   browsers (Firefox, older Safari) just keep today's instant navigation -
+   this is additive, not a replacement for anything. */
+@view-transition {
+  navigation: auto;
+}
+
+/* Named card -> case-study-hero pairs animate as one continuous shape (the
+   "grow into the page" effect). The curve is cubic-bezier(0.16, 1, 0.3, 1)
+   - a fast-start, long-smooth-decel "expo out" - which is the actual shape
+   of Apple's own card-expand transitions (App Store product pages, Photos
+   detail view): quick to commit, no bounce/overshoot at the end, because
+   overshoot on something resizing its literal box reads as a glitch, not
+   a spring. Old/new get the identical curve and duration so the box-resize
+   and the content crossfade land in the same rhythm instead of visibly
+   drifting apart, which is a common cause of transitions feeling "off." */
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Root (everything without its own view-transition-name) gets a touch of
+   depth instead of a flat dissolve: outgoing content eases forward and
+   fades, incoming content arrives from just under full size rather than
+   popping in at 100%. That small scale delta - not a zoom, just 1.5-2% -
+   is the actual difference between something fading and something
+   *arriving*, which is most of what reads as "premium" in native
+   transitions. The named groups above (card/headline/image) skip this -
+   they're already being resized by the box interpolation, so adding scale
+   on top would fight that motion instead of adding to it. A tiny stagger
+   (new content starts 60ms after old starts leaving) keeps the destination
+   page from resolving in the exact same instant as the shape lands. */
+@keyframes cs-root-out {
+  to { opacity: 0; transform: scale(1.015); }
+}
+@keyframes cs-root-in {
+  from { opacity: 0; transform: scale(0.985); }
+}
+::view-transition-old(root) {
+  animation: 0.32s cubic-bezier(0.4, 0, 1, 1) both cs-root-out;
+}
+::view-transition-new(root) {
+  animation: 0.5s cubic-bezier(0.16, 1, 0.3, 1) 60ms both cs-root-in;
+}
 
 :root {
   --bg: rgb(249, 224, 214);
   --ink: rgb(48, 30, 24);
   --panel: rgb(46, 27, 21);
   --white: rgb(253, 251, 248);
-  --card: rgba(255, 255, 255, 0.1);
+  /* 0.8, not a lower value: .bg-grid's decorative pattern repeats on a
+     ~1040px tile (see script.js), not a small fine grid - no blur radius in
+     a normal range averages that out, so a card over a line-dense part of
+     the tile will always sample differently from one over a plain area.
+     Tuning blur/lower opacity can't fix that; only making the tint opaque
+     enough to genuinely dominate over whatever's behind it can. This is
+     the value that actually guarantees uniformity rather than reducing the
+     visible difference. */
+  --card: rgba(255, 200, 205, 0.8);
   --panel-width: clamp(280px, 26vw, 420px);
   --gap: 28px;
   --radius: 26px;
@@ -16,7 +72,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  font-family: Inter, "Inter Placeholder", sans-serif;
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
   min-height: 100vh;
 }
 
@@ -25,6 +81,7 @@ button { font-family: inherit; cursor: pointer; }
 ul { margin: 0; padding: 0; list-style: none; }
 
 .page {
+  position: relative;
   display: flex;
   min-height: 100vh;
 }
@@ -62,14 +119,14 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 .panel-hello {
-  font-family: Montserrat, "Montserrat Placeholder", sans-serif;
+  font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-weight: 700;
   font-size: 22px;
   margin: 0;
 }
 
 .panel-tagline {
-  font-family: Montserrat, "Montserrat Placeholder", sans-serif;
+  font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-weight: 800;
   font-size: 28px;
   line-height: 1.3;
@@ -88,15 +145,38 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* ---- Main content ---- */
 .content {
+  position: relative;
   flex: 1;
   min-width: 0;
   background-color: var(--bg);
+  padding: 48px 48px 100px 48px;
+}
+
+/* Grid pattern lives on its own layer (a real element, not a pseudo -
+   script.js needs to measure its rendered width) inset from the top/left/
+   right of the content area, rather than painted directly on .content -
+   that's what leaves a plain-color margin on those three sides instead of
+   the pattern running edge-to-edge. It's absolutely positioned against
+   .page (which is position:relative) rather than fixed to the viewport, so
+   it scrolls together with the cards as one piece instead of staying put
+   while they scroll past it. The 1040x1684 size below is only a fallback
+   for the instant before JS runs - script.js recalculates it on load/resize
+   so a whole number of tiles always fits exactly, keeping a full line at
+   the right edge instead of a partial tile getting clipped. */
+.bg-grid {
+  position: absolute;
+  top: 40px;
+  left: calc(var(--panel-width) + 40px);
+  right: 40px;
+  bottom: 0;
+  z-index: 1;
+  pointer-events: none;
   background-image: url('assets/background-grid.svg');
   background-repeat: repeat;
-  background-position: 0 0;
-  background-size: 865px 1403px;
-  padding: 48px 48px 100px 84px;
+  background-position: center top;
+  background-size: 1040px 1684px;
 }
+
 
 /* ---- Tabs ---- */
 .tabs {
@@ -136,11 +216,14 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* ---- Masonry columns ---- */
 .masonry {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: 1fr 1.1fr;
   gap: var(--gap);
   align-items: start;
-  max-width: 1550px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .col {
@@ -155,31 +238,69 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: block;
   border-radius: calc(var(--radius) + 6px);
   overflow: hidden;
-  background:
-    linear-gradient(160deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 45%, rgba(255, 255, 255, 0.1) 100%),
-    var(--card);
-  backdrop-filter: blur(16px) saturate(200%);
-  -webkit-backdrop-filter: blur(16px) saturate(200%);
   box-shadow:
     inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
     inset 0 0 0 1px rgba(255, 255, 255, 0.15),
     inset 0 -12px 20px -14px rgba(255, 255, 255, 0.5),
-    inset 0 14px 24px -18px rgba(48, 30, 24, 0.35),
+    inset 0 10px 18px -16px rgba(48, 30, 24, 0.25),
     0 10px 30px rgba(48, 30, 24, 0.14),
     0 2px 8px rgba(48, 30, 24, 0.08);
   color: var(--ink);
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Real edge-bending refraction via an SVG displacement filter, layered on top of the
-   plain blur above. Browsers that don't render SVG filters inside backdrop-filter
-   (older Safari/Firefox) just keep the blur - no breakage, just no bend. */
-@supports (backdrop-filter: url(#glass-distortion) blur(1px)) {
-  .card {
-    backdrop-filter: url(#glass-distortion) blur(10px) saturate(200%);
-  }
+/* The frosted-glass look lives on this inner layer rather than on .card
+   itself. Cross-document view transitions snapshot the element carrying
+   view-transition-name, and Chromium can't correctly capture an element
+   that also has an SVG-filter backdrop-filter directly on it - the capture
+   silently fails and the whole transition falls back to an instant swap.
+   Keeping .card filter-free (and putting the glass on a plain absolute
+   child instead) keeps the exact same look while letting the card ->
+   hero morph actually run.
+
+   The tint background moved down here too, and that part isn't optional:
+   backdrop-filter blurs whatever paints behind IT specifically. Left on
+   .card, this layer would sit on top of .card's own background and blur
+   that flat tint instead of the actual page behind the card - which reads
+   as a grey, hazy box instead of glass. Keeping both on the same element
+   restores the original stacking (blur the page, then lay the tint over
+   the blur).
+
+   z-index: -1, not 0: cards like .card-highlights and .card-mini have
+   content with no position set (static), and a positioned element - even
+   at z-index: 0 - always paints above static content regardless of DOM
+   order. At 0, this layer sat on top of that text and blurred it. -1
+   drops it below static content while staying above .card's own
+   background, which is what "behind the content, in front of the page"
+   actually requires. */
+.card-glass {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 45%, rgba(255, 255, 255, 0.1) 100%),
+    var(--card);
+  /* saturate(140%), not 200%: that amplified whatever pink grid content sat
+     behind each card, so the saturation boost itself was a source of
+     position-dependent color variance on top of the tint issue above.
+
+     blur(16px), not the original 10px: at 10px the bg-grid pattern's lines
+     were still sharp enough to read clearly through any card without an
+     image on top of them (Highlights, Seat Selection, the mini cards) -
+     which is what made those look busy/inconsistent next to the
+     image-heavy cards, where the image itself hides the pattern instead of
+     the blur doing it. */
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
 }
 
+/* Light: -45deg, toned down from the original 80%/24% intensity - that peak
+   sat right where .card-top's label/title text lives, washing both the tint
+   color and the text region out toward white. This keeps the glass glint
+   without blowing out the corner it overlaps. */
 .card::before {
   content: "";
   position: absolute;
@@ -187,8 +308,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   z-index: 5;
   pointer-events: none;
   background:
-    radial-gradient(130% 70% at 12% -10%, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0) 55%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 22%);
+    radial-gradient(130% 70% at 8% -8%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 30%);
 }
 
 a.card:hover {
@@ -202,7 +323,16 @@ a.card:hover {
     0 4px 12px rgba(48, 30, 24, 0.1);
 }
 
-.card[data-category].hidden { display: none; }
+.card.is-disabled,
+.mini-row.is-disabled {
+  opacity: 0.32;
+  filter: grayscale(65%);
+  pointer-events: none;
+}
+
+a.card.is-disabled:hover {
+  transform: none;
+}
 
 .card-top { position: relative; z-index: 2; padding: 32px 32px 0; }
 
@@ -211,11 +341,14 @@ a.card:hover {
   font-size: 10px;
   letter-spacing: 0.02em;
   margin: 0 0 8px;
-  opacity: 0.75;
+  /* 0.82, not the original 0.75 - small text needs the full 4.5:1 AA ratio
+     (no "large text" exception at 10px), and this keeps a comfortable
+     margin above it rather than sitting close to the line. */
+  opacity: 0.82;
 }
 
 .card-title {
-  font-family: Inter, "Inter Placeholder", sans-serif;
+  font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-weight: 600;
   font-size: 18px;
   line-height: 1.35;
@@ -226,8 +359,12 @@ a.card:hover {
   min-height: 500px;
 }
 
-.card-orange, .card-teal {
-  min-height: 460px;
+.card-orange, .card-sky {
+  min-height: 380px;
+}
+
+.card-teal {
+  min-height: 480px;
 }
 
 .card-bg-img {
@@ -240,13 +377,69 @@ a.card:hover {
   width: 84%;
 }
 
-.card-purple .card-bg-img.phone-mockup {
+.card-bg-img.phone-mockup {
   bottom: -20px;
   width: 44%;
   max-width: 220px;
 }
 
+/* Card-scoped version of case-study.css's .cs-laptop-frame, for a card
+   whose screenshot has no device mockup baked into the image itself
+   (Turn Tool and UltraBasic's images are pre-rendered inside a
+   photographic laptop/iMac mockup already, so their plain .card-bg-img
+   is enough - this is only for a raw flat screenshot needing the same
+   "sitting in a computer" frame built with plain CSS). Takes over the
+   same absolute-position slot .card-bg-img normally occupies. */
+.card-laptop-frame {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 1;
+  /* Slimmer than the plain .card-bg-img's 86%/480px: the bezel+base chrome
+     around the screenshot adds height on top of the image itself, so at
+     the same width this rides up far enough to cover the card title. */
+  width: 68%;
+  max-width: 370px;
+}
+
+.card-laptop-frame .cs-laptop-screen {
+  background: #1c1c1e;
+  border-radius: 10px 10px 3px 3px;
+  padding: 9px 9px 6px;
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card-laptop-frame .cs-laptop-screen img {
+  display: block;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.card-laptop-frame .cs-laptop-base {
+  width: 112%;
+  margin: 0 -6%;
+  height: 9px;
+  background: linear-gradient(180deg, #d8d8da 0%, #b6b6ba 100%);
+  border-radius: 0 0 6px 6px;
+  position: relative;
+}
+
+.card-laptop-frame .cs-laptop-base::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 15%;
+  height: 3px;
+  background: #98989c;
+  border-radius: 0 0 4px 4px;
+}
+
 .card-orange .card-bg-img,
+.card-sky .card-bg-img,
 .card-teal .card-bg-img {
   width: 86%;
   max-width: 480px;
@@ -263,7 +456,7 @@ a.card:hover {
 }
 
 .card-eyebrow {
-  font-family: Inter, "Inter Placeholder", sans-serif;
+  font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-weight: 600;
   font-size: 15px;
   margin: 0 0 36px;
@@ -278,7 +471,7 @@ a.card:hover {
 
 .highlights-line {
   margin: 0;
-  font-family: Inter, "Inter Placeholder", sans-serif;
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
   font-weight: 700;
   line-height: 1.4;
   overflow: hidden;
@@ -297,11 +490,32 @@ a.card:hover {
   transform: translateY(6px);
 }
 
+.highlights-dots {
+  display: flex;
+  gap: 7px;
+  margin-top: 20px;
+  flex: none;
+}
+
+.highlights-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(48, 30, 24, 0.18);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.highlights-dot.is-active {
+  background: var(--ink);
+  transform: scale(1.4);
+}
+
 /* ---- Mini cards ---- */
 .mini-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--gap);
+  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .card-mini {
@@ -322,11 +536,13 @@ a.card:hover {
   object-fit: contain;
 }
 
-.card-mini-tan { background: rgba(255, 255, 255, 0.25); }
-.card-mini-cream { background: rgba(255, 255, 255, 0.25); }
+/* .card-mini-tan / .card-mini-cream intentionally carry no color rule of
+   their own - .card-glass (a positioned child) paints over a plain .card
+   background entirely, so a rule here would be invisible dead CSS. Both
+   already render the same unified --card tint as every other card. */
 
 .mini-title {
-  font-family: Inter, "Inter Placeholder", sans-serif;
+  font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-weight: 600;
   font-size: 15px;
   line-height: 1.3;
@@ -390,6 +606,8 @@ a.card:hover {
   }
 
   .sticky-panel::after { display: none; }
+
+  .bg-grid { left: 40px; }
 
   .masonry { grid-template-columns: 1fr; }
 

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Showcase — Gina Hsu</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700;800&family=Roboto:wght@400;500&display=swap');
+
+  :root {
+    --ink: rgb(48, 30, 24);
+    --bg: rgb(249, 224, 214);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    font-family: Roboto, "Roboto Placeholder", sans-serif;
+    color: var(--ink);
+  }
+
+  .grid-viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .grid-viewport.is-dragging { cursor: grabbing; }
+
+  .grid-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    will-change: transform;
+  }
+
+  .grid-tile {
+    position: absolute;
+    display: flex;
+    align-items: flex-end;
+    padding: 14px;
+    font-family: Raleway, "Raleway Placeholder", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: rgba(48, 30, 24, 0.45);
+    outline: 1px solid rgba(48, 30, 24, 0.06);
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .grid-tile img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .showcase-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .showcase-title {
+    font-family: Raleway, "Raleway Placeholder", sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: rgba(253, 251, 248, 0.85);
+    padding: 10px 16px;
+    border-radius: 100px;
+    pointer-events: auto;
+  }
+
+  .showcase-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 100px;
+    background: rgba(253, 251, 248, 0.85);
+    text-decoration: none;
+    color: var(--ink);
+    font-size: 20px;
+    line-height: 1;
+    pointer-events: auto;
+    transition: background-color 0.2s ease;
+  }
+
+  .showcase-close:hover { background: rgb(253, 251, 248); }
+
+  .showcase-hint {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: Raleway, "Raleway Placeholder", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    background: rgba(253, 251, 248, 0.85);
+    padding: 10px 18px;
+    border-radius: 100px;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .showcase-hint.is-hidden { opacity: 0; }
+</style>
+</head>
+<body>
+
+<div class="showcase-topbar">
+  <span class="showcase-title">Showcase</span>
+  <a class="showcase-close" href="index.html" aria-label="Close showcase">&times;</a>
+</div>
+
+<div class="grid-viewport" id="gridViewport">
+  <div class="grid-inner" id="gridInner"></div>
+</div>
+
+<p class="showcase-hint" id="showcaseHint">Drag to explore</p>
+
+<script>
+  // Infinite pannable tile grid, in the spirit of pdimagearchive.org/infinite-view.
+  // Renders just enough tiles to cover the viewport (+1 buffer ring), then recycles
+  // each tile to the opposite edge as it drifts out of view during a drag - the
+  // grid never runs out of tiles no matter how far you pan.
+  //
+  // TODO: swap in real Roots Collective / Turn Tool graphics. Drop image files into
+  // assets/showcase/ and list them in TILES below as { image: "assets/showcase/xyz.png" }
+  // instead of { color, label } - see renderTile() for how both are handled.
+  const CELL = 220;
+
+  const TILES = [
+    { color: '#F3D9CB', label: 'Roots Collective' },
+    { color: '#EADFD3', label: 'Turn Tool' },
+    { color: '#E7CFC2', label: 'Graphics' },
+    { color: '#DDE7E2', label: 'Roots Collective' },
+    { color: '#F6E6DC', label: 'Turn Tool' },
+    { color: '#E3D6C8', label: 'Graphics' },
+    { color: '#D9E3DE', label: 'Roots Collective' },
+    { color: '#F0DED0', label: 'Turn Tool' },
+    { color: '#EAD8CB', label: 'Graphics' },
+  ];
+
+  const viewport = document.getElementById('gridViewport');
+  const inner = document.getElementById('gridInner');
+  const hint = document.getElementById('showcaseHint');
+
+  let cols = 0;
+  let rows = 0;
+  let tiles = [];
+  let offsetX = 0;
+  let offsetY = 0;
+
+  function tileAt(col, row) {
+    const idx = Math.abs(col * 5 + row * 7) % TILES.length;
+    return TILES[idx];
+  }
+
+  function renderTile(el, col, row) {
+    const data = tileAt(col, row);
+    el.style.left = (col * CELL) + 'px';
+    el.style.top = (row * CELL) + 'px';
+    if (data.image) {
+      el.style.background = '';
+      el.innerHTML = `<img src="${data.image}" alt="${data.label || ''}">`;
+    } else {
+      el.style.background = data.color;
+      el.innerHTML = '';
+      el.textContent = data.label || '';
+    }
+  }
+
+  function buildGrid() {
+    const vw = viewport.clientWidth;
+    const vh = viewport.clientHeight;
+    cols = Math.ceil(vw / CELL) + 2;
+    rows = Math.ceil(vh / CELL) + 2;
+
+    inner.innerHTML = '';
+    tiles = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const el = document.createElement('div');
+        el.className = 'grid-tile';
+        el.style.width = CELL + 'px';
+        el.style.height = CELL + 'px';
+        renderTile(el, c, r);
+        inner.appendChild(el);
+        tiles.push({ el, col: c, row: r });
+      }
+    }
+  }
+
+  function applyTransform() {
+    inner.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
+  }
+
+  function recycle() {
+    const vw = viewport.clientWidth;
+    const vh = viewport.clientHeight;
+    tiles.forEach((t) => {
+      const screenLeft = t.col * CELL + offsetX;
+      const screenTop = t.row * CELL + offsetY;
+
+      if (screenLeft < -CELL) t.col += cols;
+      else if (screenLeft > vw) t.col -= cols;
+
+      if (screenTop < -CELL) t.row += rows;
+      else if (screenTop > vh) t.row -= rows;
+
+      renderTile(t.el, t.col, t.row);
+    });
+  }
+
+  buildGrid();
+  applyTransform();
+  window.addEventListener('resize', () => {
+    buildGrid();
+    applyTransform();
+  });
+
+  let dragging = false;
+  let lastX = 0;
+  let lastY = 0;
+  let dragDistance = 0;
+
+  const hideHint = () => {
+    if (dragDistance > 40) hint.classList.add('is-hidden');
+  };
+
+  viewport.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    viewport.classList.add('is-dragging');
+    viewport.setPointerCapture(e.pointerId);
+  });
+
+  viewport.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    offsetX += dx;
+    offsetY += dy;
+    dragDistance += Math.abs(dx) + Math.abs(dy);
+    applyTransform();
+    recycle();
+    hideHint();
+  });
+
+  const endDrag = () => {
+    dragging = false;
+    viewport.classList.remove('is-dragging');
+  };
+
+  viewport.addEventListener('pointerup', endDrag);
+  viewport.addEventListener('pointerleave', endDrag);
+  viewport.addEventListener('pointercancel', endDrag);
+
+  viewport.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    offsetX -= e.deltaX;
+    offsetY -= e.deltaY;
+    dragDistance += Math.abs(e.deltaX) + Math.abs(e.deltaY);
+    applyTransform();
+    recycle();
+    hideHint();
+  }, { passive: false });
+</script>
+
+</body>
+</html>

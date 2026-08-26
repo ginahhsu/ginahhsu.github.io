@@ -14,9 +14,9 @@
 
 <main class="cs-main">
 
-  <section class="cs-hero">
+  <section class="cs-hero" style="view-transition-name: vt-ultrabasic">
     <h1>UltraBasic and Extended Comfort</h1>
-    <p class="cs-subtitle">Designing strategic user experiences for the launch of two product offerings.</p>
+    <p class="cs-subtitle" style="view-transition-name: vt-ultrabasic-headline">Designing strategic user experiences for the launch of two product offerings.</p>
 
     <div class="cs-meta">
       <div class="cs-meta-item">
@@ -48,7 +48,7 @@
 
   <div class="cs-hero-images">
     <div class="cs-hero-desktop-wrap">
-      <img src="assets/ultrabasic/hero-desktop.png" alt="Desktop booking flow showing UltraBasic and Extended Comfort fare options">
+      <img src="assets/ultrabasic/hero-desktop.png" alt="Desktop booking flow showing UltraBasic and Extended Comfort fare options" style="view-transition-name: vt-ultrabasic-image">
     </div>
     <div class="cs-hero-phones-wrap">
       <img src="assets/ultrabasic/hero-phone-1.png" alt="Mobile trip screen">
@@ -56,6 +56,24 @@
       <img src="assets/ultrabasic/hero-phone-3.png" alt="Mobile boarding pass screen">
     </div>
   </div>
+
+  <section class="cs-section">
+    <h2>TL;DR</h2>
+    <div class="cs-tldr">
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Problem</span>
+        <p>WestJet's new UltraBasic fare and Extended Comfort seat launched with confusing fare restrictions, baggage rules, and fees, across nine product teams, six digital platforms, and over 100 employees.</p>
+      </div>
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Approach</span>
+        <p>Led the end-to-end guest experience from booking to check-in in six months, grounding decisions in guest sentiment research and A/B testing rather than stakeholder opinion alone.</p>
+      </div>
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Outcome</span>
+        <p>$3M+ in additional flight revenue from design changes, and a $35M flight-revenue loss averted by challenging a proposed direction with data.</p>
+      </div>
+    </div>
+  </section>
 
   <section class="cs-section">
     <h2>Background</h2>
@@ -122,6 +140,12 @@
 
     <h4>Upselling where it matters</h4>
     <p>Understanding that UltraBasic guests are highly price-sensitive, we strategically placed upsell opportunities at key decision points to maximize impact and assist guests in making informed choices without feeling overwhelmed.</p>
+
+    <h4>Guest education</h4>
+    <p>To support operational goals, we prioritized clear, repeated communication of fare rules and baggage allowances &mdash; reinforcing what guests had bought and reducing the confusion that was driving calls to frontline and call-centre staff.</p>
+
+    <h4>Consistency across every touchpoint</h4>
+    <p>As the only team overseeing the guest journey end-to-end, we treated look and feel, interactions, and information as one connected system &mdash; extending past digital screens to the airport and in-flight experience, so guests got the same story everywhere and the contact centre took less of the load.</p>
   </section>
 
   <figure class="cs-figure">
@@ -154,26 +178,6 @@
     <figcaption>Left: A/B testing the Basic card hierarchy. Right: A/B testing the refreshed modal design</figcaption>
   </figure>
 
-  <section class="cs-section" style="padding-top: 0;">
-    <p>Throughout and after the project launch, we ran multiple A/B tests to monitor how guests would respond to design and strategy changes.</p>
-
-    <div class="cs-block">
-      <p class="cs-block-label">Optimization insight #1</p>
-      <h3>Challenging strategies</h3>
-      <p>Design strategy flagged concerns that a proposed solution would be a poor experience. We proved this with data that showed changing directions avoided a potential loss of 35M in flight revenue and 2M in ancillary revenue.</p>
-    </div>
-    <div class="cs-block">
-      <p class="cs-block-label">Optimization insight #2</p>
-      <h3>Updated design patterns</h3>
-      <p>Designs increased buy up to Economy by almost 5%, contributing to over 3M in flight revenue and 400K in ancillary revenue.</p>
-    </div>
-  </section>
-
-  <section class="cs-section">
-    <h2>Creating a good holistic experience</h2>
-    <p>To ensure the success of the project, we approached the design from a holistic perspective, focusing on end-to-end guest experiences. As the only team overseeing the complete guest journey, we took responsibility for ensuring the look and feel, interactions, and information delivery were accurate and easy to understand. This approach extended beyond digital interfaces to consider the airport and in-flight experiences, aligning with WestJet&rsquo;s operational goals and reducing potential strain on the contact centre.</p>
-  </section>
-
   <figure class="cs-figure">
     <div class="cs-touchpoints">
       <div class="cs-touchpoint">
@@ -201,8 +205,40 @@
   </figure>
 
   <section class="cs-section">
-    <h3 class="cs-h1-style">Educating guests</h3>
-    <p>To support operational goals, we prioritized clear communication of fare rules and baggage allowances. The use of repetition helped reinforced the guests memory. This was to minimize any confusion guests may have, reducing the need for support from frontline and call centre staff.</p>
+    <h2>Key Decisions</h2>
+    <p>Two calls mattered more than the rest of the feature list — one against guest research, one against a direction already in motion.</p>
+
+    <div class="cs-decision">
+      <h3>Order fare attributes by guest priority vs. operational priority</h3>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Considered</span>
+        <p>Guest research ranked change/cancel above baggage in what mattered most, so ordering the fare attribute list to match that ranking was the direct read of the data.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Decision</span>
+        <p>We swapped the order — surfacing baggage before change/cancel — to meet WestJet's operational goal of reducing bag congestion at the gate.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Tradeoff</span>
+        <p>The attribute order no longer purely mirrored the guest-research ranking, in exchange for reinforcing the exact operational behaviour — earlier bag handling — the new fare structure existed to drive.</p>
+      </div>
+    </div>
+
+    <div class="cs-decision">
+      <h3>Ship the proposed direction vs. flag it and re-test</h3>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Considered</span>
+        <p>A design direction was already proposed and moving forward — the easier path was to build it as scoped rather than reopen a decision stakeholders had aligned on.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Decision</span>
+        <p>Design strategy flagged concerns that the proposed solution would be a poor guest experience, and we used data to make the case for changing direction instead.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Tradeoff</span>
+        <p>Pushing back on a direction already in motion, with the friction that involves — in exchange for avoiding an estimated $35M in flight revenue and $2M in ancillary revenue loss.</p>
+      </div>
+    </div>
   </section>
 
   <div class="cs-triplet">
@@ -220,7 +256,7 @@
 
   <section class="cs-section">
     <h2>Impact</h2>
-    <p>Our refreshed design flows catered to a diverse audience, ensuring guests could easily understand the product offerings, select the ancillaries they valued, and only pay for what they truly needed. This scenario allowed WestJet to welcome price-sensitive guests, generate additional revenue, and improve the overall guest experience.</p>
+    <p>Our refreshed design flows helped guests easily understand the product offerings, select the ancillaries they valued, and pay only for what they truly needed. Post-launch testing backed that up directly &mdash; updated design patterns lifted Economy buy-up by almost 5%, adding over $3M in flight revenue and $400K in ancillary revenue, on top of the $35M and $2M in losses avoided by pushing back on a weaker proposed direction. The result was a launch that welcomed price-sensitive guests without leaving revenue on the table.</p>
     <div class="cs-callout">Design helped guests easily understand product offering while giving them opportunities to select extras they valued.</div>
   </section>
 
@@ -234,12 +270,13 @@
     <p>This project was the largest initiative we undertook since switching to Figma. The scale and scope posed challenges, such as Figma files becoming too large to load and Zeplin being difficult to navigate. To overcome these obstacles, we established a source of truth file for product owners to reference, created an archival system for managing design iterations, and optimized component creation. We organized pages to make them easily navigable by all team members, ensuring efficiency and clarity throughout the design process.</p>
 
     <h4>Stakeholder management</h4>
-    <p>With the scale of the project, there were many many stakeholders to juggle. From individual Product Owners to VPs, everyone had wants and needs, and strong ones. I had two major takeaways from this process — be empowered to flag concerns and speak the stakeholders language. With so many questions about the offerings, I ran a workshop with key stakeholders to do a Q&amp;A. This ended up being a major help and further aligned the team in our vision. When presenting designs to VPs, speaking in terms of capturing revenue, improving operations and mitigating negative brand reception sped up our approvals as leadership understood our thinking.</p>
+    <p>With the scale of the project, there were many stakeholders to juggle. From individual Product Owners to VPs, everyone had wants and needs, and strong ones. I had two major takeaways from this process — be empowered to flag concerns and speak the stakeholders language. With so many questions about the offerings, I ran a workshop with key stakeholders to do a Q&amp;A. This ended up being a major help and further aligned the team in our vision. When presenting designs to VPs, speaking in terms of capturing revenue, improving operations and mitigating negative brand reception sped up our approvals as leadership understood our thinking.</p>
   </section>
 
   <footer class="cs-footer">Gina Hsu 2025</footer>
 
 </main>
 
+<script src="toc.js"></script>
 </body>
 </html>
