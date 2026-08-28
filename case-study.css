@@ -16,16 +16,10 @@
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes cs-root-out {
-  to { opacity: 0; }
-}
 @keyframes cs-root-in {
   from { opacity: 0; }
 }
-::view-transition-old(root) {
-  animation-name: cs-root-out;
-  animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
-}
+::view-transition-old(root) { animation: none; }
 ::view-transition-new(root) { animation-name: cs-root-in; }
 
 :root {
@@ -63,7 +57,8 @@ a { color: inherit; }
   position: sticky;
   top: 0;
   display: flex;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between;
   padding: 28px 24px;
   background: var(--cs-bg);
   z-index: 10;
@@ -602,6 +597,57 @@ a { color: inherit; }
 
 .cs-toc a:hover { color: var(--cs-ink); }
 
+/* ---- Image lightbox ---- */
+.cs-main img { cursor: zoom-in; }
+
+.cs-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 16, 12, 0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  z-index: 50;
+  cursor: zoom-out;
+}
+
+.cs-lightbox.is-open { display: flex; }
+
+.cs-lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 6px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  cursor: zoom-out;
+}
+
+.cs-lightbox-close {
+  position: fixed;
+  top: 24px;
+  right: 28px;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  background: rgba(253, 251, 248, 0.9);
+  color: var(--cs-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* Clone of a shared-background tile (.cs-panel, .cs-touchpoints) - opens as
+   one combined view instead of just the single image clicked within it. */
+.cs-lightbox-group {
+  max-width: min(920px, 100%);
+  max-height: 100%;
+  overflow: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  cursor: zoom-out;
+}
+
 .cs-toc a.is-active {
   color: var(--cs-ink);
   font-weight: 600;
@@ -610,6 +656,85 @@ a { color: inherit; }
 
 @media (min-width: 1300px) {
   .cs-toc { display: block; }
+}
+
+/* ---- Table of contents: tablet/mobile dropdown ----
+   Below 1300px the sidebar above has nowhere to go, so the same section
+   links are rendered as a dropdown menu inside the sticky top bar instead. */
+.cs-topbar-toc {
+  position: relative;
+}
+
+.cs-topbar-toc-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 18px;
+  border: 1px solid var(--cs-line);
+  border-radius: 100px;
+  background: var(--cs-bg);
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--cs-ink);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cs-topbar-toc-toggle:hover { background: var(--cs-pink); }
+
+.cs-topbar-toc-chevron {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+}
+
+.cs-topbar-toc.is-open .cs-topbar-toc-chevron { transform: rotate(180deg); }
+
+.cs-topbar-toc-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 220px;
+  max-width: calc(100vw - 48px);
+  max-height: min(60vh, 420px);
+  overflow-y: auto;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: var(--cs-bg);
+  border: 1px solid var(--cs-line);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(48, 30, 24, 0.14);
+}
+
+.cs-topbar-toc.is-open .cs-topbar-toc-panel { display: flex; }
+
+.cs-topbar-toc-panel a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--cs-muted);
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.cs-topbar-toc-panel a:hover { background: var(--cs-pink); }
+
+.cs-topbar-toc-panel a.is-active {
+  color: var(--cs-ink);
+  font-weight: 600;
+  background: var(--cs-pink);
+}
+
+@media (min-width: 1300px) {
+  .cs-topbar-toc { display: none; }
 }
 
 /* ---- Responsive ---- */

@@ -25,26 +25,14 @@
 }
 
 /* Root (everything without its own view-transition-name, images included)
-   is a plain crossfade - no scale/transform, so nothing on the page drifts
-   or pulses while it fades. The named groups above (card/headline) carry
-   all the motion, via their own box interpolation; root just needs to get
-   out of the way cleanly. Same duration as the group morph above (no
-   stagger) so root and the named shape land in the same rhythm instead of
-   two transitions running side by side. The exit keeps its own
-   timing-function though: cubic-bezier(0.7, 0, 0.84, 0) is the
-   time-reversed mirror of the expo-out curve above (accelerate instead of
-   decelerate) - sharing the decelerating curve made the outgoing page hang
-   near-visible for most of the 0.5s then get cut off abruptly at the end. */
-@keyframes cs-root-out {
-  to { opacity: 0; }
-}
+   just cuts out instantly on exit - no fade, no scale - and fades in on
+   entry. The named groups above (card/headline) carry all the motion, via
+   their own box interpolation; root just needs to get out of the way
+   cleanly rather than adding a second, separate-feeling transition on top. */
 @keyframes cs-root-in {
   from { opacity: 0; }
 }
-::view-transition-old(root) {
-  animation-name: cs-root-out;
-  animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
-}
+::view-transition-old(root) { animation: none; }
 ::view-transition-new(root) { animation-name: cs-root-in; }
 
 :root {
