@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&family=Roboto:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&family=Roboto:wght@400;500;600;700&display=swap');
 
 /* Opt this document into cross-document view transitions, so navigating to
    a case study (and back) morphs rather than cutting instantly. Unsupported
@@ -24,29 +24,28 @@
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Root (everything without its own view-transition-name) gets a touch of
-   depth instead of a flat dissolve: outgoing content eases forward and
-   fades, incoming content arrives from just under full size rather than
-   popping in at 100%. That small scale delta - not a zoom, just 1.5-2% -
-   is the actual difference between something fading and something
-   *arriving*, which is most of what reads as "premium" in native
-   transitions. The named groups above (card/headline/image) skip this -
-   they're already being resized by the box interpolation, so adding scale
-   on top would fight that motion instead of adding to it. A tiny stagger
-   (new content starts 60ms after old starts leaving) keeps the destination
-   page from resolving in the exact same instant as the shape lands. */
+/* Root (everything without its own view-transition-name, images included)
+   is a plain crossfade - no scale/transform, so nothing on the page drifts
+   or pulses while it fades. The named groups above (card/headline) carry
+   all the motion, via their own box interpolation; root just needs to get
+   out of the way cleanly. Same duration as the group morph above (no
+   stagger) so root and the named shape land in the same rhythm instead of
+   two transitions running side by side. The exit keeps its own
+   timing-function though: cubic-bezier(0.7, 0, 0.84, 0) is the
+   time-reversed mirror of the expo-out curve above (accelerate instead of
+   decelerate) - sharing the decelerating curve made the outgoing page hang
+   near-visible for most of the 0.5s then get cut off abruptly at the end. */
 @keyframes cs-root-out {
-  to { opacity: 0; transform: scale(1.015); }
+  to { opacity: 0; }
 }
 @keyframes cs-root-in {
-  from { opacity: 0; transform: scale(0.985); }
+  from { opacity: 0; }
 }
 ::view-transition-old(root) {
-  animation: 0.32s cubic-bezier(0.4, 0, 1, 1) both cs-root-out;
+  animation-name: cs-root-out;
+  animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
 }
-::view-transition-new(root) {
-  animation: 0.5s cubic-bezier(0.16, 1, 0.3, 1) 60ms both cs-root-in;
-}
+::view-transition-new(root) { animation-name: cs-root-in; }
 
 :root {
   --bg: rgb(249, 224, 214);
@@ -190,7 +189,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   gap: 4px;
   background: var(--panel);
   border-radius: 100px;
-  padding: 5px;
+  padding: 4px;
   margin: 0 auto 32px;
 }
 
@@ -201,7 +200,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   opacity: 0.75;
   font-size: 14px;
   font-weight: 500;
-  padding: 9px 20px;
+  padding: 8px 20px;
   border-radius: 100px;
   transition: background-color 0.2s ease, opacity 0.2s ease;
 }
@@ -337,9 +336,10 @@ a.card.is-disabled:hover {
 .card-top { position: relative; z-index: 2; padding: 32px 32px 0; }
 
 .card-label {
-  font-family: "Roboto Mono", monospace;
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
+  font-weight: 600;
   font-size: 10px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
   margin: 0 0 8px;
   /* 0.82, not the original 0.75 - small text needs the full 4.5:1 AA ratio
      (no "large text" exception at 10px), and this keeps a comfortable
@@ -363,8 +363,13 @@ a.card.is-disabled:hover {
   min-height: 380px;
 }
 
+/* UltraBasic's title runs a line longer than Turn Tool/Space Centre's, so
+   it needs more clearance above the bottom-anchored image than the plain
+   380px wide/landscape height gives - without this the image's fixed
+   height (set by its own aspect ratio, not by the card) rides up into the
+   title's third line. */
 .card-teal {
-  min-height: 480px;
+  min-height: 440px;
 }
 
 .card-bg-img {
@@ -492,7 +497,7 @@ a.card.is-disabled:hover {
 
 .highlights-dots {
   display: flex;
-  gap: 7px;
+  gap: 8px;
   margin-top: 20px;
   flex: none;
 }
@@ -520,17 +525,17 @@ a.card.is-disabled:hover {
 
 .card-mini {
   min-height: 260px;
-  padding: 26px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 14px;
+  gap: 16px;
 }
 
 .card-mini img {
   position: absolute;
-  top: 22px;
-  right: 22px;
+  top: 24px;
+  right: 24px;
   width: 68px;
   height: 68px;
   object-fit: contain;
@@ -575,7 +580,7 @@ a.card.is-disabled:hover {
   color: var(--ink);
   font-size: 13px;
   font-weight: 500;
-  padding: 9px 14px;
+  padding: 8px 16px;
   border-radius: 100px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   white-space: nowrap;
@@ -589,7 +594,7 @@ a.card.is-disabled:hover {
   position: static;
   align-self: flex-start;
   font-size: 12px;
-  padding: 7px 12px;
+  padding: 8px 12px;
 }
 
 .card-mini .card-btn.small { margin-top: auto; }
@@ -625,17 +630,17 @@ a.card.is-disabled:hover {
   }
 
   .tab {
-    padding: 9px 16px;
+    padding: 8px 16px;
     font-size: 13px;
     white-space: nowrap;
   }
 }
 
 @media (max-width: 360px) {
-  .tabs { gap: 2px; padding: 5px; }
+  .tabs { gap: 4px; padding: 4px; }
 
   .tab {
-    padding: 8px 11px;
+    padding: 8px 12px;
     font-size: 12px;
   }
 }

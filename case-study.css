@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&family=Roboto:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&family=Roboto:wght@400;500;600;700;800&display=swap');
 
 /* Mirrors the opt-in in styles.css - both the outgoing and incoming
    document need it for the cross-document transition to fire. */
@@ -7,8 +7,8 @@
 }
 
 /* Mirrors styles.css exactly - see the comments there for why this specific
-   curve/duration/stagger. Both documents need identical rules for the
-   morph to look the same landing here as it did leaving the homepage. */
+   curve/duration. Both documents need identical rules for the morph to
+   look the same landing here as it did leaving the homepage. */
 ::view-transition-group(*),
 ::view-transition-old(*),
 ::view-transition-new(*) {
@@ -17,22 +17,24 @@
 }
 
 @keyframes cs-root-out {
-  to { opacity: 0; transform: scale(1.015); }
+  to { opacity: 0; }
 }
 @keyframes cs-root-in {
-  from { opacity: 0; transform: scale(0.985); }
+  from { opacity: 0; }
 }
 ::view-transition-old(root) {
-  animation: 0.32s cubic-bezier(0.4, 0, 1, 1) both cs-root-out;
+  animation-name: cs-root-out;
+  animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
 }
-::view-transition-new(root) {
-  animation: 0.5s cubic-bezier(0.16, 1, 0.3, 1) 60ms both cs-root-in;
-}
+::view-transition-new(root) { animation-name: cs-root-in; }
 
 :root {
   --cs-bg: rgb(253, 251, 248);
   --cs-ink: rgb(48, 30, 24);
-  --cs-muted: rgba(48, 30, 24, 0.56);
+  /* 0.68, not the original 0.56 - small muted text needs the full 4.5:1 AA
+     ratio against both --cs-bg and --cs-pink, and 0.56 only cleared ~3.5:1
+     on either. */
+  --cs-muted: rgba(48, 30, 24, 0.68);
   --cs-pink: rgb(249, 224, 214);
   --cs-line: rgba(48, 30, 24, 0.1);
 }
@@ -117,7 +119,14 @@ a { color: inherit; }
 .cs-meta-item {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+}
+
+.cs-meta-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 40px;
+  width: 100%;
 }
 
 .cs-meta-label {
@@ -128,6 +137,13 @@ a { color: inherit; }
 .cs-meta-value {
   font-size: 15px;
   font-weight: 600;
+}
+
+.cs-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px 40px;
+  width: 100%;
 }
 
 .cs-stat {
@@ -214,17 +230,28 @@ a { color: inherit; }
   border-radius: 0 0 5px 5px;
 }
 
-.cs-hero-phones-wrap {
+.cs-hero-images > .cs-hero-phones-wrap {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 24px 12px 0;
+  padding: 24px 12px;
 }
 
 .cs-hero-phones-wrap img {
   width: 34%;
   border-radius: 10px 10px 0 0;
+}
+
+/* A single flat, cropped detail shot (no device mockup) paired with the
+   main desktop hero - for a supporting screenshot that isn't an actual
+   phone screen, so it shouldn't take the 34%-wide phones-wrap treatment
+   above (which was collapsing a full desktop screenshot down to an
+   unreadable thumbnail). Sized to the same visual weight as the desktop
+   hero image itself. */
+.cs-hero-detail-wrap img {
+  width: 82%;
+  border-radius: 12px 12px 0 0;
 }
 
 /* ---- Sections ---- */
@@ -253,7 +280,7 @@ a { color: inherit; }
 .cs-section p {
   font-size: 16px;
   line-height: 1.65;
-  margin: 0 0 18px;
+  margin: 0 0 16px;
 }
 
 .cs-section h4 {
@@ -267,7 +294,7 @@ a { color: inherit; }
 .cs-callout {
   background: var(--cs-pink);
   border-radius: 18px;
-  padding: 26px 28px;
+  padding: 24px 28px;
   font-size: 17px;
   font-weight: 600;
   line-height: 1.5;
@@ -277,14 +304,20 @@ a { color: inherit; }
 .cs-block {
   background: var(--cs-pink);
   border-radius: 18px;
-  padding: 26px 28px;
+  padding: 24px 28px;
   margin: 0 0 16px;
 }
 
-.cs-block-label {
-  font-family: "Roboto Mono", monospace;
-  font-size: 11px;
+/* Scoped as .cs-block .cs-block-label, not just .cs-block-label - it's a
+   <p>, and needs to outrank .cs-section p's own font-size (a plain class
+   selector loses to "class + type" on specificity) or the label renders
+   at body-paragraph size instead of eyebrow size. */
+.cs-block .cs-block-label {
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
+  font-weight: 600;
+  font-size: 10px;
   letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--cs-muted);
   margin: 0 0 8px;
 }
@@ -296,7 +329,7 @@ a { color: inherit; }
   margin: 0 0 8px;
 }
 
-.cs-block p {
+.cs-block p:not(.cs-block-label) {
   font-size: 15px;
   line-height: 1.55;
   margin: 0;
@@ -321,7 +354,8 @@ a { color: inherit; }
 .cs-tldr-row + .cs-tldr-row { border-top: 1px solid var(--cs-line); }
 
 .cs-tldr-label {
-  font-family: "Roboto Mono", monospace;
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
+  font-weight: 600;
   font-size: 11px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -340,7 +374,7 @@ a { color: inherit; }
 .cs-decision {
   background: var(--cs-pink);
   border-radius: 18px;
-  padding: 26px 28px;
+  padding: 24px 28px;
   margin: 0 0 16px;
 }
 
@@ -354,15 +388,16 @@ a { color: inherit; }
 .cs-decision-row {
   display: grid;
   grid-template-columns: 92px 1fr;
-  gap: 14px;
+  gap: 16px;
   margin: 0 0 12px;
 }
 
 .cs-decision-row:last-child { margin-bottom: 0; }
 
 .cs-decision-tag {
-  font-family: "Roboto Mono", monospace;
-  font-size: 10.5px;
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
+  font-weight: 600;
+  font-size: 10px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--cs-muted);
@@ -392,7 +427,7 @@ a { color: inherit; }
   font-style: italic;
   color: var(--cs-muted);
   text-align: center;
-  margin-top: 14px;
+  margin-top: 16px;
 }
 
 .cs-panel-row {
@@ -414,7 +449,7 @@ a { color: inherit; }
 .cs-panel-pair {
   display: flex;
   gap: 12px;
-  align-items: flex-end;
+  align-items: flex-start;
   width: 100%;
   justify-content: center;
 }
@@ -428,7 +463,8 @@ a { color: inherit; }
 }
 
 .cs-exp-label {
-  font-family: "Roboto Mono", monospace;
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
+  font-weight: 600;
   font-size: 10px;
   letter-spacing: 0.04em;
   color: var(--cs-muted);
@@ -457,7 +493,7 @@ a { color: inherit; }
 .cs-touchpoint p {
   font-size: 13px;
   font-weight: 600;
-  margin: 0 0 14px;
+  margin: 0 0 16px;
 }
 
 .cs-touchpoint img {
@@ -533,12 +569,13 @@ a { color: inherit; }
 }
 
 .cs-toc-label {
-  font-family: "Roboto Mono", monospace;
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
+  font-weight: 600;
   font-size: 10px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--cs-muted);
-  margin: 0 0 14px;
+  margin: 0 0 16px;
 }
 
 .cs-toc ul {
@@ -547,7 +584,7 @@ a { color: inherit; }
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  gap: 12px;
   border-left: 1px solid var(--cs-line);
 }
 
@@ -584,6 +621,7 @@ a { color: inherit; }
   .cs-triplet { grid-template-columns: 1fr; }
   .cs-pair { grid-template-columns: 1fr; }
   .cs-meta { gap: 20px 28px; }
+  .cs-meta-row { grid-template-columns: 1fr; gap: 20px; }
   .cs-tldr-row { grid-template-columns: 1fr; gap: 4px; }
   .cs-decision-row { grid-template-columns: 1fr; gap: 4px; }
 }

@@ -6,16 +6,16 @@
   project doesn't need, and link a card on index.html to it.
 
   Every visual style lives in case-study.css under these classes:
-  cs-hero, cs-meta, cs-stat, cs-hero-images, cs-section, cs-callout,
-  cs-tldr, cs-decision, cs-block, cs-figure, cs-panel-row,
-  cs-touchpoints, cs-triplet, cs-pair, cs-collage, cs-footer. Reuse
-  them rather than adding new one-off styles so every case study
-  stays visually consistent.
+  cs-hero, cs-meta, cs-meta-row, cs-stats, cs-stat, cs-hero-images,
+  cs-section, cs-callout, cs-tldr, cs-decision, cs-block, cs-figure,
+  cs-panel-row, cs-touchpoints, cs-triplet, cs-pair, cs-collage,
+  cs-footer. Reuse them rather than adding new one-off styles so every
+  case study stays visually consistent.
 
-  SENIOR-LEVEL SIGNAL: the TL;DR and Key Decisions sections below are
+  SENIOR-LEVEL SIGNAL: the TLDR and Key Decisions sections below are
   not optional filler — they're what separates a senior-read case
   study from a mid-level one. A hiring manager skimming should get
-  problem/approach/outcome in the TL;DR alone, and the Key Decisions
+  problem/approach/outcome in the TLDR alone, and the Key Decisions
   section should show judgment (an alternative you rejected and why),
   not just a log of what shipped. Write those before fleshing out the
   narrative sections — they force you to know what the point is.
@@ -42,6 +42,8 @@
     <p class="cs-subtitle">[One-sentence summary of what this project was and the outcome you drove.]</p>
 
     <div class="cs-meta">
+      <!-- Short quick-facts (a word or two each) go here as plain
+           .cs-meta-item's, flowing in this wrapping row. -->
       <div class="cs-meta-item">
         <span class="cs-meta-label">Role</span>
         <span class="cs-meta-value">[Your role — if you were one of several designers, name your specific slice, e.g. "Lead Designer, patient side"]</span>
@@ -54,18 +56,34 @@
         <span class="cs-meta-label">Platforms</span>
         <span class="cs-meta-value">[e.g. Web, Mobile]</span>
       </div>
-      <div class="cs-meta-item">
-        <span class="cs-meta-label">Areas</span>
-        <span class="cs-meta-value">[e.g. Strategy, Design]</span>
+
+      <!-- Any quick-fact whose value runs a full sentence/list long (a
+           team roster, a long "Areas" list) fights the row above for
+           space and loses - it wraps onto its own line with a big
+           orphaned gap next to it. Put those in a .cs-meta-row instead:
+           a dedicated 2-column row that gives long values real width.
+           One long item on its own is fine here too (just leave the
+           second column empty) - delete this wrapper entirely if every
+           item above is already short enough to never wrap oddly. -->
+      <div class="cs-meta-row">
+        <div class="cs-meta-item">
+          <span class="cs-meta-label">Areas</span>
+          <span class="cs-meta-value">[e.g. Strategy, Design]</span>
+        </div>
       </div>
-      <!-- Delete the two .cs-stat blocks below if this project has no headline metrics -->
-      <div class="cs-stat">
-        <span class="cs-stat-value">[Number]</span>
-        <span class="cs-stat-label">[what it measures]</span>
-      </div>
-      <div class="cs-stat">
-        <span class="cs-stat-value">[Number]</span>
-        <span class="cs-stat-label">[what it measures]</span>
+
+      <!-- Headline metrics live in their own .cs-stats row, separate
+           from the quick facts above - delete this whole block if this
+           project has no headline numbers to lead with. -->
+      <div class="cs-stats">
+        <div class="cs-stat">
+          <span class="cs-stat-value">[Number]</span>
+          <span class="cs-stat-label">[what it measures]</span>
+        </div>
+        <div class="cs-stat">
+          <span class="cs-stat-value">[Number]</span>
+          <span class="cs-stat-label">[what it measures]</span>
+        </div>
       </div>
     </div>
   </section>
@@ -80,9 +98,9 @@
     </div>
   </div>
 
-  <!-- ---- TL;DR: problem/approach/outcome in three lines, for someone skimming ---- -->
+  <!-- ---- TLDR: problem/approach/outcome in three lines, for someone skimming ---- -->
   <section class="cs-section">
-    <h2>TL;DR</h2>
+    <h2>TLDR</h2>
     <div class="cs-tldr">
       <div class="cs-tldr-row">
         <span class="cs-tldr-label">Problem</span>
@@ -158,6 +176,36 @@
     </div>
     <figcaption>[Caption]</figcaption>
   </figure>
+
+  <!-- Variant comparison instead (e.g. A/B test, before/after with each
+       side labeled) - swap in this markup in place of the plain
+       cs-panel-row above. Each .cs-panel is one comparison; nest another
+       identical .cs-panel block alongside this one for a second
+       comparison side by side, the way UltraBasic pairs a fare-card A/B
+       next to a modal A/B. .cs-panel-pair top-aligns its labels
+       (align-items: flex-start in case-study.css) on purpose - the two
+       screenshots being compared are almost never the same height, and
+       bottom-aligning them instead staggers "Experience A"/"Experience B"
+       out of line with each other, which reads as broken rather than
+       compared. Never override that to flex-end.
+  <figure class="cs-figure">
+    <div class="cs-panel-row">
+      <div class="cs-panel">
+        <div class="cs-panel-pair">
+          <div class="cs-panel-pair-item">
+            <p class="cs-exp-label">[Experience A]</p>
+            <img src="[assets/PROJECT/variant-a.png]" alt="[Describe variant A]">
+          </div>
+          <div class="cs-panel-pair-item">
+            <p class="cs-exp-label">[Experience B]</p>
+            <img src="[assets/PROJECT/variant-b.png]" alt="[Describe variant B]">
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>[Caption]</figcaption>
+  </figure>
+  -->
 
   <!-- ---- Key decisions: this is the section that reads as senior. Pick
        2-4 real forks in the road — not every choice, just the ones where

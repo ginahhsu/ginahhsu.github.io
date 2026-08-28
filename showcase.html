@@ -10,6 +10,7 @@
   :root {
     --ink: rgb(48, 30, 24);
     --bg: rgb(249, 224, 214);
+    --tile-size: 200px;
   }
 
   * { box-sizing: border-box; }
@@ -25,25 +26,61 @@
     color: var(--ink);
   }
 
-  .grid-viewport {
+  /* ---- Dome viewport ---- */
+  .dome-viewport {
     position: fixed;
     inset: 0;
     overflow: hidden;
     cursor: grab;
     touch-action: none;
+    display: grid;
+    place-items: center;
+    perspective: 1600px;
   }
 
-  .grid-viewport.is-dragging { cursor: grabbing; }
+  .dome-viewport.is-dragging { cursor: grabbing; }
 
-  .grid-inner {
-    position: absolute;
-    top: 0;
-    left: 0;
+  .dome-sphere {
+    position: relative;
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
     will-change: transform;
   }
 
-  .grid-tile {
+  .dome-item {
     position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--tile-size);
+    height: var(--tile-size);
+    margin: calc(var(--tile-size) / -2) 0 0 calc(var(--tile-size) / -2);
+    border-radius: 20px;
+    overflow: hidden;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    box-shadow: 0 14px 30px rgba(48, 30, 24, 0.16);
+    cursor: pointer;
+    background: #fff;
+  }
+
+  .dome-item img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    filter: grayscale(1);
+    transition: filter 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .dome-item:hover img {
+    filter: grayscale(0);
+    transform: scale(1.05);
+  }
+
+  .dome-item.is-placeholder {
     display: flex;
     align-items: flex-end;
     padding: 14px;
@@ -51,21 +88,83 @@
     font-weight: 700;
     font-size: 12px;
     letter-spacing: 0.02em;
-    color: rgba(48, 30, 24, 0.45);
-    outline: 1px solid rgba(48, 30, 24, 0.06);
-    user-select: none;
-    -webkit-user-select: none;
+    color: rgba(48, 30, 24, 0.68);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
-  .grid-tile img {
+  .dome-item.is-placeholder:hover {
+    transform: scale(1.05);
+  }
+
+  .dome-item[data-focused="true"] { visibility: hidden; }
+
+  /* Vignette so tiles near the rim fade into the page background rather
+     than clipping hard at the viewport edge - keeps the sphere reading as
+     one soft object instead of a grid that just stops. */
+  .dome-vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 50%, rgba(249, 224, 214, 0) 42%, var(--bg) 88%);
+  }
+
+  .dome-edge-fade {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 140px;
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .dome-edge-fade.top { top: 0; background: linear-gradient(to bottom, var(--bg), transparent); }
+  .dome-edge-fade.bottom { bottom: 0; background: linear-gradient(to top, var(--bg), transparent); }
+
+  /* ---- Enlarge overlay ---- */
+  .dome-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    background: rgba(48, 30, 24, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .dome-scrim.is-active { opacity: 1; pointer-events: auto; }
+
+  .dome-enlarge {
+    position: fixed;
+    z-index: 21;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+    transition: left 0.45s cubic-bezier(0.16, 1, 0.3, 1), top 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    width 0.45s cubic-bezier(0.16, 1, 0.3, 1), height 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  }
+
+  .dome-enlarge img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    pointer-events: none;
+    display: block;
   }
 
+  .dome-enlarge.is-placeholder {
+    display: flex;
+    align-items: flex-end;
+    padding: 24px;
+    font-family: Raleway, "Raleway Placeholder", sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+  }
+
+  /* ---- Chrome ---- */
   .showcase-topbar {
     position: fixed;
     top: 0;
@@ -136,22 +235,36 @@
   <a class="showcase-close" href="index.html" aria-label="Close showcase">&times;</a>
 </div>
 
-<div class="grid-viewport" id="gridViewport">
-  <div class="grid-inner" id="gridInner"></div>
+<div class="dome-viewport" id="domeViewport">
+  <div class="dome-sphere" id="domeSphere"></div>
 </div>
+
+<div class="dome-vignette"></div>
+<div class="dome-edge-fade top"></div>
+<div class="dome-edge-fade bottom"></div>
+
+<div class="dome-scrim" id="domeScrim"></div>
 
 <p class="showcase-hint" id="showcaseHint">Drag to explore</p>
 
 <script>
-  // Infinite pannable tile grid, in the spirit of pdimagearchive.org/infinite-view.
-  // Renders just enough tiles to cover the viewport (+1 buffer ring), then recycles
-  // each tile to the opposite edge as it drifts out of view during a drag - the
-  // grid never runs out of tiles no matter how far you pan.
+  // A rotating "dome" of tiles built from plain CSS 3D transforms - no
+  // library, in the spirit of the pannable grid this replaced. Tiles sit on
+  // the inside of a sphere (rotateY/rotateX/translateZ per tile), and
+  // dragging the viewport rotates the whole sphere rather than moving tiles
+  // individually. Vertical rotation is clamped so you can't flip the dome
+  // upside down; horizontal spins freely and wraps.
   //
-  // TODO: swap in real Roots Collective / Turn Tool graphics. Drop image files into
-  // assets/showcase/ and list them in TILES below as { image: "assets/showcase/xyz.png" }
-  // instead of { color, label } - see renderTile() for how both are handled.
-  const CELL = 220;
+  // TODO: swap in real Roots Collective / Turn Tool graphics. Drop image
+  // files into assets/showcase/ and list them in TILES below as
+  // { image: "assets/showcase/xyz.png", label: "..." } instead of
+  // { color, label } - see renderTile() for how both are handled.
+  const COLS = 20;
+  const ROWS = 5;
+  const COL_STEP = 360 / COLS;
+  const ROW_STEP = 11;
+  const V_MIN = -24;
+  const V_MAX = 24;
 
   const TILES = [
     { color: '#F3D9CB', label: 'Roots Collective' },
@@ -165,118 +278,183 @@
     { color: '#EAD8CB', label: 'Graphics' },
   ];
 
-  const viewport = document.getElementById('gridViewport');
-  const inner = document.getElementById('gridInner');
+  const viewport = document.getElementById('domeViewport');
+  const sphere = document.getElementById('domeSphere');
+  const scrim = document.getElementById('domeScrim');
   const hint = document.getElementById('showcaseHint');
-
-  let cols = 0;
-  let rows = 0;
-  let tiles = [];
-  let offsetX = 0;
-  let offsetY = 0;
 
   function tileAt(col, row) {
     const idx = Math.abs(col * 5 + row * 7) % TILES.length;
     return TILES[idx];
   }
 
-  function renderTile(el, col, row) {
+  function buildItems() {
+    const items = [];
+    for (let c = 0; c < COLS; c++) {
+      const hexOffset = (c % 2 === 0) ? 0 : ROW_STEP / 2;
+      for (let r = 0; r < ROWS; r++) {
+        const centered = r - (ROWS - 1) / 2;
+        items.push({
+          col: c,
+          row: r,
+          rotateY: c * COL_STEP,
+          rotateX: centered * ROW_STEP + hexOffset - ROW_STEP / 4,
+        });
+      }
+    }
+    return items;
+  }
+
+  function renderTileContent(el, col, row) {
     const data = tileAt(col, row);
-    el.style.left = (col * CELL) + 'px';
-    el.style.top = (row * CELL) + 'px';
+    el.innerHTML = '';
     if (data.image) {
-      el.style.background = '';
-      el.innerHTML = `<img src="${data.image}" alt="${data.label || ''}">`;
+      el.classList.remove('is-placeholder');
+      const img = document.createElement('img');
+      img.src = data.image;
+      img.alt = data.label || '';
+      img.draggable = false;
+      el.appendChild(img);
     } else {
+      el.classList.add('is-placeholder');
       el.style.background = data.color;
-      el.innerHTML = '';
       el.textContent = data.label || '';
     }
   }
 
-  function buildGrid() {
+  let items = [];
+  let radius = 560;
+
+  function computeRadius() {
     const vw = viewport.clientWidth;
     const vh = viewport.clientHeight;
-    cols = Math.ceil(vw / CELL) + 2;
-    rows = Math.ceil(vh / CELL) + 2;
-
-    inner.innerHTML = '';
-    tiles = [];
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const el = document.createElement('div');
-        el.className = 'grid-tile';
-        el.style.width = CELL + 'px';
-        el.style.height = CELL + 'px';
-        renderTile(el, c, r);
-        inner.appendChild(el);
-        tiles.push({ el, col: c, row: r });
-      }
-    }
+    return Math.max(480, Math.min(vw, vh) * 0.62);
   }
 
-  function applyTransform() {
-    inner.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
-  }
-
-  function recycle() {
-    const vw = viewport.clientWidth;
-    const vh = viewport.clientHeight;
-    tiles.forEach((t) => {
-      const screenLeft = t.col * CELL + offsetX;
-      const screenTop = t.row * CELL + offsetY;
-
-      if (screenLeft < -CELL) t.col += cols;
-      else if (screenLeft > vw) t.col -= cols;
-
-      if (screenTop < -CELL) t.row += rows;
-      else if (screenTop > vh) t.row -= rows;
-
-      renderTile(t.el, t.col, t.row);
+  function applyItemTransforms() {
+    items.forEach((it) => {
+      it.el.style.transform = `rotateY(${it.rotateY}deg) rotateX(${it.rotateX}deg) translateZ(${radius}px)`;
     });
   }
 
-  buildGrid();
-  applyTransform();
-  window.addEventListener('resize', () => {
-    buildGrid();
-    applyTransform();
-  });
+  function buildDome() {
+    sphere.innerHTML = '';
+    const data = buildItems();
+    items = data.map((it) => {
+      const el = document.createElement('div');
+      el.className = 'dome-item';
+      el.dataset.col = it.col;
+      el.dataset.row = it.row;
+      renderTileContent(el, it.col, it.row);
+      sphere.appendChild(el);
+      return { ...it, el };
+    });
+    radius = computeRadius();
+    applyItemTransforms();
+  }
 
+  // ---- Drag-to-rotate, with inertia ----
+  let rotX = -6;
+  let rotY = 0;
   let dragging = false;
-  let lastX = 0;
-  let lastY = 0;
+  let startX = 0, startY = 0;
+  let startRotX = 0, startRotY = 0;
+  let lastMoveX = 0, lastMoveY = 0, lastMoveT = 0;
+  let velX = 0, velY = 0;
   let dragDistance = 0;
+  let inertiaRAF = null;
+  let idleRAF = null;
+  let focusedItem = null;
+
+  function applySphereTransform() {
+    sphere.style.transform = `translateZ(${-radius}px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+  }
+
+  function stopInertia() {
+    if (inertiaRAF) { cancelAnimationFrame(inertiaRAF); inertiaRAF = null; }
+  }
+
+  function startInertia() {
+    stopInertia();
+    const step = () => {
+      velX *= 0.94;
+      velY *= 0.94;
+      if (Math.abs(velX) < 0.01 && Math.abs(velY) < 0.01) { inertiaRAF = null; return; }
+      rotY += velX;
+      rotX = Math.min(V_MAX, Math.max(V_MIN, rotX + velY));
+      applySphereTransform();
+      inertiaRAF = requestAnimationFrame(step);
+    };
+    inertiaRAF = requestAnimationFrame(step);
+  }
+
+  function stopIdleDrift() {
+    if (idleRAF) { cancelAnimationFrame(idleRAF); idleRAF = null; }
+  }
+
+  function startIdleDrift() {
+    stopIdleDrift();
+    const step = () => {
+      if (!dragging && !focusedItem && !inertiaRAF && !hovering) {
+        rotY += 0.035;
+        applySphereTransform();
+      }
+      idleRAF = requestAnimationFrame(step);
+    };
+    idleRAF = requestAnimationFrame(step);
+  }
+
+  // Pause the idle drift while the pointer is over the dome, so a tile you
+  // aim at doesn't keep drifting away from the cursor while you click it.
+  let hovering = false;
+  viewport.addEventListener('pointerenter', () => { hovering = true; });
+  viewport.addEventListener('pointerleave', () => { hovering = false; });
 
   const hideHint = () => {
     if (dragDistance > 40) hint.classList.add('is-hidden');
   };
 
   viewport.addEventListener('pointerdown', (e) => {
+    if (focusedItem) return;
+    stopInertia();
     dragging = true;
-    lastX = e.clientX;
-    lastY = e.clientY;
+    dragDistance = 0;
+    startX = lastMoveX = e.clientX;
+    startY = lastMoveY = e.clientY;
+    lastMoveT = performance.now();
+    startRotX = rotX;
+    startRotY = rotY;
+    velX = velY = 0;
     viewport.classList.add('is-dragging');
     viewport.setPointerCapture(e.pointerId);
   });
 
   viewport.addEventListener('pointermove', (e) => {
     if (!dragging) return;
-    const dx = e.clientX - lastX;
-    const dy = e.clientY - lastY;
-    lastX = e.clientX;
-    lastY = e.clientY;
-    offsetX += dx;
-    offsetY += dy;
-    dragDistance += Math.abs(dx) + Math.abs(dy);
-    applyTransform();
-    recycle();
+    const dxTotal = e.clientX - startX;
+    const dyTotal = e.clientY - startY;
+    dragDistance = Math.abs(dxTotal) + Math.abs(dyTotal);
+
+    rotY = startRotY + dxTotal / 4;
+    rotX = Math.min(V_MAX, Math.max(V_MIN, startRotX - dyTotal / 4));
+    applySphereTransform();
+
+    const now = performance.now();
+    const dt = Math.max(1, now - lastMoveT);
+    velX = ((e.clientX - lastMoveX) / dt) * 12;
+    velY = (-(e.clientY - lastMoveY) / dt) * 12;
+    lastMoveX = e.clientX;
+    lastMoveY = e.clientY;
+    lastMoveT = now;
+
     hideHint();
   });
 
   const endDrag = () => {
+    if (!dragging) return;
     dragging = false;
     viewport.classList.remove('is-dragging');
+    if (Math.abs(velX) > 0.02 || Math.abs(velY) > 0.02) startInertia();
   };
 
   viewport.addEventListener('pointerup', endDrag);
@@ -284,14 +462,101 @@
   viewport.addEventListener('pointercancel', endDrag);
 
   viewport.addEventListener('wheel', (e) => {
+    if (focusedItem) return;
     e.preventDefault();
-    offsetX -= e.deltaX;
-    offsetY -= e.deltaY;
+    stopInertia();
+    rotY += e.deltaX / 4;
+    rotX = Math.min(V_MAX, Math.max(V_MIN, rotX - e.deltaY / 4));
+    applySphereTransform();
     dragDistance += Math.abs(e.deltaX) + Math.abs(e.deltaY);
-    applyTransform();
-    recycle();
     hideHint();
   }, { passive: false });
+
+  window.addEventListener('resize', () => {
+    radius = computeRadius();
+    applyItemTransforms();
+    applySphereTransform();
+  });
+
+  // ---- Click to enlarge ----
+  function openItem(el) {
+    if (focusedItem) return;
+    focusedItem = el;
+    el.setAttribute('data-focused', 'true');
+
+    const fromRect = el.getBoundingClientRect();
+    const col = Number(el.dataset.col);
+    const row = Number(el.dataset.row);
+    const data = tileAt(col, row);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'dome-enlarge' + (data.image ? '' : ' is-placeholder');
+    overlay.style.left = fromRect.left + 'px';
+    overlay.style.top = fromRect.top + 'px';
+    overlay.style.width = fromRect.width + 'px';
+    overlay.style.height = fromRect.height + 'px';
+    overlay.style.opacity = '0';
+
+    if (data.image) {
+      const img = document.createElement('img');
+      img.src = data.image;
+      img.alt = data.label || '';
+      overlay.appendChild(img);
+    } else {
+      overlay.style.background = data.color;
+      overlay.textContent = data.label || '';
+      overlay.style.color = 'rgba(48, 30, 24, 0.6)';
+      overlay.style.fontFamily = "Raleway, sans-serif";
+    }
+
+    document.body.appendChild(overlay);
+    scrim.classList.add('is-active');
+
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const target = Math.min(600, vw * 0.6, vh * 0.68);
+    const targetLeft = (vw - target) / 2;
+    const targetTop = (vh - target) / 2;
+
+    void overlay.offsetWidth;
+    requestAnimationFrame(() => {
+      overlay.style.opacity = '1';
+      overlay.style.left = targetLeft + 'px';
+      overlay.style.top = targetTop + 'px';
+      overlay.style.width = target + 'px';
+      overlay.style.height = target + 'px';
+    });
+
+    const close = () => {
+      scrim.removeEventListener('click', close);
+      window.removeEventListener('keydown', onKey);
+      const backRect = el.getBoundingClientRect();
+      overlay.style.left = backRect.left + 'px';
+      overlay.style.top = backRect.top + 'px';
+      overlay.style.width = backRect.width + 'px';
+      overlay.style.height = backRect.height + 'px';
+      overlay.style.opacity = '0';
+      scrim.classList.remove('is-active');
+      overlay.addEventListener('transitionend', () => {
+        overlay.remove();
+        el.removeAttribute('data-focused');
+        focusedItem = null;
+      }, { once: true });
+    };
+
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
+    scrim.addEventListener('click', close);
+    window.addEventListener('keydown', onKey);
+  }
+
+  sphere.addEventListener('click', (e) => {
+    if (dragDistance > 6) return;
+    const item = e.target.closest('.dome-item');
+    if (item) openItem(item);
+  });
+
+  buildDome();
+  applySphereTransform();
+  startIdleDrift();
 </script>
 
 </body>
