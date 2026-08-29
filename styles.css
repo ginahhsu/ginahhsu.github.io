@@ -40,15 +40,6 @@
   --ink: rgb(48, 30, 24);
   --panel: rgb(46, 27, 21);
   --white: rgb(253, 251, 248);
-  /* 0.8, not a lower value: .bg-grid's decorative pattern repeats on a
-     ~1040px tile (see script.js), not a small fine grid - no blur radius in
-     a normal range averages that out, so a card over a line-dense part of
-     the tile will always sample differently from one over a plain area.
-     Tuning blur/lower opacity can't fix that; only making the tint opaque
-     enough to genuinely dominate over whatever's behind it can. This is
-     the value that actually guarantees uniformity rather than reducing the
-     visible difference. */
-  --card: rgba(255, 200, 205, 0.8);
   --panel-width: clamp(280px, 26vw, 420px);
   --gap: 28px;
   --radius: 26px;
@@ -261,33 +252,65 @@ ul { margin: 0; padding: 0; list-style: none; }
    drops it below static content while staying above .card's own
    background, which is what "behind the content, in front of the page"
    actually requires. */
+/* Figma "Glass" material, ported 1:1 where CSS has a real equivalent and
+   approximated where it doesn't (that engine renders true refraction/
+   dispersion; backdrop-filter can't bend light, only blur+saturate it):
+     Frost 12       -> blur(); pushed well past the literal 12px to 52px.
+                       .bg-grid's pattern repeats on a ~1040px tile (see
+                       script.js), so a blur radius has to get genuinely
+                       large before it stops just softening the lines and
+                       starts actually averaging them out - 22px still left
+                       them readable enough to fight with text on cards with
+                       a lot of bare glass (Highlights, Seat selection). A
+                       thin white wash is layered in below for the same
+                       reason blur alone won't fully solve: it also masks
+                       the pattern, without going back to an opaque tint.
+     Refraction 80  -> saturate(180%) - backdrop-filter's closest analog to
+                       "how much the glass bends/intensifies what's behind it"
+     Light -45/80%  -> the -45deg linear glint below; dialed down from the
+                       literal 80% to 40% peak opacity - at 80% it read as a
+                       wash strong enough to look like a strikethrough over
+                       title text on the same bare-glass cards above
+     Depth 20       -> the inset highlight/shadow pair (light rim top-left,
+                       dark rim bottom-right)
+     Dispersion 50  -> the two hairline magenta/cyan inset shadows - a
+                       restrained stand-in for chromatic-aberration fringing
+     Splay 0        -> nothing extra; 0 means no additional spread
+
+   One shared rule, no per-card override: every card gets the identical
+   treatment regardless of how much of it its own image covers - card-mini-
+   tan/-cream used to paint their own flat tan/cream fill here, which is
+   part of why cards disagreed on what the material even looked like.
+
+   The other part: with saturate(180%), a card that's mostly bare glass
+   (Highlights, Seat selection) picks up a strong warm wash off the pink
+   page behind the blur, while a card that's mostly its own screenshot
+   (Turn Tool, Space Centre) barely shows any glass at all - so the exact
+   same rule still read as two different materials depending on coverage,
+   just because of how much pink it had left to saturate. Trading most of
+   that saturation for a heavier white wash instead is what makes a fully-
+   exposed card and a sliver of one look like the same surface: closer to
+   frosted white glass than tinted glass, so coverage stops being visible
+   in the result. */
 .card-glass {
   position: absolute;
   inset: 0;
   z-index: -1;
   border-radius: inherit;
   pointer-events: none;
-  background:
-    linear-gradient(160deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 45%, rgba(255, 255, 255, 0.1) 100%),
-    var(--card);
-  /* saturate(140%), not 200%: that amplified whatever pink grid content sat
-     behind each card, so the saturation boost itself was a source of
-     position-dependent color variance on top of the tint issue above.
-
-     blur(16px), not the original 10px: at 10px the bg-grid pattern's lines
-     were still sharp enough to read clearly through any card without an
-     image on top of them (Highlights, Seat Selection, the mini cards) -
-     which is what made those look busy/inconsistent next to the
-     image-heavy cards, where the image itself hides the pattern instead of
-     the blur doing it. */
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(52px) saturate(115%);
+  -webkit-backdrop-filter: blur(52px) saturate(115%);
+  box-shadow:
+    inset 1px 0 0 rgba(255, 0, 170, 0.05),
+    inset -1px 0 0 rgba(0, 220, 255, 0.05),
+    inset 0 14px 22px -18px rgba(255, 255, 255, 0.6),
+    inset 0 -14px 22px -18px rgba(48, 30, 24, 0.22);
 }
 
-/* Light: -45deg, toned down from the original 80%/24% intensity - that peak
-   sat right where .card-top's label/title text lives, washing both the tint
-   color and the text region out toward white. This keeps the glass glint
-   without blowing out the corner it overlaps. */
+/* The "front" glint that keeps text readable on a now-transparent glass
+   surface: a top-left highlight sitting right under .card-top's label/
+   title, plus the -45deg sweep from the Light setting. */
 .card::before {
   content: "";
   position: absolute;
@@ -295,8 +318,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   z-index: 5;
   pointer-events: none;
   background:
-    radial-gradient(130% 70% at 8% -8%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 55%),
-    linear-gradient(-45deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 30%);
+    radial-gradient(130% 70% at 8% -8%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 45%);
 }
 
 a.card:hover {
@@ -513,33 +536,42 @@ a.card.is-disabled:hover {
 
 .card-mini {
   min-height: 260px;
-  padding: 24px;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 16px;
 }
 
 .card-mini img {
   position: absolute;
-  top: 24px;
-  right: 24px;
-  width: 68px;
-  height: 68px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  pointer-events: none;
 }
 
-/* .card-mini-tan / .card-mini-cream intentionally carry no color rule of
-   their own - .card-glass (a positioned child) paints over a plain .card
-   background entirely, so a rule here would be invisible dead CSS. Both
-   already render the same unified --card tint as every other card. */
+/* card-mini-tan/-cream intentionally carry no .card-glass override of their
+   own anymore - they use the exact same shared glass as every other card
+   (see the comment on .card-glass) so all four "bare glass" cards read as
+   one consistent material instead of two of them being flat tinted panels. */
 
-.mini-title {
-  font-family: Raleway, "Raleway Placeholder", sans-serif;
-  font-weight: 600;
-  font-size: 15px;
-  line-height: 1.3;
-  margin: 0;
+/* Sized/positioned per image rather than a shared rule - the sandwich photo
+   and the showcase illustration have different native crops, so one
+   "bigger + shifted" value doesn't fit both. Bleeding past the card edge
+   (cropped by .card's own overflow: hidden) is what makes each read as
+   large as the reference instead of a contained thumbnail floating in
+   empty padding. */
+.card-mini-tan img {
+  width: 112%;
+  height: 112%;
+  top: 6%;
+  left: 8%;
+}
+
+.card-mini-cream img {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  object-position: 52% 42%;
 }
 
 /* ---- Photo card ---- */
@@ -577,15 +609,6 @@ a.card.is-disabled:hover {
 .card-highlights .card-btn { display: none; }
 
 .card-btn svg { width: 12px; height: 12px; }
-
-.card-btn.small {
-  position: static;
-  align-self: flex-start;
-  font-size: 12px;
-  padding: 8px 12px;
-}
-
-.card-mini .card-btn.small { margin-top: auto; }
 
 /* ---- Responsive ---- */
 @media (max-width: 960px) {
