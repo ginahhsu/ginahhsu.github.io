@@ -63,7 +63,13 @@ function buildCaseStudyTOC() {
   };
 
   headings.forEach((heading) => {
-    const base = slugify(heading.textContent) || 'section';
+    // Prefer the section's specific subheading (e.g. "Understanding Current
+    // Sentiment") over its generic h2 ("The Discovery") when one immediately
+    // follows it - it tells readers more about what's actually in the section.
+    const specific = heading.nextElementSibling;
+    const label = (specific && specific.matches('h3.cs-h1-style')) ? specific.textContent : heading.textContent;
+
+    const base = slugify(label) || 'section';
     let slug = base;
     let i = 2;
     while (used.has(slug)) slug = `${base}-${i++}`;
@@ -73,14 +79,14 @@ function buildCaseStudyTOC() {
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.href = `#${slug}`;
-    a.textContent = heading.textContent;
+    a.textContent = label;
     li.appendChild(a);
     list.appendChild(li);
 
     const liPanel = document.createElement('li');
     const aPanel = document.createElement('a');
     aPanel.href = `#${slug}`;
-    aPanel.textContent = heading.textContent;
+    aPanel.textContent = label;
     aPanel.addEventListener('click', closeTopbarToc);
     liPanel.appendChild(aPanel);
     panel.appendChild(liPanel);

@@ -36,27 +36,93 @@
 ::view-transition-new(root) { animation-name: cs-root-in; }
 
 :root {
-  --bg: rgb(249, 224, 214);
-  --ink: rgb(48, 30, 24);
-  --panel: rgb(46, 27, 21);
-  --white: rgb(253, 251, 248);
-  --panel-width: clamp(280px, 26vw, 420px);
-  --gap: 28px;
-  --radius: 26px;
+  /* ==== Reference tokens ====
+     The raw scales. Nothing consumes these directly - components reference
+     a *role* below, which points at one step of a scale. Redefining a step
+     here (what "lg" actually equals) ripples to every role assigned to it;
+     reassigning a role to a different step doesn't touch the scale. This
+     is the same reference/system split m3.material.io uses for its own
+     token set. */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
 
-  /* The .card-glass tint - split into an RGB triple and an alpha so a design
-     tool can drive tint color and tint strength independently, composed via
-     rgba(var(--card-tint-rgb), var(--card-tint-alpha)) where it's used. */
-  --card-tint-rgb: 255, 255, 255;
-  --card-tint-alpha: 0.4;
-  --card-glass-blur: 52px;
-  --card-glass-saturate: 115%;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  /* 100px, not the more conventional 999px: every pill-shaped element on
+     this site is under 50px tall, so 100 already guarantees a full round
+     the same as 999 would - and a slider bounded 0-100 stays useful,
+     whereas one that had to reach 999 would be all but unusable for the
+     visually-relevant 0-40px range. */
+  --radius-full: 100px;
 
-  --body-size: 16px;
-  --tagline-size: 28px;
-  --card-title-size: 18px;
-  --card-label-size: 10px;
-  --tab-font-size: 14px;
+  /* ==== Color tokens (semantic - name the role, not the hue) ==== */
+  --color-surface: #f9e0d6;
+  --color-on-surface: #301e18;
+  --color-surface-inverse: #2e1b15;
+  --color-surface-bright: #fdfbf8;
+  /* Sits on --color-surface-inverse (the dark sticky panel), so it defaults
+     to the bright value for contrast, not --color-on-surface - "the color
+     for interactive text/links" is contextual, not one fixed hue. */
+  --color-interactive: #fdfbf8;
+  /* The .card-glass tint - an RGB triple + separate alpha so color and
+     strength can be tuned independently, composed as
+     rgba(var(--color-glass-tint), var(--color-glass-tint-alpha)) where
+     it's used. */
+  --color-glass-tint: 255, 240, 240;
+  --color-glass-tint-alpha: 0.5;
+
+  /* ==== Type tokens (one role per distinct text style on the page) ==== */
+  --type-headline: 34px;
+  --type-title: 20px;
+  --type-label: 10px;
+  --type-label-lg: 15px;
+  --type-body: 14px;
+  --type-body-lg: 17px;
+  --type-nav: 14px;
+  --type-button: 13px;
+
+  /* ==== Motion tokens ==== */
+  --motion-hover: 0.35s;
+  --motion-fade: 0.45s;
+
+  /* ==== Size tokens (standalone dimensions - not steps of a repeating
+     scale, so they live outside --space-*) ==== */
+  --size-panel-width: 400px;
+
+  /* ==== Component role assignments ====
+     Which scale step each spacing/shape role actually uses. Change the
+     step referenced here (e.g. --gap: var(--space-xl)) to reassign the
+     role; change the scale itself above to redefine what that step means
+     everywhere it's used. */
+  --gap: var(--space-lg);
+  --radius: var(--radius-md);
+  --btn-radius: var(--radius-full);
+  --tabs-radius: var(--radius-full);
+  --tab-radius: var(--radius-full);
+  /* Content gap (title -> image) for the three cards where that's still a
+     meaningful per-card knob. Previously drifted to a hardcoded 20px on
+     .card-bg-img when the image treatment was simplified to pre-composed
+     mockups - reconnected here so the role tokens actually mean something
+     again rather than sitting unused in :root. */
+  --card-gap-teal: var(--space-md);
+  --card-gap-purple: var(--space-md);
+  --card-gap-orangesky: var(--space-md);
+
+  /* ==== Component-specific tokens (continuous values with no shared
+     scale to draw from) ==== */
+  --card-glass-blur: 2px;
+  --card-glass-saturate: 100%;
+  --card-mh-mini: 260px;
+  --card-mh-photo: 340px;
+  --img-phone-width: 58%;
+  --img-phones-width: 88%;
+  --img-spacecentre-x: -20px;
 }
 
 * { box-sizing: border-box; }
@@ -65,9 +131,19 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: Roboto, "Roboto Placeholder", sans-serif;
-  font-size: var(--body-size);
+  font-size: var(--type-body);
   min-height: 100vh;
+  /* Inherited, so this reaches every wrapping label/line on the page
+     without hand-listing each class - avoids a lone last-line word (an
+     "orphan") wherever text wraps to more than one line. Short headline-
+     style text (tagline, card titles) gets the stronger text-wrap: balance
+     below instead, which evens every line rather than only nudging the
+     last one - reads better on 2-3 line titles specifically. Both are
+     no-ops in browsers that don't support them yet. */
+  text-wrap: pretty;
 }
+
+.panel-tagline, .card-title { text-wrap: balance; }
 
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; }
@@ -85,10 +161,10 @@ ul { margin: 0; padding: 0; list-style: none; }
   top: 0;
   align-self: flex-start;
   height: 100vh;
-  width: var(--panel-width);
-  flex: 0 0 var(--panel-width);
-  background: var(--panel);
-  color: var(--white);
+  width: var(--size-panel-width);
+  flex: 0 0 var(--size-panel-width);
+  background: var(--color-surface-inverse);
+  color: var(--color-surface-bright);
   z-index: 5;
 }
 
@@ -99,7 +175,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   right: -25px;
   bottom: 0;
   width: 50px;
-  background-image: radial-gradient(circle 25px at 25px 25px, var(--panel) 25px, transparent 26px);
+  background-image: radial-gradient(circle 25px at 25px 25px, var(--color-surface-inverse) 25px, transparent 26px);
   background-size: 50px 50px;
   background-repeat: repeat-y;
 }
@@ -121,7 +197,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .panel-tagline {
   font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-weight: 800;
-  font-size: var(--tagline-size);
+  font-size: var(--type-headline);
   line-height: 1.3;
   letter-spacing: -0.3px;
   margin: 0;
@@ -133,7 +209,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   font-size: 15px;
 }
 
-.panel-links a { text-decoration: underline; }
+.panel-links a { color: var(--color-interactive); text-decoration: underline; }
 .panel-links span { margin: 0 8px; opacity: 0.6; }
 
 /* ---- Main content ---- */
@@ -141,7 +217,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   position: relative;
   flex: 1;
   min-width: 0;
-  background-color: var(--bg);
+  background-color: var(--color-surface);
   padding: 48px 48px 100px 48px;
 }
 
@@ -159,7 +235,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .bg-grid {
   position: absolute;
   top: 40px;
-  left: calc(var(--panel-width) + 40px);
+  left: calc(var(--size-panel-width) + 40px);
   right: 40px;
   bottom: 0;
   z-index: 1;
@@ -181,8 +257,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   width: fit-content;
   max-width: 100%;
   gap: 4px;
-  background: var(--panel);
-  border-radius: 100px;
+  background: var(--color-surface-inverse);
+  border-radius: var(--tabs-radius);
   padding: 4px;
   margin: 0 auto 32px;
 }
@@ -190,18 +266,18 @@ ul { margin: 0; padding: 0; list-style: none; }
 .tab {
   border: none;
   background: transparent;
-  color: var(--white);
+  color: var(--color-surface-bright);
   opacity: 0.75;
-  font-size: var(--tab-font-size);
+  font-size: var(--type-nav);
   font-weight: 500;
   padding: 8px 20px;
-  border-radius: 100px;
+  border-radius: var(--tab-radius);
   transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
 .tab.active {
-  background: var(--white);
-  color: var(--ink);
+  background: var(--color-surface-bright);
+  color: var(--color-on-surface);
   opacity: 1;
 }
 
@@ -223,12 +299,19 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: flex;
   flex-direction: column;
   gap: var(--gap);
+  /* Without this, a grid item's min-width defaults to its content's
+     min-content size - and a hero image sitting in normal flow (see
+     .card-bg-img) contributes its natural pixel width to that, which
+     blew the masonry grid's two columns wildly out of proportion instead
+     of respecting the 1fr/1.1fr split. */
+  min-width: 0;
 }
 
 /* ---- Cards ---- */
 .card {
   position: relative;
   display: block;
+  min-width: 0;
   border-radius: calc(var(--radius) + 6px);
   overflow: hidden;
   box-shadow:
@@ -238,9 +321,9 @@ ul { margin: 0; padding: 0; list-style: none; }
     inset 0 10px 18px -16px rgba(48, 30, 24, 0.25),
     0 10px 30px rgba(48, 30, 24, 0.14),
     0 2px 8px rgba(48, 30, 24, 0.08);
-  color: var(--ink);
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  color: var(--color-on-surface);
+  transition: transform var(--motion-hover) cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow var(--motion-hover) cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity var(--motion-fade) cubic-bezier(0.22, 1, 0.36, 1), filter var(--motion-fade) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* The frosted-glass look lives on this inner layer rather than on .card
@@ -313,7 +396,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   z-index: -1;
   border-radius: inherit;
   pointer-events: none;
-  background: rgba(var(--card-tint-rgb), var(--card-tint-alpha));
+  background: rgba(var(--color-glass-tint), var(--color-glass-tint-alpha));
   backdrop-filter: blur(var(--card-glass-blur)) saturate(var(--card-glass-saturate));
   -webkit-backdrop-filter: blur(var(--card-glass-blur)) saturate(var(--card-glass-saturate));
   box-shadow:
@@ -364,7 +447,7 @@ a.card.is-disabled:hover {
 .card-label {
   font-family: Roboto, "Roboto Placeholder", sans-serif;
   font-weight: 600;
-  font-size: var(--card-label-size);
+  font-size: var(--type-label);
   letter-spacing: 0.05em;
   margin: 0 0 8px;
   /* 0.82, not the original 0.75 - small text needs the full 4.5:1 AA ratio
@@ -376,118 +459,66 @@ a.card.is-disabled:hover {
 .card-title {
   font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-weight: 600;
-  font-size: var(--card-title-size);
+  font-size: var(--type-title);
   line-height: 1.35;
   margin: 0;
 }
 
-/* 540px, not the 500px the phone-mockup pairing normally calls for: the
-   masonry column this card sits in isn't width-capped, so at a wide
-   single-column tablet layout (~700-960px viewport) or a very wide desktop
-   window (masonry at its 1400px max-width), the card itself can get wide
-   enough that the phone image hits its own 220px max-width cap. Past that
-   point the image's rendered height stops scaling down with the card and
-   sits at a fixed ~444px, so min-height has to be tall enough to clear the
-   title at that fixed image height specifically - not just at the image
-   height a "normal" ~450px-wide desktop column produces. */
-.card-purple {
-  min-height: 540px;
-}
+/* UltraBasic/Seat Selection/Turn Tool/Space Centre: title block in normal
+   flow, then one image below it. A flow-based box (not position: absolute)
+   means there's no min-height/top-offset arithmetic that can drift out of
+   sync with a longer title - the image always starts exactly where the
+   title block ends.
 
-.card-orange, .card-sky {
-  min-height: 380px;
-}
-
-/* 500px, not 440px: same reasoning as .card-purple above, for the plain
-   (non-phone) 480px-max-width image treatment. Once this card is wide
-   enough to push its image to that 480px cap - a wide single-column tablet
-   layout, or a very wide desktop window - the image's rendered height stops
-   shrinking with the card and holds at a fixed ~385px, so min-height needs
-   enough clearance for the title above that fixed height, not just the
-   shorter image height a typical ~450px-wide desktop column produces. */
-.card-teal {
-  min-height: 500px;
-}
-
+   Every source here is a pre-composed mockup exported straight from Figma
+   (a real device frame - laptop or phone bezel - already rendered around
+   the actual screenshot, already cropped to its final look), not a raw
+   screenshot needing CSS to fake a crop/frame around it. So there's no
+   object-fit: cover / aspect-ratio window doing work here anymore - each
+   image just displays at its own native size and ratio. Only Seat
+   Selection and UltraBasic (phone sources) get a narrower, centered width;
+   Turn Tool and Space Centre (laptop sources, already close to the card's
+   own width) run full-bleed edge to edge at the base width below. */
 .card-bg-img {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-  z-index: 1;
-  width: 84%;
-}
-
-.card-bg-img.phone-mockup {
-  bottom: -20px;
-  width: 44%;
-  max-width: 220px;
-}
-
-/* Card-scoped version of case-study.css's .cs-laptop-frame, for a card
-   whose screenshot has no device mockup baked into the image itself
-   (Turn Tool and UltraBasic's images are pre-rendered inside a
-   photographic laptop/iMac mockup already, so their plain .card-bg-img
-   is enough - this is only for a raw flat screenshot needing the same
-   "sitting in a computer" frame built with plain CSS). Takes over the
-   same absolute-position slot .card-bg-img normally occupies. */
-.card-laptop-frame {
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-  z-index: 1;
-  /* Slimmer than the plain .card-bg-img's 86%/480px: the bezel+base chrome
-     around the screenshot adds height on top of the image itself, so at
-     the same width this rides up far enough to cover the card title. */
-  width: 68%;
-  max-width: 370px;
-}
-
-.card-laptop-frame .cs-laptop-screen {
-  background: #1c1c1e;
-  border-radius: 10px 10px 3px 3px;
-  padding: 9px 9px 6px;
-  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.08);
-}
-
-.card-laptop-frame .cs-laptop-screen img {
   display: block;
   width: 100%;
-  border-radius: 2px;
+  height: auto;
+  pointer-events: none;
 }
 
-.card-laptop-frame .cs-laptop-base {
-  width: 112%;
-  margin: 0 -6%;
-  height: 9px;
-  background: linear-gradient(180deg, #d8d8da 0%, #b6b6ba 100%);
-  border-radius: 0 0 6px 6px;
-  position: relative;
-}
-
-.card-laptop-frame .cs-laptop-base::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 15%;
-  height: 3px;
-  background: #98989c;
-  border-radius: 0 0 4px 4px;
-}
-
-.card-orange .card-bg-img,
-.card-sky .card-bg-img,
+/* UltraBasic: a single phone source, so it stays noticeably narrower than
+   the two-phone Seat Selection image below - full width would blow a
+   single phone silhouette up far past its natural size. */
 .card-teal .card-bg-img {
-  width: 86%;
-  max-width: 480px;
-  bottom: -6px;
-  border-radius: 8px 8px 0 0;
-  box-shadow: 0 -6px 20px rgba(0,0,0,0.08);
+  width: var(--img-phone-width);
+  margin-top: var(--card-gap-teal);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Seat Selection: two phones side by side in one source image, already
+   wider than a single phone but still narrower than the full-bleed laptop
+   cards - full width would stretch the pair past a natural phone size. */
+.card-purple .card-bg-img {
+  width: var(--img-phones-width);
+  margin-top: var(--card-gap-purple);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-sky .card-bg-img,
+.card-orange .card-bg-img {
+  margin-top: var(--card-gap-orangesky);
+}
+
+/* Space Centre: left edge offset from the card's own edge - a plain
+   x-position, not a width recalculation, so the right edge keeps bleeding
+   off the card's own edge regardless of this value; only the left side
+   moves. Negative pulls it left past the card edge (bleeding, like the
+   right side already does); 32px would align it with .card-top's own left
+   padding instead, flush with the title/label above it. */
+.card-orange .card-bg-img {
+  margin-left: var(--img-spacecentre-x);
 }
 
 /* ---- Highlights card ---- */
@@ -500,7 +531,7 @@ a.card.is-disabled:hover {
 .card-eyebrow {
   font-family: Raleway, "Raleway Placeholder", sans-serif;
   font-weight: 600;
-  font-size: 15px;
+  font-size: var(--type-label-lg);
   margin: 0 0 36px;
   flex: none;
 }
@@ -522,8 +553,12 @@ a.card.is-disabled:hover {
 }
 
 .highlights-line.is-active {
+  /* height stays a fixed 72px, not a var - it's sized to fit the longest
+     bio line in full at 17px (see script.js's comment on this element), so
+     it's not safe to expose independently of font-size without risking
+     clipped text. */
   height: 72px;
-  font-size: 17px;
+  font-size: var(--type-body-lg);
   opacity: 1;
 }
 
@@ -548,7 +583,7 @@ a.card.is-disabled:hover {
 }
 
 .highlights-dot.is-active {
-  background: var(--ink);
+  background: var(--color-on-surface);
   transform: scale(1.4);
 }
 
@@ -557,11 +592,11 @@ a.card.is-disabled:hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--gap);
-  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity var(--motion-fade) cubic-bezier(0.22, 1, 0.36, 1), filter var(--motion-fade) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .card-mini {
-  min-height: 260px;
+  min-height: var(--card-mh-mini);
   display: flex;
 }
 
@@ -602,13 +637,13 @@ a.card.is-disabled:hover {
 
 /* ---- Photo card ---- */
 .card-photo {
-  min-height: 340px;
+  min-height: var(--card-mh-photo);
 }
 
 .card-photo img {
   width: 100%;
   height: 100%;
-  min-height: 340px;
+  min-height: var(--card-mh-photo);
   object-fit: cover;
   display: block;
 }
@@ -622,12 +657,12 @@ a.card.is-disabled:hover {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--white);
-  color: var(--ink);
-  font-size: 13px;
+  background: var(--color-surface-bright);
+  color: var(--color-on-surface);
+  font-size: var(--type-button);
   font-weight: 500;
   padding: 8px 16px;
-  border-radius: 100px;
+  border-radius: var(--btn-radius);
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   white-space: nowrap;
 }

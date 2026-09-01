@@ -23,14 +23,28 @@
 ::view-transition-new(root) { animation-name: cs-root-in; }
 
 :root {
-  --cs-bg: rgb(253, 251, 248);
-  --cs-ink: rgb(48, 30, 24);
+  /* Color tokens - same semantic names as styles.css's :root (surface,
+     on-surface, interactive, ...), just pointed at this page's own light
+     palette instead of the landing page's dark-panel/peach one. A shared
+     vocabulary across both stylesheets, even though neither file imports
+     the other. */
+  --color-surface: #fdfbf8;
+  --color-on-surface: #301e18;
   /* 0.68, not the original 0.56 - small muted text needs the full 4.5:1 AA
-     ratio against both --cs-bg and --cs-pink, and 0.56 only cleared ~3.5:1
-     on either. */
-  --cs-muted: rgba(48, 30, 24, 0.68);
-  --cs-pink: rgb(249, 224, 214);
-  --cs-line: rgba(48, 30, 24, 0.1);
+     ratio against both --color-surface and --color-surface-container, and
+     0.56 only cleared ~3.5:1 on either. */
+  --color-on-surface-muted: rgba(48, 30, 24, 0.68);
+  --color-surface-container: #f9e0d6;
+  --color-outline: rgba(48, 30, 24, 0.1);
+  /* Case-study pages sit on a light surface throughout (unlike the landing
+     page's dark sticky panel), so "interactive" defaults to on-surface
+     here rather than the bright value styles.css uses. */
+  --color-interactive: #301e18;
+
+  --size-content-width: 700px;
+
+  --type-headline: 34px;
+  --type-subtitle: 19px;
 }
 
 * { box-sizing: border-box; }
@@ -38,10 +52,20 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--cs-bg);
-  color: var(--cs-ink);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
   font-family: Roboto, "Roboto Placeholder", sans-serif;
+  /* Inherited, so this reaches every paragraph/label on the page without
+     hand-listing each class - avoids a lone last-line word (an "orphan")
+     wherever text actually wraps to more than one line. Headings get the
+     stronger text-wrap: balance below instead: pretty only nudges the last
+     line, balance evens every line, which reads better on short multi-line
+     titles specifically. Both are no-ops in browsers that don't support
+     them yet (Safari/Firefox for pretty) - text just wraps as it always did. */
+  text-wrap: pretty;
 }
+
+h1, h2, h3, h4 { text-wrap: balance; }
 
 a { color: inherit; }
 
@@ -49,6 +73,7 @@ a { color: inherit; }
    alone makes them indistinguishable from surrounding text, so an
    underline is the non-color signal that it's a link. */
 .cs-inline-link {
+  color: var(--color-interactive);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -60,7 +85,7 @@ a { color: inherit; }
   align-items: center;
   justify-content: space-between;
   padding: 28px 24px;
-  background: var(--cs-bg);
+  background: var(--color-surface);
   z-index: 10;
 }
 
@@ -74,14 +99,14 @@ a { color: inherit; }
   font-size: 22px;
   line-height: 1;
   text-decoration: none;
-  color: var(--cs-ink);
+  color: var(--color-on-surface);
   transition: background-color 0.2s ease;
 }
 
-.cs-close:hover { background: var(--cs-pink); }
+.cs-close:hover { background: var(--color-surface-container); }
 
 .cs-main {
-  max-width: 700px;
+  max-width: var(--size-content-width);
   margin: 0 auto;
   padding: 0 24px 100px;
 }
@@ -89,16 +114,16 @@ a { color: inherit; }
 /* ---- Hero ---- */
 .cs-hero h1 {
   font-family: Raleway, "Raleway Placeholder", sans-serif;
-  font-size: 34px;
+  font-size: var(--type-headline);
   font-weight: 800;
   letter-spacing: -0.3px;
   margin: 8px 0 20px;
 }
 
 .cs-subtitle {
-  font-size: 19px;
+  font-size: var(--type-subtitle);
   line-height: 1.5;
-  color: var(--cs-ink);
+  color: var(--color-on-surface);
   max-width: 460px;
   margin: 0 0 36px;
 }
@@ -108,7 +133,7 @@ a { color: inherit; }
   flex-wrap: wrap;
   gap: 32px 40px;
   padding-bottom: 40px;
-  border-bottom: 1px solid var(--cs-line);
+  border-bottom: 1px solid var(--color-outline);
 }
 
 .cs-meta-item {
@@ -126,7 +151,7 @@ a { color: inherit; }
 
 .cs-meta-label {
   font-size: 13px;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
 }
 
 .cs-meta-value {
@@ -155,7 +180,7 @@ a { color: inherit; }
 
 .cs-stat-label {
   font-size: 13px;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
   max-width: 130px;
 }
 
@@ -168,7 +193,7 @@ a { color: inherit; }
 }
 
 .cs-hero-images > div {
-  background: var(--cs-pink);
+  background: var(--color-surface-container);
   border-radius: 20px;
   display: flex;
   align-items: flex-end;
@@ -260,7 +285,7 @@ a { color: inherit; }
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
   margin: 0 0 12px;
 }
 
@@ -287,7 +312,7 @@ a { color: inherit; }
 
 /* ---- Callouts + labeled blocks ---- */
 .cs-callout {
-  background: var(--cs-pink);
+  background: var(--color-surface-container);
   border-radius: 18px;
   padding: 24px 28px;
   font-size: 17px;
@@ -297,7 +322,7 @@ a { color: inherit; }
 }
 
 .cs-block {
-  background: var(--cs-pink);
+  background: var(--color-surface-container);
   border-radius: 18px;
   padding: 24px 28px;
   margin: 0 0 16px;
@@ -313,7 +338,7 @@ a { color: inherit; }
   font-size: 10px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
   margin: 0 0 8px;
 }
 
@@ -328,12 +353,12 @@ a { color: inherit; }
   font-size: 15px;
   line-height: 1.55;
   margin: 0;
-  color: var(--cs-ink);
+  color: var(--color-on-surface);
 }
 
 /* ---- TL;DR ---- */
 .cs-tldr {
-  border: 1px solid var(--cs-line);
+  border: 1px solid var(--color-outline);
   border-radius: 18px;
   overflow: hidden;
   margin: 4px 0 8px;
@@ -346,7 +371,7 @@ a { color: inherit; }
   padding: 20px 24px;
 }
 
-.cs-tldr-row + .cs-tldr-row { border-top: 1px solid var(--cs-line); }
+.cs-tldr-row + .cs-tldr-row { border-top: 1px solid var(--color-outline); }
 
 .cs-tldr-label {
   font-family: Roboto, "Roboto Placeholder", sans-serif;
@@ -354,7 +379,7 @@ a { color: inherit; }
   font-size: 11px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
   padding-top: 2px;
 }
 
@@ -367,7 +392,7 @@ a { color: inherit; }
 
 /* ---- Key decisions (considered / decision / tradeoff) ---- */
 .cs-decision {
-  background: var(--cs-pink);
+  background: var(--color-surface-container);
   border-radius: 18px;
   padding: 24px 28px;
   margin: 0 0 16px;
@@ -395,7 +420,7 @@ a { color: inherit; }
   font-size: 10px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
   padding-top: 2px;
 }
 
@@ -403,7 +428,7 @@ a { color: inherit; }
   margin: 0;
   font-size: 15px;
   line-height: 1.55;
-  color: var(--cs-ink);
+  color: var(--color-on-surface);
 }
 
 /* ---- Figures ---- */
@@ -420,7 +445,7 @@ a { color: inherit; }
 .cs-figure figcaption {
   font-size: 13px;
   font-style: italic;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
   text-align: center;
   margin-top: 16px;
 }
@@ -462,7 +487,7 @@ a { color: inherit; }
   font-weight: 600;
   font-size: 10px;
   letter-spacing: 0.04em;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
   text-align: center;
   margin: 0 0 8px;
 }
@@ -545,9 +570,9 @@ a { color: inherit; }
 .cs-footer {
   margin-top: 64px;
   padding-top: 24px;
-  border-top: 1px solid var(--cs-line);
+  border-top: 1px solid var(--color-outline);
   font-size: 13px;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
 }
 
 /* ---- Table of contents ----
@@ -569,7 +594,7 @@ a { color: inherit; }
   font-size: 10px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
   margin: 0 0 16px;
 }
 
@@ -580,7 +605,7 @@ a { color: inherit; }
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border-left: 1px solid var(--cs-line);
+  border-left: 1px solid var(--color-outline);
 }
 
 .cs-toc a {
@@ -590,12 +615,12 @@ a { color: inherit; }
   border-left: 1px solid transparent;
   font-size: 13px;
   line-height: 1.4;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
   text-decoration: none;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.cs-toc a:hover { color: var(--cs-ink); }
+.cs-toc a:hover { color: var(--color-on-surface); }
 
 /* ---- Image lightbox ---- */
 .cs-main img { cursor: zoom-in; }
@@ -630,7 +655,7 @@ a { color: inherit; }
   height: 40px;
   border-radius: 100px;
   background: rgba(253, 251, 248, 0.9);
-  color: var(--cs-ink);
+  color: var(--color-on-surface);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -649,9 +674,9 @@ a { color: inherit; }
 }
 
 .cs-toc a.is-active {
-  color: var(--cs-ink);
+  color: var(--color-on-surface);
   font-weight: 600;
-  border-left-color: var(--cs-ink);
+  border-left-color: var(--color-on-surface);
 }
 
 @media (min-width: 1300px) {
@@ -671,18 +696,18 @@ a { color: inherit; }
   gap: 6px;
   height: 40px;
   padding: 0 18px;
-  border: 1px solid var(--cs-line);
+  border: 1px solid var(--color-outline);
   border-radius: 100px;
-  background: var(--cs-bg);
+  background: var(--color-surface);
   font-family: Roboto, "Roboto Placeholder", sans-serif;
   font-weight: 600;
   font-size: 13px;
-  color: var(--cs-ink);
+  color: var(--color-on-surface);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
-.cs-topbar-toc-toggle:hover { background: var(--cs-pink); }
+.cs-topbar-toc-toggle:hover { background: var(--color-surface-container); }
 
 .cs-topbar-toc-chevron {
   font-size: 10px;
@@ -706,8 +731,8 @@ a { color: inherit; }
   margin: 0;
   padding: 8px;
   list-style: none;
-  background: var(--cs-bg);
-  border: 1px solid var(--cs-line);
+  background: var(--color-surface);
+  border: 1px solid var(--color-outline);
   border-radius: 12px;
   box-shadow: 0 12px 32px rgba(48, 30, 24, 0.14);
 }
@@ -720,17 +745,17 @@ a { color: inherit; }
   border-radius: 8px;
   font-size: 14px;
   line-height: 1.4;
-  color: var(--cs-muted);
+  color: var(--color-on-surface-muted);
   text-decoration: none;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.cs-topbar-toc-panel a:hover { background: var(--cs-pink); }
+.cs-topbar-toc-panel a:hover { background: var(--color-surface-container); }
 
 .cs-topbar-toc-panel a.is-active {
-  color: var(--cs-ink);
+  color: var(--color-on-surface);
   font-weight: 600;
-  background: var(--cs-pink);
+  background: var(--color-surface-container);
 }
 
 @media (min-width: 1300px) {
