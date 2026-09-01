@@ -1,3 +1,6 @@
 .DS_Store
 Thumbs.db
 2026 Portfolio refresh/
+
+# Local design-tuning tool - never ships to the live site or the repo.
+design-panel.js
