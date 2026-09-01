@@ -366,21 +366,32 @@ a.card.is-disabled:hover {
   margin: 0;
 }
 
+/* 540px, not the 500px the phone-mockup pairing normally calls for: the
+   masonry column this card sits in isn't width-capped, so at a wide
+   single-column tablet layout (~700-960px viewport) or a very wide desktop
+   window (masonry at its 1400px max-width), the card itself can get wide
+   enough that the phone image hits its own 220px max-width cap. Past that
+   point the image's rendered height stops scaling down with the card and
+   sits at a fixed ~444px, so min-height has to be tall enough to clear the
+   title at that fixed image height specifically - not just at the image
+   height a "normal" ~450px-wide desktop column produces. */
 .card-purple {
-  min-height: 500px;
+  min-height: 540px;
 }
 
 .card-orange, .card-sky {
   min-height: 380px;
 }
 
-/* UltraBasic's title runs a line longer than Turn Tool/Space Centre's, so
-   it needs more clearance above the bottom-anchored image than the plain
-   380px wide/landscape height gives - without this the image's fixed
-   height (set by its own aspect ratio, not by the card) rides up into the
-   title's third line. */
+/* 500px, not 440px: same reasoning as .card-purple above, for the plain
+   (non-phone) 480px-max-width image treatment. Once this card is wide
+   enough to push its image to that 480px cap - a wide single-column tablet
+   layout, or a very wide desktop window - the image's rendered height stops
+   shrinking with the card and holds at a fixed ~385px, so min-height needs
+   enough clearance for the title above that fixed height, not just the
+   shorter image height a typical ~450px-wide desktop column produces. */
 .card-teal {
-  min-height: 440px;
+  min-height: 500px;
 }
 
 .card-bg-img {
