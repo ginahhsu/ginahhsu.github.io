@@ -1,5 +1,0 @@
-# Netlify only (GitHub Pages ignores this file).
-# The guest wedding site lives in its own repo (ginahhsu/wedding-website), deployed as ginahsu-wedding.netlify.app.
-# Guests see it at ginahsu.co/wedding — the address stays the same as it was on Framer.
-/wedding     /wedding/                                     301
-/wedding/*   https://ginahsu-wedding.netlify.app/:splat    200
