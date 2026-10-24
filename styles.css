@@ -76,6 +76,11 @@
      it's used. */
   --color-glass-tint: 255, 240, 240;
   --color-glass-tint-alpha: 0.5;
+  /* Shade laid over inactive cards (hover dimming and the tab filter).
+     Color + strength are separate so either can be tuned alone; the hover
+     dim uses 70% of the strength, the filter uses all of it. */
+  --color-dim: #301e18;
+  --dim-strength: 42%;
 
   /* ==== Type tokens (one role per distinct text style on the page) ==== */
   --type-headline: 34px;
@@ -487,11 +492,12 @@ a.card:hover {
    One card "selected", the rest of the grid stepping back. The selection
    box itself is a separate fixed element (.card-selection) so it can sit
    outside the card's own overflow: hidden. */
-/* Inactive cards are frosted over rather than faded out: a veil in the
-   glass's own tint sits above the content (::after, z 8 - over the title,
+/* Inactive cards are shaded rather than faded out: a translucent veil of
+   the espresso ink sits above the content (::after, z 8 - over the title,
    image and button) while the glass, its edge and its shadow stay at full
    strength. Fading the whole card with opacity took the frost with it and
-   let the grid show straight through. */
+   let the grid show straight through; a pale veil read as washed-out white.
+   Color and darkness are the --color-dim / --dim-strength tokens in :root. */
 .card::after {
   content: "";
   position: absolute;
@@ -499,12 +505,12 @@ a.card:hover {
   z-index: 8;
   border-radius: inherit;
   pointer-events: none;
-  background: rgba(var(--color-glass-tint), 0.82);
+  background: color-mix(in srgb, var(--color-dim) var(--dim-strength), transparent);
   opacity: 0;
   transition: opacity var(--motion-fade) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.masonry.is-linked .card:not(.is-lit):not(.is-disabled)::after { opacity: 0.62; }
+.masonry.is-linked .card:not(.is-lit):not(.is-disabled)::after { opacity: 0.7; }
 .card.is-disabled::after,
 .mini-row.is-disabled .card::after { opacity: 1; }
 

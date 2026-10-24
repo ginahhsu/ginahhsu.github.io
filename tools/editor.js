@@ -220,6 +220,7 @@
     const update = (value) => setToken(file, token.name, value, token.value, row);
 
     const px = token.value.match(/^(-?\d*\.?\d+)px$/);
+    const pct = token.value.match(/^(\d*\.?\d+)%$/);
     const ref = token.value.match(/^var\((--[\w-]+?-)[\w]+\)$/);
     const hex = /^#[0-9a-f]{3,8}$/i.test(token.value);
 
@@ -229,6 +230,14 @@
       const range = Object.assign(document.createElement('input'), { type: 'range', min: Math.min(0, value), max: Math.max(64, Math.ceil(value * 2.5)), step: 1, value });
       number.addEventListener('input', () => { range.value = number.value; update(`${number.value}px`); });
       range.addEventListener('input', () => { number.value = range.value; update(`${range.value}px`); });
+      row.append(number, range);
+    } else if (pct) {
+      // Percentages (e.g. --dim-strength) get a 0-100 slider.
+      const value = parseFloat(pct[1]);
+      const number = Object.assign(document.createElement('input'), { type: 'number', value, min: 0, max: 100, step: 1 });
+      const range = Object.assign(document.createElement('input'), { type: 'range', min: 0, max: 100, step: 1, value });
+      number.addEventListener('input', () => { range.value = number.value; update(`${number.value}%`); });
+      range.addEventListener('input', () => { number.value = range.value; update(`${range.value}%`); });
       row.append(number, range);
     } else if (ref) {
       // A role token pointing at a scale step: pick another step, not a raw number.

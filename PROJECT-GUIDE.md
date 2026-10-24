@@ -158,7 +158,7 @@ Mismatching these is the most common layout bug in this system — a wide image 
 
 **States:**
 - `:hover` (anchor cards only) — lift + intensified shadow (§2.4).
-- `.is-disabled` — set by the tab filter, not authored by hand. Frosted over by the card's `::after` veil (glass tint at full strength, so the card stays solid glass rather than see-through), `pointer-events: none`, and removes the card's link(s) from tab order. See §4.2.
+- `.is-disabled` — set by the tab filter, not authored by hand. Shaded by the card's `::after` veil (translucent espresso over the content, so the card stays solid glass rather than see-through; color and darkness are the `--color-dim` and `--dim-strength` tokens, editable in the browser editor's Spacing & color panel), `pointer-events: none`, and removes the card's link(s) from tab order. See §4.2.
 
 ### 3.4 Card badge (`.card-badge`)
 
@@ -278,7 +278,7 @@ Homepage only, by choice: `thinking.js` is loaded on `index.html` alone. The on/
 
 Borrowed from karyll.com, reframed for a product-designer lens. Each project sentence in `.panel-intro` carries `data-work="<page>"` matching a card's `href` (`data-work="ultrabasic"` ↔ `href="./ultrabasic.html"`), so there's no second list to keep in sync. On desktop pointers only:
 
-- **Hover or keyboard-focus a card:** a coral selection box with corner handles labelled with the card's `data-outcome` (the journey it covered and what it moved, e.g. "Booking to check-in · 3 flows into 1 · $50K/yr from A/B tests"), the rest of the grid is frosted over (the same `::after` veil, lighter), and the title turns coral. Cards don't light up the intro — the link is one-way, by choice. Focus works on every device; the image drift is mouse-only and off under reduced motion.
+- **Hover or keyboard-focus a card:** a coral selection box with corner handles labelled with the card's `data-outcome` (the journey it covered and what it moved, e.g. "Booking to check-in · 3 flows into 1 · $50K/yr from A/B tests"), the rest of the grid is shaded (the same `::after` veil, lighter), and the title turns coral. Cards don't light up the intro — the link is one-way, by choice. Focus works on every device; the image drift is mouse-only and off under reduced motion.
 - **Hover a sentence:** the same selection on its card, and that sentence is spotlighted while the rest of the intro dims. A sentence can name several pages, space-separated.
 
 Cards the filter has dimmed (`.is-disabled`) are never selected. The selection box is its own fixed element (`.card-selection`) so it isn't clipped by the card's `overflow: hidden`. This replaced the old 3D hover tilt — a selection box around a tilted card never lines up.
@@ -373,7 +373,7 @@ Crop to a single reasonable viewport height before using one of these — Python
 Double-click **`Edit site.command`** in the repo root. It starts `tools/edit-server.py` on `127.0.0.1:8130` (this Mac only) and opens the homepage. A dock in the bottom-right corner of every page has:
 
 - **Edit** (`E`) — every text block becomes typeable, outlined in coral. Enter finishes a block, Shift+Enter adds a line break, Escape undoes that block. Text kept in `hidden` markup (the Highlights list) is shown while editing so it can be edited too. Links don't navigate while editing.
-- **Spacing & color** — the `:root` tokens of every stylesheet on the page: px values get a slider, role tokens (`var(--space-lg)`) a scale-step picker, hex colors a color picker. Changes preview live.
+- **Spacing & color** — the `:root` tokens of every stylesheet on the page: px and % values get a slider, role tokens (`var(--space-lg)`) a scale-step picker, hex colors a color picker. Changes preview live.
 - **Save** (`⌘S`) — writes straight into the source files, then reloads. Text edits replace exactly that element's inner HTML; token edits rewrite that one declaration and bump the stylesheet's `?v=` in every page automatically.
 - **Publish…** — commits only the files saved from the editor and pushes the current branch. On `main` that's live in about a minute; on any other branch it waits for a merge.
 
