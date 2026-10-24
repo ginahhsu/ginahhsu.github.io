@@ -257,6 +257,24 @@ Every case study gets a sticky, scroll-spy "Contents" nav for free — `toc.js` 
 - **Pages that inject content dynamically after load must call it again manually.** `seatselection.html`'s password gate is the example: its headings don't exist in the DOM until the correct password decrypts and injects the content, so its `reveal()` function calls `window.buildCaseStudyTOC()` right after `main.innerHTML = html`. Any future page with a similar reveal-after-load pattern needs the same explicit call — `toc.js`'s own `DOMContentLoaded` listener will have already run and found nothing.
 - The nav is positioned relative to `.cs-main`'s own edge (`left: calc(50% + 390px)`), not a fixed viewport offset, so it stays a consistent gap from the content column at any width — and it's hidden below 1300px, where there isn't reliably enough room beside the 700px content column for it to sit without crowding.
 
+### 4.5 Site nav (`site-nav.js` / `site-nav.css`)
+
+A "← Prev · Page ▾ · Next →" pill on every page, borrowed from karyll.com. The page order lives in one `PAGES` array at the top of `site-nav.js` — prev/next, the dropdown and the number shortcuts all derive from it, so adding or reordering a case study means editing that array and nothing else. Pages not in the array (e.g. `case-study-template.html`) get no nav.
+
+- Placement is CSS-only, keyed off `data-context`: centred in the top bar on case studies and the Showcase, and floating at the bottom of the screen at 960px and below. On the homepage there's no separate pill: the filter tabs (`.tabs`) become the nav — `site-nav.js` appends a divider and a menu button to them, and they float to the bottom on phones like the pill does elsewhere.
+- Below 1300px on case studies the steps drop to arrows only, so the pill never collides with the Contents dropdown.
+- Keys: ←/→ prev/next, `1`–`5` case studies, `H` home, `A` about, `/` menu. Arrow keys are ignored while anything with `.is-open` is showing (lightboxes, Showcase panel, Contents dropdown), since those use the arrows themselves.
+
+### 4.6 Show the thinking (`thinking.js`)
+
+Press `T` (or flip the switch) to overlay layout reasoning: column bands with labelled gutters, redlines on text measure, and numbered avatar pins that open a design note. All of it is authored as HTML attributes — nothing page-specific lives in the script:
+
+- `data-note="…"` — a pin on that element's top-right corner. Notes are numbered in DOM order. Write them in first person, one or two sentences, about *why*, not *what*.
+- `data-measure` — a dashed redline labelled with the rendered width and characters per line (counted from the actual line boxes, so it's right at every breakpoint).
+- `data-grid-col` — a column band; gaps between side-by-side bands are labelled automatically.
+
+Homepage only, by choice: `thinking.js` is loaded on `index.html` alone, and case studies carry none of these attributes — they stay clean reading pages. The switch sits in the sticky panel; its on/off state is stored in `localStorage`.
+
 ---
 
 ## 5. Content & voice
@@ -298,6 +316,10 @@ case-study.css             Case-study-page styling, shared by every case study
 case-study-template.html  Starting scaffold for a new case study (not linked from the site)
 script.js                  Card hover tilt, highlights carousel, tab filter + reorder, bg-grid sizing
 toc.js                      Shared scroll-spy table of contents, included on every case study page
+site-nav.js / site-nav.css  Prev/page/next pill (every page) + "Show the thinking" styles
+Edit site.command           Double-click to start the local browser editor (§6.6)
+tools/                      edit-server.py + editor.js - the local editor, never loaded by the live site
+thinking.js                 "Show the thinking" overlay (grid, redlines, note pins), homepage only
 
 spacecentre.html           Case study — H.R. MacMillan Space Centre (real content + real assets)
 seatselection.html         Case study — seat selection redesign (public, NDA-safe version; WIP project)
@@ -329,7 +351,7 @@ When in doubt about a project's real content, check **https://www.ginahsu.co/** 
 
 - Test through a local server (`python3 -m http.server`), not `file://` — some tooling renders `file://` pages as static snapshots with no JS/CSS execution.
 - Plain static servers send no cache headers, so browsers cache CSS/JS aggressively. If an edit doesn't show up on reload, hard-bust it (cache-busting query string, or a genuinely uncached reload) before assuming something's broken.
-- **Bump the `?v=` query on CSS/JS links whenever you change a stylesheet or script** (every page references them as e.g. `styles.css?v=20261023`). GitHub Pages lets browsers cache assets for ~10 minutes, so new HTML can load against old CSS — in Oct 2026 that pushed the homepage panel sideways for visitors with a cached `styles.css` (new `.bg-gradient` div, no rule positioning it yet). Find/replace the date across all `*.html` files.
+- **Bump the `?v=` query on CSS/JS links whenever you change a stylesheet or script** (every page references them as e.g. `styles.css?v=20261024`). GitHub Pages lets browsers cache assets for ~10 minutes, so new HTML can load against old CSS — in Oct 2026 that pushed the homepage panel sideways for visitors with a cached `styles.css` (new `.bg-gradient` div, no rule positioning it yet). Find/replace the date across all `*.html` files. (The browser editor, §6.6, does this for you whenever it saves a token.)
 - Start the server from the project root every time. `cd`-ing into a subfolder (e.g. to rename files in `assets/spacecentre/`) and starting the server from there without `cd`-ing back is a real, repeatable way to get a confusing 404 on every page.
 
 ### 6.5 Handling full-page screenshots
@@ -337,3 +359,16 @@ When in doubt about a project's real content, check **https://www.ginahsu.co/** 
 Real screenshots supplied for a case study (a client's live site, or exported design files) are very often full page-scroll captures — thousands of pixels tall, not a single viewport. Dropped straight into a hero or triplet slot, these render as an almost-blank box: the CSS only constrains width, so the image scales to a proportionally enormous height and you only ever see whatever sliver of it lands in frame.
 
 Crop to a single reasonable viewport height before using one of these — Python's PIL (`Image.open(...).crop((0, 0, width, height)).save(...)`) works fine for a top-anchored crop; macOS's `sips` centre-crops by default, which isn't what you want here. As a rule of thumb, crop desktop shots to roughly 1000–1200px tall and mobile shots to roughly 2400px tall (matching a real phone viewport at 3x device pixel ratio) — enough to show the hero/nav/headline without dragging in the rest of the scroll.
+
+### 6.6 Editing text and spacing in the browser
+
+Double-click **`Edit site.command`** in the repo root. It starts `tools/edit-server.py` on `127.0.0.1:8130` (this Mac only) and opens the homepage. A dock in the bottom-right corner of every page has:
+
+- **Edit** (`E`) — every text block becomes typeable, outlined in coral. Enter finishes a block, Shift+Enter adds a line break, Escape undoes that block. Text kept in `hidden` markup (the Highlights list) is shown while editing so it can be edited too. Links don't navigate while editing.
+- **Spacing & color** — the `:root` tokens of every stylesheet on the page: px values get a slider, role tokens (`var(--space-lg)`) a scale-step picker, hex colors a color picker. Changes preview live.
+- **Save** (`⌘S`) — writes straight into the source files, then reloads. Text edits replace exactly that element's inner HTML; token edits rewrite that one declaration and bump the stylesheet's `?v=` in every page automatically.
+- **Publish…** — commits only the files saved from the editor and pushes the current branch. On `main` that's live in about a minute; on any other branch it waits for a merge.
+
+What isn't editable: text generated by scripts (nav, Contents, the highlights carousel line - edit the revealed list instead), labels that share an element with an icon (`.card-btn`), and buttons. Edit those in the HTML directly.
+
+Safety: the live site never loads `tools/editor.js` — the server injects it into pages it serves. Every editor request needs a random per-run token embedded in the served page, requests addressed to any host other than `127.0.0.1`/`localhost` are refused, and a save is refused if the file changed on disk since the page loaded.

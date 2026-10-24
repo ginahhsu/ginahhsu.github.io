@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gina Hsu — Product Designer</title>
-<link rel="stylesheet" href="styles.css?v=20261023">
+<link rel="stylesheet" href="styles.css?v=20261024">
+<link rel="stylesheet" href="site-nav.css?v=20261024">
 </head>
 <body>
 
@@ -22,10 +23,10 @@
 
   <div class="bg-grid" aria-hidden="true"></div>
 
-  <aside class="sticky-panel">
+  <aside class="sticky-panel" data-note="This panel stays put while the work scrolls past, so my name and contact are never more than a glance away. The scalloped edge is one repeating CSS gradient, not an image.">
     <div class="panel-inner">
       <p class="panel-hello">Hey, I&rsquo;m Gina!</p>
-      <h1 class="panel-tagline">A Product Designer who makes complex products feel simple, from Figma to&nbsp;code.</h1>
+      <h1 class="panel-tagline" data-measure data-note="The one line I&#x27;d want you to remember. Line breaks are balanced so it reads as a statement, not a paragraph that ran out of room.">A Product Designer who makes complex products feel simple, from Figma to&nbsp;code.</h1>
       <p class="panel-links">
         <a href="https://www.linkedin.com/in/ginahueihsu/" target="_blank" rel="noopener">LinkedIn</a>
         <span>/</span>
@@ -36,7 +37,7 @@
 
   <main class="content">
 
-    <nav class="tabs">
+    <nav class="tabs" aria-label="Filter and pages" data-note="Filter and site menu in one pill: filtering dims cards instead of removing them, and the menu at the end jumps anywhere on the site. On a phone the whole bar drops to the bottom, where your thumb is.">
       <button class="tab active" data-filter="all">All</button>
       <button class="tab" data-filter="about">About</button>
       <button class="tab" data-filter="projects">Projects</button>
@@ -45,9 +46,9 @@
 
     <div class="masonry">
 
-      <div class="col">
+      <div class="col" data-grid-col>
 
-        <a class="card card-teal" href="./ultrabasic.html" data-category="projects">
+        <a class="card card-teal" href="./ultrabasic.html" data-category="projects" data-note="Cards lean slightly toward your cursor, then grow into the case study when you click. The curve starts fast and settles without a bounce, the way Apple&#x27;s card expands do.">
           <div class="card-glass"></div>
           <div class="card-top">
             <p class="card-label">Product Strategy &bull; Team Leadership &bull; E-commerce</p>
@@ -57,7 +58,7 @@
           <span class="card-btn">UltraBasic and Extended Comfort <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>
 
-        <div class="card card-highlights" data-category="about">
+        <div class="card card-highlights" data-category="about" data-note="Sized to fit the longest highlight, so nothing gets cut off mid-rotation. Hover to pause it and finish reading.">
           <div class="card-glass"></div>
           <p class="card-eyebrow">Highlights</p>
           <div class="highlights-viewport">
@@ -98,7 +99,7 @@
 
       </div>
 
-      <div class="col">
+      <div class="col" data-grid-col>
 
         <a class="card card-ai" href="./designingwithai.html" data-category="projects">
           <div class="card-glass"></div>
@@ -145,6 +146,8 @@
 </div>
 
 <script src="https://makegradient.com/embed.js"></script>
-<script src="script.js?v=20261023"></script>
+<script src="script.js?v=20261024"></script>
+<script src="site-nav.js?v=20261024"></script>
+<script src="thinking.js?v=20261024"></script>
 </body>
 </html>

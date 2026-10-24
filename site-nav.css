@@ -1,0 +1,379 @@
+/* Site-wide chrome shared by every page: the prev/page/next pill
+   (site-nav.js) and the "Show the thinking" overlay (thinking.js).
+   Self-contained on purpose - it's linked from both styles.css pages and
+   case-study.css pages, so it doesn't lean on either file's tokens. */
+
+:root {
+  --nav-bg: #2e1b15;
+  --nav-ink: #fdfbf8;
+  --nav-ink-muted: rgba(253, 251, 248, 0.62);
+  --nav-line: rgba(253, 251, 248, 0.12);
+  --nav-chip: rgba(253, 251, 248, 0.1);
+  --nav-current: #ffd1c6;
+  /* Redline coral: reads as "annotation" the way Figma's measurement red
+     does, but warm enough to belong to the rest of the palette. */
+  --thinking: #e8505b;
+  --thinking-band: rgba(232, 80, 91, 0.1);
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* ==== Nav pill ==== */
+.site-nav {
+  position: fixed;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 40px;
+  padding: 3px;
+  border: 1px solid var(--nav-line);
+  border-radius: 100px;
+  background: var(--nav-bg);
+  color: var(--nav-ink);
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  box-shadow: 0 8px 24px rgba(48, 30, 24, 0.18);
+  /* Same name on every page, so the pill holds still (or glides between
+     placements) during the cross-document view transition. */
+  view-transition-name: site-nav;
+}
+
+.site-nav svg { width: 14px; height: 14px; flex: none; }
+
+.site-nav-step,
+.site-nav-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 100px;
+  background: transparent;
+  color: var(--nav-ink-muted);
+  font: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.site-nav-step:hover { color: var(--nav-ink); }
+
+.site-nav-toggle { color: var(--nav-ink); font-weight: 600; cursor: pointer; }
+.site-nav-toggle:hover,
+.site-nav.is-menu-open .site-nav-toggle { background: var(--nav-chip); }
+.site-nav-toggle svg { transition: transform 0.2s ease; }
+.site-nav.is-menu-open .site-nav-toggle svg { transform: rotate(180deg); }
+
+.site-nav-step-short { display: none; }
+
+.site-nav-current { position: relative; height: 100%; }
+
+/* ---- Dropdown ---- */
+.site-nav-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 264px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid var(--nav-line);
+  border-radius: 14px;
+  background: var(--nav-bg);
+  box-shadow: 0 16px 40px rgba(48, 30, 24, 0.28);
+}
+
+.site-nav-menu ul { margin: 0; padding: 0; list-style: none; }
+.site-nav-menu ul + ul,
+.site-nav-keys { border-top: 1px solid var(--nav-line); margin-top: 6px; padding-top: 6px; }
+
+.site-nav-menu a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 10px;
+  border-radius: 8px;
+  color: var(--nav-ink);
+  text-decoration: none;
+  outline-offset: -2px;
+}
+
+.site-nav-menu a:hover,
+.site-nav-menu a:focus-visible { background: var(--nav-chip); }
+.site-nav-menu a[aria-current] { background: var(--nav-chip); color: var(--nav-current); font-weight: 600; }
+
+.site-nav-hint { font-family: var(--font-mono); font-size: 11px; color: var(--nav-ink-muted); }
+
+.site-nav-keys { margin-bottom: 0; padding: 10px 10px 4px; display: grid; gap: 8px; font-size: 12px; color: var(--nav-ink-muted); }
+.site-nav-keys div { display: flex; justify-content: space-between; gap: 12px; }
+.site-nav-keys dt, .site-nav-keys dd { margin: 0; }
+
+.site-nav kbd,
+.thinking-toggle kbd {
+  display: inline-block;
+  min-width: 18px;
+  padding: 2px 4px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.2;
+  text-align: center;
+  opacity: 0.7;
+}
+.site-nav-keys kbd + kbd { margin-left: 3px; }
+
+/* ==== Placement ==== */
+
+/* Case studies: centred in the sticky top bar, level with the close button. */
+.site-nav[data-context="case"] { top: 28px; left: 50%; transform: translateX(-50%); }
+.site-nav[data-context="showcase"] { top: 20px; left: 50%; transform: translateX(-50%); }
+
+/* Homepage: the filter tabs *are* the nav - they keep their own sticky
+   spot and look (styles.css), and just gain a divider + menu button. */
+.site-nav[data-context="tabs"] {
+  position: sticky;
+  top: 20px;
+  height: auto;
+  padding: 4px;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.site-nav[data-context="tabs"] .site-nav-current { height: auto; align-self: stretch; }
+.site-nav[data-context="tabs"] .site-nav-toggle { padding: 0 12px; color: var(--nav-ink-muted); }
+.site-nav[data-context="tabs"] .site-nav-toggle:hover,
+.site-nav[data-context="tabs"].is-menu-open .site-nav-toggle { color: var(--nav-ink); }
+.site-nav[data-context="tabs"] .site-nav-toggle svg { width: 16px; height: 16px; transform: none; }
+.site-nav[data-context="tabs"] .site-nav-menu { left: auto; right: -4px; transform: none; }
+
+.site-nav-divider {
+  align-self: center;
+  width: 1px;
+  height: 18px;
+  margin: 0 2px;
+  background: var(--nav-line);
+}
+
+/* While the Contents dropdown shares the top bar, the steps drop to
+   arrows only so the three groups never collide. */
+@media (max-width: 1299px) {
+  .site-nav[data-context="case"] .site-nav-step-label { display: none; }
+  .site-nav[data-context="case"] .site-nav-step { padding: 0 11px; }
+}
+
+/* Phones (and the stacked homepage): float at the bottom, in thumb reach,
+   menu opening upward. */
+@media (max-width: 960px) {
+  .site-nav[data-context] {
+    top: auto;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    border-color: var(--nav-line);
+    box-shadow: 0 10px 30px rgba(48, 30, 24, 0.28);
+  }
+  .site-nav[data-context] .site-nav-step-label { display: none; }
+  .site-nav[data-context] .site-nav-step-short { display: inline; }
+  .site-nav[data-context] .site-nav-menu { top: auto; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); }
+  .site-nav[data-context="tabs"] { position: fixed; margin: 0; max-width: calc(100vw - 16px); }
+  .site-nav[data-context="tabs"] .site-nav-menu { left: auto; right: 0; transform: none; }
+  .site-nav-keys { display: none; } /* no keyboard on a phone */
+
+  /* Keep the last bit of every page clear of the floating pill. */
+  body { padding-bottom: 72px; }
+}
+
+/* ==== "Show the thinking" switch (homepage only, in the sticky panel) ==== */
+.thinking-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  height: 40px;
+  padding: 0 12px 0 8px;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 100px;
+  background: transparent;
+  color: inherit;
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.thinking-toggle:hover { border-color: color-mix(in srgb, currentColor 40%, transparent); }
+
+.thinking-switch {
+  position: relative;
+  width: 30px;
+  height: 18px;
+  border-radius: 100px;
+  background: color-mix(in srgb, currentColor 22%, transparent);
+  transition: background-color 0.2s ease;
+}
+
+.thinking-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.thinking-toggle[aria-pressed="true"] .thinking-switch { background: var(--thinking); }
+.thinking-toggle[aria-pressed="true"] .thinking-switch::after { transform: translateX(12px); }
+
+@media (max-width: 960px) {
+  .thinking-toggle kbd { display: none; }
+}
+
+/* Phone: all four filters plus the menu button have to fit one bar. */
+@media (max-width: 560px) {
+  .site-nav[data-context="tabs"] .tab { padding: 8px 11px; }
+  .site-nav[data-context="tabs"] .site-nav-toggle { padding: 0 9px; }
+}
+
+/* ==== Overlay ==== */
+.thinking-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  pointer-events: none;
+  font-family: var(--font-mono);
+}
+
+.thinking-band {
+  position: absolute;
+  background: var(--thinking-band);
+  outline: 1px solid var(--thinking);
+}
+
+/* Gutter: a measurement line with end ticks, value chip centred on it. */
+.thinking-gutter {
+  position: absolute;
+  height: 0;
+  border-top: 1px solid var(--thinking);
+}
+
+.thinking-gutter::before {
+  content: "";
+  position: absolute;
+  inset: -4px 0 auto;
+  height: 7px;
+  border-inline: 1px solid var(--thinking);
+}
+
+.thinking-gutter span {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  transform: translateX(-50%);
+}
+
+.thinking-redline {
+  position: absolute;
+  outline: 1px dashed var(--thinking);
+  outline-offset: 2px;
+}
+
+.thinking-redline span {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: -3px;
+}
+
+.thinking-redline span,
+.thinking-gutter span {
+  white-space: nowrap;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: var(--thinking);
+  color: #fff;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.thinking-pin {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(48, 30, 24, 0.3);
+  pointer-events: auto;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+  animation: thinking-pop 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.thinking-pin img { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+.thinking-pin span {
+  position: absolute;
+  right: -6px;
+  bottom: -5px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border: 1.5px solid #fff;
+  border-radius: 100px;
+  background: var(--thinking);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 12px;
+}
+
+.thinking-pin:hover,
+.thinking-pin.is-active { transform: scale(1.12); border-color: var(--thinking); }
+
+@keyframes thinking-pop {
+  from { transform: scale(0.4); opacity: 0; }
+}
+
+.thinking-popover {
+  position: fixed;
+  z-index: 40;
+  width: min(280px, calc(100vw - 24px));
+  padding: 12px 14px 14px;
+  border-radius: 12px;
+  background: var(--nav-bg);
+  color: var(--nav-ink);
+  box-shadow: 0 16px 40px rgba(48, 30, 24, 0.3);
+  pointer-events: auto;
+  font-family: Roboto, "Roboto Placeholder", sans-serif;
+}
+
+.thinking-popover p { margin: 0; }
+
+.thinking-popover-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px !important;
+  font-size: 13px;
+}
+
+.thinking-popover-head img { width: 20px; height: 20px; border-radius: 50%; }
+.thinking-popover-head span { font-family: var(--font-mono); font-size: 11px; color: var(--nav-ink-muted); }
+
+.thinking-popover-body { font-size: 14px; line-height: 1.5; text-wrap: pretty; }
+
+@media (prefers-reduced-motion: reduce) {
+  .thinking-pin { animation: none; }
+}
