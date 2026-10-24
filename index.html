@@ -48,9 +48,11 @@
       <button class="tab" data-filter="for-fun">Exploration</button>
     </nav>
 
+    <!-- Cards can be dragged between and within these two columns in the
+         browser editor (data-reorder groups them). -->
     <div class="masonry">
 
-      <div class="col">
+      <div class="col" data-reorder="cards">
 
         <a class="card card-teal" href="./ultrabasic.html" data-category="projects" data-note="Cards lead with the problem and the outcome, not the screens. Hover or tab to one to see the journey it covered and what it moved, which is what a product review asks first." data-outcome="Strategy to launch · 6 products · $35M loss averted">
           <div class="card-glass"></div>
@@ -103,7 +105,7 @@
 
       </div>
 
-      <div class="col">
+      <div class="col" data-reorder="cards">
 
         <a class="card card-ai" href="./designingwithai.html" data-category="projects" data-outcome="Idea to live site in 13 days · built with AI agents">
           <div class="card-glass"></div>

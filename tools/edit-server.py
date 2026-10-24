@@ -26,6 +26,7 @@ server behind your back.
 """
 
 import hashlib
+import html
 import json
 import os
 import re
@@ -135,6 +136,120 @@ def editable_ranges(source):
     return outer
 
 
+class ElementIndex(HTMLParser):
+    """Every element's source ranges, for reordering and image edits."""
+
+    def __init__(self, source):
+        super().__init__(convert_charrefs=True)
+        self.source = source
+        self.line_starts = [0] + [m.end() for m in re.finditer('\n', source)]
+        self.nodes = []   # dicts: tag, attrs, start, start_end, inner_end, end, parent
+        self.stack = []
+
+    def src_offset(self):
+        line, col = self.getpos()
+        return self.line_starts[line - 1] + col
+
+    def _open(self, tag, attrs, void):
+        start = self.src_offset()
+        start_end = start + len(self.get_starttag_text() or '')
+        node = {'tag': tag, 'attrs': dict(attrs), 'start': start, 'start_end': start_end,
+                'inner_end': start_end if void else None, 'end': start_end if void else None,
+                'parent': self.stack[-1] if self.stack else None}
+        self.nodes.append(node)
+        if not void:
+            self.stack.append(len(self.nodes) - 1)
+
+    def handle_starttag(self, tag, attrs):
+        self._open(tag, attrs, tag in VOID)
+
+    def handle_startendtag(self, tag, attrs):
+        self._open(tag, attrs, True)
+
+    def handle_endtag(self, tag):
+        pos = self.src_offset()
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.nodes[self.stack[i]]['tag'] == tag:
+                break
+        else:
+            return
+        end = self.source.index('>', pos) + 1
+        while len(self.stack) > i:
+            node = self.nodes[self.stack.pop()]
+            node['inner_end'], node['end'] = pos, end
+
+
+def index_elements(source):
+    idx = ElementIndex(source)
+    idx.feed(source)
+    return idx.nodes
+
+
+def reorder_containers(nodes):
+    """Containers marked data-reorder="group" and their direct children."""
+    out = []
+    for i, node in enumerate(nodes):
+        if 'data-reorder' in node['attrs'] and node['end'] is not None:
+            kids = [n for n in nodes if n['parent'] == i]
+            out.append({'group': node['attrs']['data-reorder'], 'node': node,
+                        'inner': (node['start_end'], node['inner_end']),
+                        'blocks': [(k['start'], k['end']) for k in kids]})
+    return out
+
+
+def image_tags(nodes):
+    return [(n['start'], n['start_end']) for n in nodes if n['tag'] == 'img']
+
+
+def set_attr(tag, name, value):
+    """Set (or with value None, remove) one attribute on a start tag."""
+    pattern = re.compile(r'\s%s\s*=\s*("[^"]*"|\'[^\']*\')' % re.escape(name))
+    tag = pattern.sub('', tag)
+    if value is None:
+        return tag
+    close = '/>' if tag.rstrip().endswith('/>') else '>'
+    body = tag.rstrip()[:-len(close)].rstrip()
+    return '%s %s="%s"%s' % (body, name, html.escape(value, quote=True), close)
+
+
+def set_max_width(tag, width):
+    m = re.search(r'\sstyle\s*=\s*"([^"]*)"', tag)
+    decls = [d.strip() for d in (m.group(1) if m else '').split(';') if d.strip()]
+    decls = [d for d in decls if not re.match(r'max-width\s*:', d)]
+    if width:
+        decls.append('max-width: %s' % width)
+    return set_attr(tag, 'style', '; '.join(decls) if decls else None)
+
+
+def apply_edits(source, splices, containers):
+    """Apply non-overlapping splices plus container reorders in one pass.
+
+    splices:    (start, end, replacement) - text, width and image edits
+    containers: (inner_start, inner_end, lead, sep, trail, [block ranges])
+    Edits inside a block that moves travel with it, because blocks are
+    rendered recursively from the original source."""
+    items = [('s', a, b, r) for a, b, r in splices] + [('c', c[0], c[1], c) for c in containers]
+
+    def render(lo, hi):
+        cands = [it for it in items if lo <= it[1] and it[2] <= hi and (it[1], it[2]) != (lo, hi)]
+        top = [it for it in cands
+               if not any(o is not it and o[1] <= it[1] and it[2] <= o[2] and (o[1], o[2]) != (it[1], it[2]) for o in cands)]
+        out, pos = [], lo
+        for kind, a, b, payload in sorted(top, key=lambda it: it[1]):
+            out.append(source[pos:a])
+            if kind == 's':
+                out.append(payload)
+            else:
+                _, _, lead, sep, trail, blocks = payload
+                parts = [render(x, y) for x, y in blocks]
+                out.append(lead + sep.join(parts) + trail if parts else lead.rstrip(' ') + trail)
+            pos = b
+        out.append(source[pos:hi])
+        return ''.join(out)
+
+    return render(0, len(source))
+
+
 def file_hash(text):
     return hashlib.sha1(text.encode('utf-8')).hexdigest()[:16]
 
@@ -238,14 +353,32 @@ class Handler(SimpleHTTPRequestHandler):
     def serve_page(self, full):
         source = read(full)
         rel = os.path.relpath(full, ROOT)
-        out, last = [], 0
+        inserts = {}
+
+        def add(tag_start, tag_end, attr):
+            at = tag_end - 1  # just before the start tag's ">"
+            if source[at - 1] == '/':
+                at -= 1
+            inserts.setdefault(at, []).append(attr)
+
         for tag_start, tag_len, inner_start, inner_end in editable_ranges(source):
-            insert_at = tag_start + tag_len - 1  # just before the start tag's ">"
-            if source[insert_at - 1] == '/':
-                continue
-            out.append(source[last:insert_at])
-            out.append(' data-src="%d:%d"' % (inner_start, inner_end))
-            last = insert_at
+            add(tag_start, tag_start + tag_len,
+                ' data-src="%d:%d" data-tag="%d:%d"' % (inner_start, inner_end, tag_start, tag_start + tag_len))
+        nodes = index_elements(source)
+        for start, end in image_tags(nodes):
+            add(start, end, ' data-img="%d:%d"' % (start, end))
+        for cont in reorder_containers(nodes):
+            node = cont['node']
+            add(node['start'], node['start_end'], ' data-reorder-src="%d:%d"' % cont['inner'])
+            for b_start, b_end in cont['blocks']:
+                child = next(n for n in nodes if n['start'] == b_start)
+                add(child['start'], child['start_end'], ' data-block="%d:%d"' % (b_start, b_end))
+
+        out, last = [], 0
+        for at in sorted(inserts):
+            out.append(source[last:at])
+            out.append(''.join(inserts[at]))
+            last = at
         out.append(source[last:])
         page = ''.join(out)
         boot = ('<script>window.__EDIT__ = %s;</script>\n<script src="/tools/editor.js"></script>\n'
@@ -300,6 +433,8 @@ class Handler(SimpleHTTPRequestHandler):
             return
         try:
             length = int(self.headers.get('Content-Length', 0))
+            if path == '/__edit/upload':
+                return self.reply(200, self.upload(self.rfile.read(length)))
             data = json.loads(self.rfile.read(length) or b'{}')
             if path == '/__edit/save':
                 return self.reply(200, self.save(data))
@@ -312,18 +447,77 @@ class Handler(SimpleHTTPRequestHandler):
     def save(self, data):
         saved = []
         text_edits = data.get('text') or []
-        if text_edits:
+        width_edits = data.get('widths') or []
+        image_edits = data.get('images') or []
+        reorder = data.get('reorder') or []
+        if text_edits or width_edits or image_edits or reorder:
             full = safe_path(data['file'], {'.html'})
             source = read(full)
             if file_hash(source) != data.get('hash'):
                 raise ValueError('%s changed on disk since this page loaded. Reload, then redo the edit.' % data['file'])
-            valid = {(s, e) for _, _, s, e in editable_ranges(source)}
-            for edit in sorted(text_edits, key=lambda x: -x['start']):
-                start, end = int(edit['start']), int(edit['end'])
-                if (start, end) not in valid:
-                    raise ValueError('That text block no longer lines up with the file. Reload and try again.')
-                source = source[:start] + edit['html'] + source[end:]
-            write(full, source)
+            stale = 'The page no longer lines up with the file. Reload and try again.'
+            ranges = editable_ranges(source)
+            inner_ok = {(a, b) for _, _, a, b in ranges}
+            tag_ok = {(t, t + n) for t, n, _, _ in ranges}
+            nodes = index_elements(source)
+            img_ok = set(image_tags(nodes))
+            splices = []
+
+            for edit in text_edits:
+                a, b = int(edit['start']), int(edit['end'])
+                if (a, b) not in inner_ok:
+                    raise ValueError(stale)
+                splices.append((a, b, edit['html']))
+
+            tag_changes = {}
+            for edit in width_edits:
+                a, b = int(edit['start']), int(edit['end'])
+                width = edit.get('maxWidth')
+                if (a, b) not in tag_ok or (width and not re.fullmatch(r'\d+(\.\d+)?px', width)):
+                    raise ValueError(stale)
+                tag_changes[(a, b)] = set_max_width(tag_changes.get((a, b), source[a:b]), width)
+            for edit in image_edits:
+                a, b = int(edit['start']), int(edit['end'])
+                if (a, b) not in img_ok:
+                    raise ValueError(stale)
+                tag = tag_changes.get((a, b), source[a:b])
+                if edit.get('src'):
+                    tag = set_attr(tag, 'src', edit['src'])
+                if edit.get('alt') is not None:
+                    tag = set_attr(tag, 'alt', edit['alt'])
+                tag_changes[(a, b)] = tag
+            splices += [(a, b, tag) for (a, b), tag in tag_changes.items()]
+
+            containers = []
+            if reorder:
+                known = {'%d:%d' % c['inner']: c for c in reorder_containers(nodes)}
+                sent = {r['container']: [tuple(map(int, blk.split(':'))) for blk in r['blocks']] for r in reorder}
+                groups = {}
+                for key, c in known.items():
+                    groups.setdefault(c['group'], []).append(key)
+                for key in sent:
+                    if key not in known:
+                        raise ValueError(stale)
+                    group = groups[known[key]['group']]
+                    if not all(k in sent for k in group):
+                        raise ValueError(stale)
+                    before = sorted(b for k in group for b in known[k]['blocks'])
+                    after = sorted(b for k in group for b in sent[k])
+                    if before != after:
+                        raise ValueError(stale)
+                for key, blocks in sent.items():
+                    c = known[key]
+                    a, b = c['inner']
+                    orig = c['blocks']
+                    lead = source[a:orig[0][0]] if orig else source[a:b]
+                    trail = source[orig[-1][1]:b] if orig else ''
+                    sep = source[orig[0][1]:orig[1][0]] if len(orig) > 1 else lead
+                    containers.append((a, b, lead, sep, trail, blocks))
+
+            spans = sorted((a, b) for a, b, _ in splices)
+            if any(spans[i][1] > spans[i + 1][0] for i in range(len(spans) - 1)):
+                raise ValueError(stale)
+            write(full, apply_edits(source, splices, containers))
             saved.append(data['file'])
 
         for css_file, values in (data.get('tokens') or {}).items():
@@ -343,6 +537,31 @@ class Handler(SimpleHTTPRequestHandler):
             bump_version(css_file)
             saved.append(css_file)
         return {'saved': saved}
+
+    def upload(self, body):
+        # New image, saved next to the one it replaces (assets/<project>/).
+        query = dict(p.split('=', 1) for p in (self.path.split('?', 1) + [''])[1].split('&') if '=' in p)
+        from urllib.parse import unquote
+        folder = os.path.realpath(os.path.join(ROOT, unquote(query.get('dir', 'assets'))))
+        assets = os.path.join(ROOT, 'assets')
+        if not (folder == assets or folder.startswith(assets + os.sep)) or not os.path.isdir(folder):
+            folder = assets
+        name, ext = os.path.splitext(unquote(query.get('name', 'image')))
+        ext = ext.lower()
+        if ext not in {'.png', '.jpg', '.jpeg', '.webp', '.gif', '.avif'}:
+            raise ValueError('Images only: PNG, JPG, WebP, GIF or AVIF.')
+        if len(body) > 20 * 1024 * 1024:
+            raise ValueError('That image is over 20MB. Export a smaller version first.')
+        name = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-') or 'image'
+        candidate, n = name + ext, 2
+        while os.path.exists(os.path.join(folder, candidate)):
+            candidate, n = '%s-%d%s' % (name, n, ext), n + 1
+        target = os.path.join(folder, candidate)
+        with open(target, 'wb') as f:
+            f.write(body)
+        rel = os.path.relpath(target, ROOT)
+        written.add(rel)
+        return {'path': rel.replace(os.sep, '/')}
 
     def publish(self, data):
         if not written:

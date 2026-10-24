@@ -2,7 +2,10 @@
 // (plus window.__EDIT__ = { token, file, hash }) into pages it serves on
 // 127.0.0.1 - no page on the live site references this file.
 //
-//   Edit (E)    every text block with a data-src range becomes typeable
+//   Edit (E)    every text block with a data-src range becomes typeable;
+//               cards get a grip to reorder them (drag, or arrow keys),
+//               images open a panel to replace them or edit alt text, and
+//               text blocks get a right-edge handle to set their max-width
 //   Spacing     the :root tokens of each stylesheet on the page, live preview
 //   Save (⌘S)   writes text + tokens into the source files, then reloads
 //   Publish     commits the saved files and pushes the current branch
@@ -39,6 +42,36 @@
     html.ed-editing [data-ed-text]:hover { outline-color: #e8505b; }
     html.ed-editing [data-ed-text]:focus { outline: 2px solid #e8505b; outline-offset: 3px; }
     html.ed-editing [data-ed-text].ed-changed { background: rgba(232,80,91,.1); }
+    /* Reorder grips, image panel, width handle */
+    .ed-grip { position: absolute; top: 10px; right: 10px; z-index: 12; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: #1d120e; color: #fdfbf8; cursor: grab; box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+    .ed-grip svg { width: 10px; height: 16px; }
+    .ed-grip:focus-visible { outline: 2px solid #e8505b; outline-offset: 2px; }
+    .ed-grip:active { cursor: grabbing; }
+    html.ed-editing [data-block] { position: relative; }
+    .ed-dragging { opacity: .4; }
+    html.ed-editing img[data-img] { pointer-events: auto !important; cursor: pointer; }
+    html.ed-editing img[data-img]:hover { outline: 2px dashed #e8505b; outline-offset: -2px; }
+    html.ed-editing img[data-img].ed-changed { outline: 2px solid #e8505b; outline-offset: -2px; }
+    html.ed-editing [data-ed-text].ed-resized { box-shadow: inset -2px 0 0 #e8505b; }
+    .ed-image { position: fixed; z-index: 2050; width: 300px; padding: 14px 16px; border-radius: 14px; background: #1d120e; color: #fdfbf8; box-shadow: 0 16px 40px rgba(0,0,0,.35); font: 500 13px/1.35 Roboto, system-ui, sans-serif; }
+    .ed-image[hidden] { display: none; }
+    .ed-image p { margin: 0 0 8px; }
+    .ed-image-head { display: flex; justify-content: space-between; align-items: center; }
+    .ed-image-head button { border: 0; background: none; color: inherit; font-size: 18px; cursor: pointer; }
+    .ed-image-file { font: 11px ui-monospace, Menlo, monospace; color: rgba(253,251,248,.6); word-break: break-all; }
+    .ed-image-replace { display: inline-block; margin: 2px 0 12px; padding: 8px 12px; border-radius: 100px; background: rgba(253,251,248,.12); cursor: pointer; }
+    .ed-image-replace:focus-within { outline: 2px solid #e8505b; }
+    .ed-image-replace input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .ed-image-alt { display: block; }
+    .ed-image-alt span { display: block; margin: 2px 0 6px; font-weight: 400; font-size: 11px; color: rgba(253,251,248,.55); }
+    .ed-image-alt textarea { width: 100%; padding: 8px; border: 1px solid rgba(253,251,248,.2); border-radius: 8px; background: transparent; color: inherit; font: 400 13px/1.4 Roboto, system-ui, sans-serif; resize: vertical; }
+    .ed-image-actions { display: flex; justify-content: flex-end; gap: 6px; margin-top: 10px; }
+    .ed-image-actions button { border: 0; border-radius: 100px; padding: 8px 12px; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+    .ed-image-actions .ed-primary { background: #e8505b; color: #fff; }
+    .ed-width { position: fixed; z-index: 2040; width: 8px; height: 28px; border-radius: 4px; background: #e8505b; cursor: ew-resize; box-shadow: 0 2px 6px rgba(0,0,0,.25); touch-action: none; }
+    .ed-width[hidden] { display: none; }
+    .ed-width span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); padding: 3px 6px; border-radius: 4px; background: #e8505b; color: #fff; font: 500 10px/1 ui-monospace, Menlo, monospace; white-space: nowrap; }
+    .ed-width span:empty { display: none; }
     .ed-revealed { display: block !important; outline: 1px dashed #e8505b; padding: 8px 10px 8px 26px; margin: 8px 0; position: relative; }
     .ed-revealed::before { content: "Hidden source text - shown while editing"; display: block; margin: 0 0 6px -16px; font: 600 10px/1 ui-monospace, Menlo, monospace; color: #e8505b; }
 
@@ -106,10 +139,19 @@
   const revealed = [];
   let editing = false;
 
-  const pending = { tokens: {} };
+  const pending = { tokens: {}, widths: new Map(), images: new Map() };
   const changedBlocks = () => blocks.filter((el) => originals.has(el) && el.innerHTML !== originals.get(el));
   const tokenCount = () => Object.values(pending.tokens).reduce((n, values) => n + Object.keys(values).length, 0);
-  const dirtyCount = () => changedBlocks().length + tokenCount();
+  const dirtyCount = () => changedBlocks().length + tokenCount() + pending.widths.size + pending.images.size + (orderChanged() ? 1 : 0);
+
+  // ---- Card order ----
+  // Containers marked data-reorder (the homepage's two columns) hold blocks
+  // with data-block ranges; the server rebuilds each container from the
+  // order they end up in.
+  const containers = [...document.querySelectorAll('[data-reorder-src]')];
+  const orderOf = () => containers.map((c) => [...c.children].filter((k) => k.dataset.block).map((k) => k.dataset.block).join(','));
+  const originalOrder = orderOf();
+  const orderChanged = () => orderOf().some((o, i) => o !== originalOrder[i]);
 
   const refresh = () => {
     const n = dirtyCount();
@@ -140,7 +182,10 @@
         el.removeAttribute('data-ed-text');
       }
     });
+    setGrips(on);
     if (!on) {
+      closeImagePanel();
+      widthHandle.hidden = true;
       revealed.splice(0).forEach((el) => { el.hidden = true; el.classList.remove('ed-revealed'); });
       panel.hidden = true;
       btn('spacing').setAttribute('aria-pressed', 'false');
@@ -183,9 +228,238 @@
 
   // While editing, links and cards stay put instead of navigating away.
   document.addEventListener('click', (event) => {
-    if (!editing || event.target.closest('.ed-dock, .ed-panel, .ed-modal')) return;
-    if (event.target.closest('a, button')) event.preventDefault();
+    if (!editing || event.target.closest('.ed-dock, .ed-panel, .ed-modal, .ed-image')) return;
+    const img = event.target.closest('img[data-img]');
+    if (img) {
+      event.preventDefault();
+      event.stopPropagation();
+      openImagePanel(img);
+      return;
+    }
+    if (event.target.closest('a, button, .ed-grip')) event.preventDefault();
   }, true);
+
+  // ---- Reorder: grips ----
+  const grips = [];
+  const groupOf = (block) => block.parentElement;
+  function setGrips(on) {
+    grips.splice(0).forEach((g) => g.remove());
+    if (!on) return;
+    containers.forEach((container) => [...container.children].filter((k) => k.dataset.block).forEach((block) => {
+      const grip = document.createElement('span');
+      grip.className = 'ed-grip';
+      grip.setAttribute('role', 'button');
+      grip.setAttribute('tabindex', '0');
+      grip.setAttribute('aria-label', 'Move card (drag, or use arrow keys)');
+      grip.draggable = true;
+      grip.innerHTML = '<svg viewBox="0 0 10 16" aria-hidden="true"><g fill="currentColor"><circle cx="2" cy="2" r="1.5"/><circle cx="8" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/><circle cx="8" cy="14" r="1.5"/></g></svg>';
+      block.appendChild(grip);
+      grips.push(grip);
+    }));
+  }
+
+  let dragging = null;
+  document.addEventListener('dragstart', (event) => {
+    const grip = event.target.closest?.('.ed-grip');
+    if (!grip) return;
+    dragging = grip.parentElement;
+    dragging.classList.add('ed-dragging');
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', '');
+    const r = dragging.getBoundingClientRect();
+    event.dataTransfer.setDragImage(dragging, event.clientX - r.left, event.clientY - r.top);
+  });
+  document.addEventListener('dragover', (event) => {
+    if (!dragging) return;
+    const over = event.target.closest?.('[data-block]');
+    const container = over ? over.parentElement : event.target.closest?.('[data-reorder-src]');
+    if (!container || !containers.includes(container)) return;
+    event.preventDefault();
+    if (over && over !== dragging && !over.contains(dragging)) {
+      const r = over.getBoundingClientRect();
+      container.insertBefore(dragging, event.clientY < r.top + r.height / 2 ? over : over.nextSibling);
+    } else if (!over) {
+      container.appendChild(dragging);
+    }
+  });
+  document.addEventListener('drop', (event) => { if (dragging) event.preventDefault(); });
+  document.addEventListener('dragend', () => {
+    if (!dragging) return;
+    dragging.classList.remove('ed-dragging');
+    dragging = null;
+    refresh();
+  });
+
+  // Keyboard: up/down within a column, left/right to the other column.
+  // Captured and stopped here so the site nav's arrow-key page shortcuts
+  // never see these presses.
+  document.addEventListener('keydown', (event) => {
+    const grip = event.target.closest?.('.ed-grip');
+    if (!grip || !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const block = grip.parentElement;
+    const container = groupOf(block);
+    const siblings = [...container.children].filter((k) => k.dataset.block);
+    const i = siblings.indexOf(block);
+    if (event.key === 'ArrowUp' && i > 0) container.insertBefore(block, siblings[i - 1]);
+    if (event.key === 'ArrowDown' && i < siblings.length - 1) container.insertBefore(block, siblings[i + 1].nextSibling);
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      const target = containers[containers.indexOf(container) + (event.key === 'ArrowLeft' ? -1 : 1)];
+      if (target) {
+        const others = [...target.children].filter((k) => k.dataset.block);
+        target.insertBefore(block, others[Math.min(i, others.length)] || null);
+      }
+    }
+    grip.focus();
+    refresh();
+  }, true);
+
+  // ---- Images: replace + alt text ----
+  const imagePanel = document.createElement('div');
+  imagePanel.className = 'ed-image';
+  imagePanel.hidden = true;
+  imagePanel.setAttribute('role', 'dialog');
+  imagePanel.setAttribute('aria-label', 'Edit image');
+  document.body.appendChild(imagePanel);
+  let imageTarget = null;
+
+  const imageState = (img) => pending.images.get(img) || { alt: img.getAttribute('alt') || '', file: null };
+  const setImageState = (img, state) => {
+    const changed = state.file || state.alt !== (img.dataset.edAlt ?? img.getAttribute('alt') ?? '');
+    if (changed) pending.images.set(img, state);
+    else pending.images.delete(img);
+    img.classList.toggle('ed-changed', !!changed);
+    refresh();
+  };
+
+  function openImagePanel(img) {
+    if (img.dataset.edSrc === undefined) {
+      img.dataset.edSrc = img.getAttribute('src');
+      img.dataset.edAlt = img.getAttribute('alt') || '';
+    }
+    imageTarget = img;
+    const state = imageState(img);
+    imagePanel.innerHTML = `
+      <p class="ed-image-head"><strong>Image</strong><button type="button" data-close aria-label="Close">&times;</button></p>
+      <p class="ed-image-file"></p>
+      <label class="ed-image-replace">Replace image&hellip;<input type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif"></label>
+      <label class="ed-image-alt">Alt text <span>what a screen reader says - leave empty only if it's decorative</span><textarea rows="3"></textarea></label>
+      <div class="ed-image-actions"><button type="button" data-revert>Revert</button><button type="button" data-close class="ed-primary">Done</button></div>`;
+    imagePanel.querySelector('.ed-image-file').textContent = state.file ? `New: ${state.file.name} (saves into ${folderOf(img.dataset.edSrc)}/)` : img.dataset.edSrc;
+    const alt = imagePanel.querySelector('textarea');
+    alt.value = state.alt;
+    alt.addEventListener('input', () => setImageState(img, { ...imageState(img), alt: alt.value }));
+    imagePanel.querySelector('input[type="file"]').addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      img.src = URL.createObjectURL(file);
+      img.removeAttribute('srcset');
+      setImageState(img, { ...imageState(img), file });
+      imagePanel.querySelector('.ed-image-file').textContent = `New: ${file.name} (saves into ${folderOf(img.dataset.edSrc)}/)`;
+    });
+    imagePanel.querySelector('[data-revert]').addEventListener('click', () => {
+      img.src = img.dataset.edSrc;
+      img.setAttribute('alt', img.dataset.edAlt);
+      pending.images.delete(img);
+      img.classList.remove('ed-changed');
+      refresh();
+      openImagePanel(img);
+    });
+    imagePanel.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', closeImagePanel));
+    imagePanel.hidden = false;
+    const r = img.getBoundingClientRect();
+    const w = imagePanel.offsetWidth;
+    const h = imagePanel.offsetHeight;
+    imagePanel.style.left = `${Math.max(12, Math.min(r.left + r.width / 2 - w / 2, innerWidth - w - 12))}px`;
+    imagePanel.style.top = `${Math.max(12, Math.min(r.top + 16, innerHeight - h - 12))}px`;
+    alt.focus();
+  }
+  function closeImagePanel() {
+    imagePanel.hidden = true;
+    imageTarget?.focus?.();
+    imageTarget = null;
+  }
+  const folderOf = (src) => (src || 'assets/x').replace(/^\.\//, '').split('/').slice(0, -1).join('/') || 'assets';
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !imagePanel.hidden) closeImagePanel();
+  });
+
+  // ---- Text widths: right-edge handle ----
+  const widthHandle = document.createElement('div');
+  widthHandle.className = 'ed-width';
+  widthHandle.hidden = true;
+  widthHandle.title = 'Drag to set this text block\'s width. Double-click to reset.';
+  widthHandle.innerHTML = '<span></span>';
+  document.body.appendChild(widthHandle);
+  let widthTarget = null;
+  let widthHide = 0;
+
+  const isBlock = (el) => !/^inline/.test(getComputedStyle(el).display);
+  const placeWidthHandle = () => {
+    if (!widthTarget) return;
+    const r = widthTarget.getBoundingClientRect();
+    Object.assign(widthHandle.style, { left: `${r.right + 4}px`, top: `${r.top + r.height / 2 - 14}px` });
+  };
+  const showWidthHandle = (el) => {
+    clearTimeout(widthHide);
+    if (!editing || !el || !isBlock(el)) return;
+    widthTarget = el;
+    widthHandle.hidden = false;
+    widthHandle.firstChild.textContent = '';
+    placeWidthHandle();
+  };
+  document.addEventListener('mouseover', (event) => {
+    if (!editing || dragging) return;
+    if (event.target.closest?.('.ed-width')) { clearTimeout(widthHide); return; }
+    const el = event.target.closest?.('[data-ed-text]');
+    if (el) showWidthHandle(el);
+    else widthHide = setTimeout(() => { if (!widthHandle.classList.contains('is-dragging')) widthHandle.hidden = true; }, 400);
+  });
+  document.addEventListener('focusin', (event) => {
+    const el = event.target.closest?.('[data-ed-text]');
+    if (el) showWidthHandle(el);
+  });
+  window.addEventListener('scroll', placeWidthHandle, { passive: true });
+
+  const setWidth = (el, value) => {
+    const original = el.dataset.edWidth;
+    el.style.maxWidth = value || '';
+    if ((value || '') === original) pending.widths.delete(el);
+    else pending.widths.set(el, value || null);
+    el.classList.toggle('ed-resized', pending.widths.has(el));
+    refresh();
+  };
+  widthHandle.addEventListener('pointerdown', (event) => {
+    if (!widthTarget) return;
+    event.preventDefault();
+    const el = widthTarget;
+    if (el.dataset.edWidth === undefined) el.dataset.edWidth = el.style.maxWidth || '';
+    const startX = event.clientX;
+    const startW = el.getBoundingClientRect().width;
+    widthHandle.setPointerCapture(event.pointerId);
+    widthHandle.classList.add('is-dragging');
+    const move = (e) => {
+      const w = Math.max(80, Math.round(startW + e.clientX - startX));
+      el.style.maxWidth = `${w}px`;
+      widthHandle.firstChild.textContent = `max-width ${w}px`;
+      placeWidthHandle();
+    };
+    const up = () => {
+      widthHandle.removeEventListener('pointermove', move);
+      widthHandle.classList.remove('is-dragging');
+      setWidth(el, el.style.maxWidth);
+    };
+    widthHandle.addEventListener('pointermove', move);
+    widthHandle.addEventListener('pointerup', up, { once: true });
+  });
+  widthHandle.addEventListener('dblclick', () => {
+    if (!widthTarget) return;
+    if (widthTarget.dataset.edWidth === undefined) widthTarget.dataset.edWidth = widthTarget.style.maxWidth || '';
+    setWidth(widthTarget, '');
+    widthHandle.firstChild.textContent = 'width reset';
+    placeWidthHandle();
+  });
 
   // ---- Spacing & color panel ----
   const panel = document.createElement('aside');
@@ -288,18 +562,47 @@
   };
 
   // ---- Save / publish ----
+  const range = (attr) => attr.split(':').map(Number);
+
   async function save() {
     const text = changedBlocks().map((el) => {
-      const [start, end] = el.dataset.src.split(':').map(Number);
+      const [start, end] = range(el.dataset.src);
       return { start, end, html: el.innerHTML };
     });
-    if (!text.length && !tokenCount()) return;
+    if (!dirtyCount()) return;
     btn('save').disabled = true;
     btn('save').textContent = 'Saving…';
     try {
-      await api('save', { file: CONFIG.file, hash: CONFIG.hash, text, tokens: pending.tokens });
+      // New image files go up first; the save then points each <img> at its upload.
+      const images = [];
+      for (const [img, state] of pending.images) {
+        const [start, end] = range(img.dataset.img);
+        let src = null;
+        if (state.file) {
+          const res = await fetch(`/__edit/upload?dir=${encodeURIComponent(folderOf(img.dataset.edSrc))}&name=${encodeURIComponent(state.file.name)}`, {
+            method: 'POST',
+            headers: { 'X-Edit-Token': CONFIG.token },
+            body: state.file,
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || 'Image upload failed');
+          src = data.path;
+        }
+        images.push({ start, end, src, alt: state.alt });
+      }
+      const widths = [...pending.widths].map(([el, maxWidth]) => {
+        const [start, end] = range(el.dataset.tag);
+        return { start, end, maxWidth };
+      });
+      const reorder = orderChanged()
+        ? containers.map((c) => ({ container: c.dataset.reorderSrc, blocks: [...c.children].filter((k) => k.dataset.block).map((k) => k.dataset.block) }))
+        : [];
+      await api('save', { file: CONFIG.file, hash: CONFIG.hash, text, widths, images, reorder, tokens: pending.tokens });
       pending.tokens = {};
+      pending.widths.clear();
+      pending.images.clear();
       originals.clear();
+      originalOrder.splice(0, originalOrder.length, ...orderOf());
       try { sessionStorage.setItem(RESUME_KEY, JSON.stringify({ editing, spacing: !panel.hidden, y: scrollY })); } catch (e) { /* ignore */ }
       location.reload();
     } catch (error) {
