@@ -329,6 +329,7 @@ When in doubt about a project's real content, check **https://www.ginahsu.co/** 
 
 - Test through a local server (`python3 -m http.server`), not `file://` — some tooling renders `file://` pages as static snapshots with no JS/CSS execution.
 - Plain static servers send no cache headers, so browsers cache CSS/JS aggressively. If an edit doesn't show up on reload, hard-bust it (cache-busting query string, or a genuinely uncached reload) before assuming something's broken.
+- **Bump the `?v=` query on CSS/JS links whenever you change a stylesheet or script** (every page references them as e.g. `styles.css?v=20261023`). GitHub Pages lets browsers cache assets for ~10 minutes, so new HTML can load against old CSS — in Oct 2026 that pushed the homepage panel sideways for visitors with a cached `styles.css` (new `.bg-gradient` div, no rule positioning it yet). Find/replace the date across all `*.html` files.
 - Start the server from the project root every time. `cd`-ing into a subfolder (e.g. to rename files in `assets/spacecentre/`) and starting the server from there without `cd`-ing back is a real, repeatable way to get a confusing 404 on every page.
 
 ### 6.5 Handling full-page screenshots
