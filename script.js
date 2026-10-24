@@ -22,14 +22,15 @@ if (bgGrid) {
   window.addEventListener('resize', sizeGrid);
 }
 
-// Card hover + linked intro (desktop pointers only).
+// Card hover + linked intro.
 //
 // Hovering (or tabbing to) a card selects it - a coral box with corner
 // handles and a label naming the journey it covered and what it moved
-// (the card's data-outcome) - dims the rest of the grid,
-// and lights up the intro sentence about it in the sticky panel. Hovering
-// an intro sentence does the same in reverse. Sentences are tied to cards
-// by data-work="ultrabasic" <-> href="./ultrabasic.html", so there's no
+// (the card's data-outcome) - and dims the rest of the grid. Hovering an
+// intro sentence selects the card(s) it describes and spotlights that
+// sentence. The link is one-way on purpose: cards never reach back and
+// light up the intro. Sentences are tied to cards by
+// data-work="ultrabasic" <-> href="./ultrabasic.html", so there's no
 // second list to keep in sync.
 const cards = [...document.querySelectorAll('a.card')];
 const masonry = document.querySelector('.masonry');
@@ -70,20 +71,20 @@ if (masonry) {
     frame = lit.length ? requestAnimationFrame(place) : 0;
   };
 
-  const light = (works) => {
+  // fromIntro: only a hovered sentence spotlights the intro text.
+  const light = (works, fromIntro = false) => {
     lit = cards.filter((card) => works.includes(workOf(card)) && !card.classList.contains('is-disabled'));
     masonry.classList.toggle('is-linked', lit.length > 0);
     cards.forEach((card) => card.classList.toggle('is-lit', lit.includes(card)));
-    const spot = sentences.some((s) => works.includes(s.dataset.work));
-    intro?.classList.toggle('is-spot', spot);
-    sentences.forEach((s) => s.classList.toggle('is-on', works.includes(s.dataset.work)));
+    intro?.classList.toggle('is-spot', fromIntro && works.length > 0);
+    sentences.forEach((s) => s.classList.toggle('is-on', fromIntro && works.includes(s.dataset.work)));
     if (lit.length && !frame) frame = requestAnimationFrame(place);
     if (!lit.length) place();
   };
 
   cards.forEach((card) => {
-    // Keyboard focus gets the same selection and linked sentence as hover,
-    // on every device - only the pointer-driven drift is mouse-only.
+    // Keyboard focus gets the same selection as hover, on every device -
+    // only the pointer-driven drift is mouse-only.
     card.addEventListener('focus', () => light([workOf(card)]));
     card.addEventListener('blur', () => light([]));
     if (!canHover) return;
@@ -109,7 +110,7 @@ if (masonry) {
   });
 
   if (canHover) sentences.forEach((sentence) => {
-    sentence.addEventListener('mouseenter', () => light(sentence.dataset.work.split(/\s+/)));
+    sentence.addEventListener('mouseenter', () => light(sentence.dataset.work.split(/\s+/), true));
     sentence.addEventListener('mouseleave', () => light([]));
   });
 }

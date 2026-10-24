@@ -278,8 +278,8 @@ Homepage only, by choice: `thinking.js` is loaded on `index.html` alone. The on/
 
 Borrowed from karyll.com, reframed for a product-designer lens. Each project sentence in `.panel-intro` carries `data-work="<page>"` matching a card's `href` (`data-work="ultrabasic"` ↔ `href="./ultrabasic.html"`), so there's no second list to keep in sync. On desktop pointers only:
 
-- **Hover or keyboard-focus a card:** a coral selection box with corner handles labelled with the card's `data-outcome` (the journey it covered and what it moved, e.g. "Booking to check-in · 3 flows into 1 · $50K/yr from A/B tests"), the rest of the grid fades to 50%, the title turns coral, and that card's sentence lights up in the panel. Focus works on every device; the image drift is mouse-only and off under reduced motion.
-- **Hover a sentence:** the same selection on its card. A sentence can name several pages, space-separated.
+- **Hover or keyboard-focus a card:** a coral selection box with corner handles labelled with the card's `data-outcome` (the journey it covered and what it moved, e.g. "Booking to check-in · 3 flows into 1 · $50K/yr from A/B tests"), the rest of the grid fades to 50%, and the title turns coral. Cards don't light up the intro — the link is one-way, by choice. Focus works on every device; the image drift is mouse-only and off under reduced motion.
+- **Hover a sentence:** the same selection on its card, and that sentence is spotlighted while the rest of the intro dims. A sentence can name several pages, space-separated.
 
 Cards the filter has dimmed (`.is-disabled`) are never selected. The selection box is its own fixed element (`.card-selection`) so it isn't clipped by the card's `overflow: hidden`. This replaced the old 3D hover tilt — a selection box around a tilted card never lines up.
 
