@@ -246,6 +246,22 @@ ul { margin: 0; padding: 0; list-style: none; }
   background-size: 1040px 1684px;
 }
 
+/* Animated mesh gradient sitting behind .bg-grid and the cards, scoped to
+   the .content column the same way .bg-grid is (left offset skips the
+   sticky panel). z-index: 0 keeps it under .bg-grid (1) and .masonry (2).
+   position: fixed (not absolute) because the gradient's canvas only ever
+   renders viewport-sized content - anchoring it to the full, much-taller
+   scroll height of .page left everything past the first screen unpainted. */
+.bg-gradient {
+  position: fixed;
+  top: 0;
+  left: var(--size-panel-width);
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
 
 /* ---- Tabs ---- */
 .tabs {
@@ -685,6 +701,7 @@ a.card.is-disabled:hover {
   .sticky-panel::after { display: none; }
 
   .bg-grid { left: 40px; }
+  .bg-gradient { left: 0; }
 
   .masonry { grid-template-columns: 1fr; }
 
