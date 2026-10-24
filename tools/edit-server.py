@@ -311,6 +311,224 @@ def git(*args):
     return proc.returncode, (proc.stdout + proc.stderr).strip()
 
 
+
+# ---- Case studies: add / archive / restore ----
+# A case study is wired into three files: its card on index.html (inside a
+# data-reorder="cards" column), its line in site-nav.js's PAGES list, and -
+# once archived - a line in showcase.html's SHOWCASE_ITEMS. Archived cards
+# are kept verbatim inside <template id="archived-cards"> on index.html so a
+# restore puts back exactly what was there.
+
+ARROW_SVG = ('<svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" '
+             'stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+CARD_STYLES = {'teal': 'Single phone', 'purple': 'Two phones', 'sky': 'Laptop, full width', 'ai': 'Panel, centred'}
+NAV_LINE = re.compile(r"^\s*\{ href: '([^']+)', label: (?:'([^']*)'|\"([^\"]*)\"), group: 'work' \},\n", re.M)
+
+
+def slug_of(href):
+    return re.sub(r'^\./', '', href or '').replace('.html', '')
+
+
+def case_cards(index_src):
+    """Homepage cards that link to a case study page."""
+    nodes = index_elements(index_src)
+    out = []
+    for cont in reorder_containers(nodes):
+        for i, (a, b) in enumerate(cont['blocks']):
+            node = next(n for n in nodes if n['start'] == a)
+            href = node['attrs'].get('href', '')
+            if node['tag'] == 'a' and node['attrs'].get('data-category') == 'projects' and href.endswith('.html'):
+                out.append({'slug': slug_of(href), 'range': (a, b), 'cont': cont, 'pos': i})
+    return out
+
+
+def card_facts(card_html):
+    def grab(pattern):
+        m = re.search(pattern, card_html, re.S)
+        return html.unescape(re.sub(r'<[^>]+>', '', m.group(1))).strip() if m else ''
+    img = re.search(r'<img[^>]*\ssrc="([^"]+)"', card_html)
+    return {
+        'title': grab(r'class="card-title"[^>]*>(.*?)</h2>'),
+        'label': grab(r'class="card-label"[^>]*>(.*?)</p>'),
+        'button': grab(r'class="card-btn"[^>]*>(.*?)<svg'),
+        'outcome': html.unescape(re.search(r'data-outcome="([^"]*)"', card_html).group(1)) if 'data-outcome="' in card_html else '',
+        'image': img.group(1) if img else '',
+    }
+
+
+def remove_block(src, cont, pos):
+    blocks = cont['blocks']
+    a, b = blocks[pos]
+    if pos > 0:
+        return src[:blocks[pos - 1][1]] + src[b:]
+    if len(blocks) > 1:
+        return src[:a] + src[blocks[1][0]:]
+    return src[:a] + src[b:]
+
+
+def insert_first(src, cont, block_html):
+    blocks = cont['blocks']
+    if not blocks:
+        a, _ = cont['inner']
+        return src[:a] + '\n\n        ' + block_html + src[a:]
+    sep = src[blocks[0][1]:blocks[1][0]] if len(blocks) > 1 else '\n\n        '
+    a = blocks[0][0]
+    return src[:a] + block_html + sep + src[a:]
+
+
+ARCHIVE_OPEN = '<template id="archived-cards">'
+
+
+def archived_cards(index_src):
+    i = index_src.find(ARCHIVE_OPEN)
+    if i == -1:
+        return []
+    inner_start = i + len(ARCHIVE_OPEN)
+    inner_end = index_src.index('</template>', inner_start)
+    out = []
+    for m in re.finditer(r'<a class="card[^"]*" href="([^"]+)".*?</a>', index_src[inner_start:inner_end], re.S):
+        out.append({'slug': slug_of(m.group(1)), 'start': inner_start + m.start(), 'end': inner_start + m.end(),
+                    'html': m.group(0)})
+    return out
+
+
+def nav_add(js, slug, label):
+    lines = list(NAV_LINE.finditer(js))
+    quoted = "'%s'" % label if "'" not in label and '\\' not in label else json.dumps(label)
+    entry = "    { href: '%s.html', label: %s, group: 'work' },\n" % (slug, quoted)
+    if any(m.group(1) == slug + '.html' for m in lines):
+        return js
+    at = lines[-1].end() if lines else js.index("  const PAGES = [\n") + len("  const PAGES = [\n")
+    return js[:at] + entry + js[at:]
+
+
+def nav_remove(js, slug):
+    for m in NAV_LINE.finditer(js):
+        if m.group(1) == slug + '.html':
+            return js[:m.start()] + js[m.end():]
+    return js
+
+
+def showcase_add(src, item):
+    marker = 'const SHOWCASE_ITEMS = [\n'
+    at = src.index(marker) + len(marker)
+    return src[:at] + '    ' + json.dumps(item, ensure_ascii=False) + ',\n' + src[at:]
+
+
+def showcase_remove(src, slug):
+    return re.sub(r'^ *\{[^\n]*"href": "%s\.html"[^\n]*\},?\n' % re.escape(slug), '', src, count=1, flags=re.M)
+
+
+def list_cases():
+    index_src = read(os.path.join(ROOT, 'index.html'))
+    nav = read(os.path.join(ROOT, 'site-nav.js'))
+    labels = {m.group(1): m.group(2) or m.group(3) for m in NAV_LINE.finditer(nav)}
+    active = []
+    for c in case_cards(index_src):
+        facts = card_facts(index_src[c['range'][0]:c['range'][1]])
+        active.append({'slug': c['slug'], 'title': facts['title'], 'label': labels.get(c['slug'] + '.html', facts['button'])})
+    archived = [{'slug': a['slug'], 'title': card_facts(a['html'])['title']} for a in archived_cards(index_src)]
+    return {'active': active, 'archived': archived, 'styles': CARD_STYLES}
+
+
+def archive_case(slug):
+    index_path = os.path.join(ROOT, 'index.html')
+    index_src = read(index_path)
+    card = next((c for c in case_cards(index_src) if c['slug'] == slug), None)
+    if not card:
+        raise ValueError('No homepage card links to %s.html.' % slug)
+    a, b = card['range']
+    block = index_src[a:b]
+    facts = card_facts(block)
+    nav_src = read(os.path.join(ROOT, 'site-nav.js'))
+    nav_label = next((m.group(2) or m.group(3) for m in NAV_LINE.finditer(nav_src) if m.group(1) == slug + '.html'), facts['button'])
+    stored = set_attr(block[:block.index('>') + 1], 'data-nav-label', nav_label) + block[block.index('>') + 1:]
+    index_src = remove_block(index_src, card['cont'], card['pos'])
+    if ARCHIVE_OPEN not in index_src:
+        index_src = index_src.replace('</main>', '<!-- Archived case study cards, kept verbatim so the browser editor can\n'
+                                      '     restore them. Never rendered. -->\n' + ARCHIVE_OPEN + '\n</template>\n\n</main>', 1)
+    close = index_src.index('</template>', index_src.index(ARCHIVE_OPEN))
+    index_src = index_src[:close] + stored + '\n' + index_src[close:]
+    write(index_path, index_src)
+
+    nav_path = os.path.join(ROOT, 'site-nav.js')
+    write(nav_path, nav_remove(read(nav_path), slug))
+
+    showcase_path = os.path.join(ROOT, 'showcase.html')
+    showcase = showcase_remove(read(showcase_path), slug)
+    item = {'image': facts['image'] or 'assets/gina-avatar.jpg', 'tag': 'CASE STUDY', 'title': facts['title'] or slug,
+            'desc': facts['outcome'] or facts['label'], 'href': slug + '.html'}
+    write(showcase_path, showcase_add(showcase, item))
+    return {'archived': slug}
+
+
+def restore_case(slug):
+    index_path = os.path.join(ROOT, 'index.html')
+    index_src = read(index_path)
+    entry = next((a for a in archived_cards(index_src) if a['slug'] == slug), None)
+    if not entry:
+        raise ValueError('%s is not in the archive.' % slug)
+    index_src = index_src[:entry['start']] + index_src[entry['end']:]
+    index_src = re.sub(r'(%s)\n+' % re.escape(ARCHIVE_OPEN), r'\1\n', index_src, count=1)
+    card = entry['html']
+    tag_end = card.index('>') + 1
+    label = re.search(r'\sdata-nav-label="([^"]*)"', card[:tag_end])
+    card = set_attr(card[:tag_end], 'data-nav-label', None) + card[tag_end:]
+    first = reorder_containers(index_elements(index_src))[0]
+    index_src = insert_first(index_src, first, card)
+    write(index_path, index_src)
+
+    nav_path = os.path.join(ROOT, 'site-nav.js')
+    facts = card_facts(card)
+    nav_label = html.unescape(label.group(1)) if label else (facts['button'] or facts['title'])
+    write(nav_path, nav_add(read(nav_path), slug, nav_label))
+    showcase_path = os.path.join(ROOT, 'showcase.html')
+    write(showcase_path, showcase_remove(read(showcase_path), slug))
+    return {'restored': slug}
+
+
+def new_case(data):
+    title = (data.get('title') or '').strip()
+    short = (data.get('short') or '').strip() or title
+    slug = re.sub(r'[^a-z0-9]+', '', (data.get('slug') or short).lower())
+    style = data.get('style') if data.get('style') in CARD_STYLES else 'sky'
+    image = (data.get('image') or '').strip()
+    if not title or not slug:
+        raise ValueError('A case study needs a title.')
+    if not image or not os.path.isfile(os.path.join(ROOT, image)):
+        raise ValueError('Choose a card image first.')
+    page = slug + '.html'
+    if os.path.exists(os.path.join(ROOT, page)):
+        raise ValueError('%s already exists - pick a different short name.' % page)
+
+    template = read(os.path.join(ROOT, 'case-study-template.html'))
+    template = template.replace('[Project Title]', html.escape(title), 2)
+    # Placeholder images point at this project's own folder, so replacing
+    # them in the editor files the new image under assets/<slug>/.
+    template = re.sub(r'src="\[assets/PROJECT/([^\]"]+)\]"', r'src="assets/%s/\1"' % slug, template)
+    write(os.path.join(ROOT, page), template)
+
+    e = lambda v: html.escape(v, quote=True)
+    card = ('<a class="card card-%s" href="./%s" data-category="projects" data-outcome="%s">\n'
+            '          <div class="card-glass"></div>\n'
+            '          <div class="card-top">\n'
+            '            <p class="card-label">%s</p>\n'
+            '            <h2 class="card-title">%s</h2>\n'
+            '          </div>\n'
+            '          <img class="card-bg-img" src="%s" alt="%s">\n'
+            '          <span class="card-btn">%s %s</span>\n'
+            '        </a>') % (style, page, e(data.get('outcome', '').strip()), e(data.get('label', '').strip()),
+                              e(title), e(image), e(data.get('alt', '').strip()), e(short), ARROW_SVG)
+    index_path = os.path.join(ROOT, 'index.html')
+    index_src = read(index_path)
+    first = reorder_containers(index_elements(index_src))[0]
+    write(index_path, insert_first(index_src, first, card))
+
+    nav_path = os.path.join(ROOT, 'site-nav.js')
+    write(nav_path, nav_add(read(nav_path), slug, short))
+    return {'page': page}
+
+
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=ROOT, **kwargs)
@@ -415,6 +633,8 @@ class Handler(SimpleHTTPRequestHandler):
             if path == '/__edit/tokens':
                 full = safe_path(query.get('file', ''), {'.css'})
                 return self.reply(200, {'tokens': read_tokens(read(full))})
+            if path == '/__edit/cases':
+                return self.reply(200, list_cases())
             if path == '/__edit/status':
                 _, branch = git('rev-parse', '--abbrev-ref', 'HEAD')
                 _, status = git('status', '--porcelain', '--', *sorted(written)) if written else (0, '')
@@ -440,6 +660,12 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.reply(200, self.save(data))
             if path == '/__edit/publish':
                 return self.reply(200, self.publish(data))
+            if path == '/__edit/case/new':
+                return self.reply(200, new_case(data))
+            if path == '/__edit/case/archive':
+                return self.reply(200, archive_case(re.sub(r'[^a-z0-9-]', '', data.get('slug', ''))))
+            if path == '/__edit/case/restore':
+                return self.reply(200, restore_case(re.sub(r'[^a-z0-9-]', '', data.get('slug', ''))))
         except ValueError as e:
             return self.reply(409, {'error': str(e)})
         self.reply(404, {'error': 'Unknown endpoint'})
@@ -544,8 +770,14 @@ class Handler(SimpleHTTPRequestHandler):
         from urllib.parse import unquote
         folder = os.path.realpath(os.path.join(ROOT, unquote(query.get('dir', 'assets'))))
         assets = os.path.join(ROOT, 'assets')
-        if not (folder == assets or folder.startswith(assets + os.sep)) or not os.path.isdir(folder):
+        if not (folder == assets or folder.startswith(assets + os.sep)):
             folder = assets
+        if not os.path.isdir(folder):
+            # A new case study's own folder (assets/<slug>) may not exist yet.
+            if os.path.dirname(folder) == assets and re.fullmatch(r'[a-z0-9-]+', os.path.basename(folder)):
+                os.makedirs(folder)
+            else:
+                folder = assets
         name, ext = os.path.splitext(unquote(query.get('name', 'image')))
         ext = ext.lower()
         if ext not in {'.png', '.jpg', '.jpeg', '.webp', '.gif', '.avif'}:

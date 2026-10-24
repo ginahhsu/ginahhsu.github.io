@@ -361,6 +361,19 @@
     color: var(--ink-dim);
   }
 
+  .showcase-panel-link {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 10px 16px;
+    border-radius: 100px;
+    background: var(--accent);
+    color: #1a1410;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .showcase-panel-link:hover { filter: brightness(1.08); }
+  .showcase-panel-link[hidden] { display: none; }
   .showcase-panel-foot {
     display: flex;
     align-items: center;
@@ -428,6 +441,7 @@
       <img id="panelImage" src="" alt="">
     </div>
     <p class="showcase-panel-desc" id="panelDesc" hidden></p>
+    <a class="showcase-panel-link" id="panelLink" hidden>Read the case study &rarr;</a>
   </div>
   <div class="showcase-panel-foot">
     <span class="showcase-panel-nav" id="panelPrev" aria-label="Previous">&#8249;</span>
@@ -437,6 +451,11 @@
 </div>
 
 <script>
+  // Archived case studies are added to the top of this list by the browser
+  // editor (one line each, with an `href` to the case study page, which then
+  // shows a "Read the case study" link in the detail panel). Restoring a case
+  // study removes its line again.
+  //
   // Placeholder tiles - swap in finished project work here. Labels are
   // generic descriptions of what each image shows, not attributed to Gina;
   // see assets/showcase/ for the source files. `desc` is optional and only
@@ -489,6 +508,8 @@
   `;
   viewport.appendChild(titleBlock);
 
+  const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
   function makeTile(idx) {
     const item = SHOWCASE_ITEMS[idx];
     const el = document.createElement('div');
@@ -498,10 +519,10 @@
     el.setAttribute('tabindex', '0');
     el.setAttribute('aria-label', item.title);
     el.innerHTML = `
-      <div class="tile-frame"><img src="${item.image}" alt="${item.title}" loading="lazy" draggable="false"></div>
+      <div class="tile-frame"><img src="${esc(item.image)}" alt="${esc(item.title)}" loading="lazy" draggable="false"></div>
       <div class="tile-caption">
-        <div class="tile-tag"><span>${item.tag}</span><i></i></div>
-        <p class="tile-label">${item.title}</p>
+        <div class="tile-tag"><span>${esc(item.tag)}</span><i></i></div>
+        <p class="tile-label">${esc(item.title)}</p>
       </div>
     `;
     el.addEventListener('keydown', (e) => {
@@ -638,6 +659,7 @@
   const panelTitle = document.getElementById('panelTitle');
   const panelImage = document.getElementById('panelImage');
   const panelDesc = document.getElementById('panelDesc');
+  const panelLink = document.getElementById('panelLink');
   const panelCounter = document.getElementById('panelCounter');
 
   let currentPanelIndex = 0;
@@ -654,6 +676,12 @@
       panelDesc.hidden = false;
     } else {
       panelDesc.hidden = true;
+    }
+    if (item.href) {
+      panelLink.href = item.href;
+      panelLink.hidden = false;
+    } else {
+      panelLink.hidden = true;
     }
     panelCounter.textContent = `${currentPanelIndex + 1} / ${N}`;
     backdrop.classList.add('is-open');
@@ -678,6 +706,6 @@
   });
 </script>
 
-<script src="site-nav.js?v=20261024"></script>
+<script src="site-nav.js?v=20261024-cases"></script>
 </body>
 </html>

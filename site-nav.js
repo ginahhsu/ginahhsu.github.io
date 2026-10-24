@@ -10,6 +10,8 @@
 // dark pill at top-centre, so the menu button is added to the end of them
 // and the tabs become the nav (data-context="tabs").
 (() => {
+  // Case study entries (group: 'work') are added and removed by the browser
+  // editor's Case studies panel - keep each on one line in this shape.
   const PAGES = [
     { href: 'aboutme.html', label: 'About', key: 'A' },
     { href: 'index.html', label: 'Home', key: 'H' },
@@ -64,7 +66,7 @@
         ${groupHtml(PAGES.filter((p) => p.group === 'fun'))}
         <dl class="site-nav-keys">
           <div><dt><kbd>&larr;</kbd><kbd>&rarr;</kbd></dt><dd>Previous / next page</dd></div>
-          <div><dt><kbd>1</kbd>&ndash;<kbd>5</kbd></dt><dd>Jump to a case study</dd></div>
+          <div><dt><kbd>1</kbd>&ndash;<kbd>${Math.min(9, PAGES.filter((p) => p.group === 'work').length)}</kbd></dt><dd>Jump to a case study</dd></div>
           ${tabs ? '<div><dt><kbd>T</kbd></dt><dd>Show the thinking</dd></div>' : ''}
           <div><dt><kbd>/</kbd></dt><dd>Open this menu</dd></div>
         </dl>

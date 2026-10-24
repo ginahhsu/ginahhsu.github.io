@@ -7,6 +7,8 @@
 //               images open a panel to replace them or edit alt text, and
 //               text blocks get a right-edge handle to set their max-width
 //   Spacing     the :root tokens of each stylesheet on the page, live preview
+//   Case studies  add a new one (page + card + nav entry), archive one into
+//               the Showcase, or restore an archived one
 //   Save (⌘S)   writes text + tokens into the source files, then reloads
 //   Publish     commits the saved files and pushes the current branch
 (() => {
@@ -108,6 +110,22 @@
       .ed-panel { top: 64px; bottom: 12px; }
     }
 
+    .ed-grip.ed-archive { right: 44px; }
+    .ed-modal > div.ed-wide { width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 48px); overflow-y: auto; }
+    .ed-cases section + section { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(253,251,248,.12); }
+    .ed-cases h3 { margin: 0 0 8px; font-size: 13px; }
+    .ed-cases h3 span { font-weight: 400; color: rgba(253,251,248,.55); }
+    .ed-cases ul { list-style: none; margin: 0; padding: 0; font: inherit; }
+    .ed-cases li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 0; }
+    .ed-cases li a { color: inherit; }
+    .ed-cases li button { padding: 6px 12px; background: rgba(253,251,248,.12); }
+    .ed-cases .ed-empty { color: rgba(253,251,248,.5); }
+    .ed-form label { display: block; margin-bottom: 10px; font-size: 12px; }
+    .ed-form label span { font-weight: 400; color: rgba(253,251,248,.55); }
+    .ed-form input, .ed-form select { width: 100%; margin: 4px 0 0; padding: 8px 10px; border: 1px solid rgba(253,251,248,.2); border-radius: 8px; background: transparent; color: inherit; font: 400 13px Roboto, system-ui, sans-serif; }
+    .ed-form select option { color: #000; }
+    .ed-form .ed-hint { font-size: 12px; }
+    .ed-modal code { font: 12px ui-monospace, Menlo, monospace; color: #ffd1c6; }
     .ed-toast { position: fixed; left: 50%; top: 16px; transform: translateX(-50%); z-index: 2200; max-width: min(520px, calc(100vw - 32px)); padding: 10px 16px; border-radius: 10px; background: #1d120e; box-shadow: 0 10px 30px rgba(0,0,0,.3); white-space: pre-wrap; }
     .ed-toast.is-error { background: #9b2430; }
   `;
@@ -128,6 +146,7 @@
     <button type="button" data-act="edit" aria-pressed="false" title="Edit text (E)">&#9998; Edit</button>
     <button type="button" data-act="spacing" data-mode-only aria-pressed="false">Spacing &amp; color</button>
     <button type="button" data-act="save" data-mode-only class="ed-primary" disabled>Save</button>
+    <button type="button" data-act="cases">Case studies</button>
     <button type="button" data-act="publish">Publish&hellip;</button>`;
   document.body.appendChild(dock);
   const btn = (act) => dock.querySelector(`[data-act="${act}"]`);
@@ -255,6 +274,22 @@
       grip.innerHTML = '<svg viewBox="0 0 10 16" aria-hidden="true"><g fill="currentColor"><circle cx="2" cy="2" r="1.5"/><circle cx="8" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/><circle cx="8" cy="14" r="1.5"/></g></svg>';
       block.appendChild(grip);
       grips.push(grip);
+      if (block.matches('a.card[data-category="projects"]')) {
+        const archive = document.createElement('span');
+        archive.className = 'ed-grip ed-archive';
+        archive.setAttribute('role', 'button');
+        archive.setAttribute('tabindex', '0');
+        archive.title = 'Archive into the Showcase';
+        archive.setAttribute('aria-label', 'Archive this case study into the Showcase');
+        archive.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3h12v3H2zM3 6v7h10V6M6.5 9h3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+        const slug = (block.getAttribute('href') || '').replace(/^\.\//, '').replace(/\.html$/, '');
+        const title = block.querySelector('.card-title')?.textContent.trim() || slug;
+        const go = () => confirmArchive(slug, title);
+        archive.addEventListener('click', go);
+        archive.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+        block.appendChild(archive);
+        grips.push(archive);
+      }
     }));
   }
 
@@ -562,6 +597,117 @@
   };
 
   // ---- Save / publish ----
+  // ---- Case studies: add / archive / restore ----
+  // These rewrite index.html, site-nav.js and showcase.html directly, so
+  // they refuse to run over unsaved edits and reload the page afterwards.
+  const needsClean = () => {
+    if (!dirtyCount()) return false;
+    toast('Save (or undo) your current changes first.', true);
+    return true;
+  };
+  const slugify = (v) => v.toLowerCase().replace(/[^a-z0-9]+/g, '');
+  const reloadInEditMode = (url) => {
+    try { sessionStorage.setItem(RESUME_KEY, JSON.stringify({ editing: true, spacing: false, y: 0 })); } catch (e) { /* ignore */ }
+    location.href = url || location.href;
+  };
+
+  function confirmArchive(slug, title) {
+    if (needsClean()) return;
+    const box = modal(`
+      <h2>Archive &ldquo;${escapeHtml(title)}&rdquo;?</h2>
+      <p>The card leaves the homepage and the nav, and a tile linking to it is added to the Showcase. The page itself stays online at <code>${escapeHtml(slug)}.html</code>.</p>
+      <p>You can restore it any time from <strong>Case studies</strong>. If an intro sentence points at it, you may want to reword that sentence.</p>
+      <div class="ed-actions"><button type="button" data-close>Cancel</button><button type="button" class="ed-primary">Archive</button></div>`);
+    box.querySelector('.ed-primary').addEventListener('click', async () => {
+      try {
+        await api('case/archive', { slug });
+        reloadInEditMode();
+      } catch (error) {
+        box.remove();
+        toast(error.message, true);
+      }
+    });
+  }
+
+  async function openCases() {
+    if (needsClean()) return;
+    let data;
+    try { data = await api('cases'); } catch (error) { toast(error.message, true); return; }
+    const styleOptions = Object.entries(data.styles).map(([k, v]) => `<option value="${k}"${k === 'sky' ? ' selected' : ''}>${escapeHtml(v)}</option>`).join('');
+    const box = modal(`
+      <h2>Case studies</h2>
+      <div class="ed-cases">
+        <section>
+          <h3>On the homepage</h3>
+          <ul>${data.active.map((c) => `<li><a href="${escapeHtml(c.slug)}.html">${escapeHtml(c.label || c.title)}</a><button type="button" data-archive="${escapeHtml(c.slug)}" data-title="${escapeHtml(c.title)}">Archive</button></li>`).join('') || '<li class="ed-empty">None yet</li>'}</ul>
+        </section>
+        <section>
+          <h3>Archived <span>(shown in the Showcase)</span></h3>
+          <ul>${data.archived.map((c) => `<li><a href="${escapeHtml(c.slug)}.html">${escapeHtml(c.title)}</a><button type="button" data-restore="${escapeHtml(c.slug)}">Restore</button></li>`).join('') || '<li class="ed-empty">Nothing archived</li>'}</ul>
+        </section>
+        <section>
+          <h3>New case study</h3>
+          <form class="ed-form">
+            <label>Title <span>the headline on the card and the page</span><input name="title" required placeholder="Designing a social feed for new players"></label>
+            <label>Short name <span>for the nav and the card button</span><input name="short" required placeholder="Social Feed"></label>
+            <label>Card label <span>areas, separated by &bull;</span><input name="label" placeholder="Growth &bull; Social &bull; Experimentation"></label>
+            <label>Hover outcome <span>journey &middot; result, shown when the card is hovered</span><input name="outcome" placeholder="Signup to first game &middot; +12% day-7 retention"></label>
+            <label>Card image<input name="image" type="file" required accept="image/png,image/jpeg,image/webp,image/gif,image/avif"></label>
+            <label>Image alt text <span>what a screen reader says</span><input name="alt" required></label>
+            <label>Image layout<select name="style">${styleOptions}</select></label>
+            <p class="ed-hint">Creates <code><span data-slug>slug</span>.html</code> from your case study template, adds its card to the top of the homepage and its entry to the nav, then opens it here in edit mode.</p>
+            <div class="ed-actions"><button type="button" data-close>Close</button><button type="submit" class="ed-primary">Create case study</button></div>
+          </form>
+        </section>
+      </div>`);
+    box.querySelector('[role="dialog"]').classList.add('ed-wide');
+    box.querySelectorAll('[data-archive]').forEach((b) => b.addEventListener('click', () => {
+      box.remove();
+      confirmArchive(b.dataset.archive, b.dataset.title);
+    }));
+    box.querySelectorAll('[data-restore]').forEach((b) => b.addEventListener('click', async () => {
+      b.disabled = true;
+      b.textContent = 'Restoring…';
+      try {
+        await api('case/restore', { slug: b.dataset.restore });
+        reloadInEditMode('index.html');
+      } catch (error) {
+        toast(error.message, true);
+        b.disabled = false;
+        b.textContent = 'Restore';
+      }
+    }));
+    const form = box.querySelector('form');
+    const f = form.elements; // not form.title / form.style - those are the form's own properties
+    const slugEl = box.querySelector('[data-slug]');
+    f.short.addEventListener('input', () => { slugEl.textContent = slugify(f.short.value) || 'slug'; });
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const slug = slugify(f.short.value);
+      const file = f.image.files[0];
+      if (!slug || !file) return;
+      const submit = form.querySelector('[type="submit"]');
+      submit.disabled = true;
+      submit.textContent = 'Creating…';
+      try {
+        const res = await fetch(`/__edit/upload?dir=${encodeURIComponent(`assets/${slug}`)}&name=${encodeURIComponent(file.name)}`, {
+          method: 'POST', headers: { 'X-Edit-Token': CONFIG.token }, body: file,
+        });
+        const up = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(up.error || 'Image upload failed');
+        const result = await api('case/new', {
+          title: f.title.value, short: f.short.value, slug, label: f.label.value,
+          outcome: f.outcome.value, style: f.style.value, image: up.path, alt: f.alt.value,
+        });
+        reloadInEditMode(result.page);
+      } catch (error) {
+        toast(error.message, true);
+        submit.disabled = false;
+        submit.textContent = 'Create case study';
+      }
+    });
+  }
+
   const range = (attr) => attr.split(':').map(Number);
 
   async function save() {
@@ -664,6 +810,7 @@
   });
   btn('save').addEventListener('click', save);
   btn('publish').addEventListener('click', publish);
+  btn('cases').addEventListener('click', openCases);
 
   window.addEventListener('beforeunload', (event) => {
     if (dirtyCount()) event.preventDefault();
