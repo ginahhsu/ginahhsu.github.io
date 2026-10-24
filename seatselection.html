@@ -5,61 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Modernizing the Seat Selection Experience — Gina Hsu</title>
 <link rel="stylesheet" href="case-study.css">
-<style>
-  .cs-gate {
-    max-width: 360px;
-    margin: 18vh auto 0;
-    padding: 0 24px;
-    text-align: center;
-  }
-  .cs-gate h1 {
-    font-size: 22px;
-    font-weight: 800;
-    margin: 0 0 10px;
-  }
-  .cs-gate p.cs-gate-copy {
-    font-size: 15px;
-    line-height: 1.5;
-    color: var(--cs-muted);
-    margin: 0 0 28px;
-  }
-  .cs-gate-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .cs-gate-form input {
-    font-family: inherit;
-    font-size: 16px;
-    padding: 14px 16px;
-    border-radius: 14px;
-    border: 1px solid var(--cs-line);
-    background: #fff;
-    color: var(--cs-ink);
-  }
-  .cs-gate-form input:focus {
-    outline: 2px solid var(--cs-pink);
-    outline-offset: 1px;
-  }
-  .cs-gate-form button {
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 13px 16px;
-    border-radius: 14px;
-    border: none;
-    background: var(--cs-ink);
-    color: var(--cs-bg);
-    cursor: pointer;
-  }
-  .cs-gate-form button:disabled { opacity: 0.6; cursor: default; }
-  .cs-gate-error {
-    min-height: 18px;
-    font-size: 13px;
-    color: #b3392c;
-    margin: 12px 0 0;
-  }
-</style>
 </head>
 <body>
 
@@ -67,87 +12,206 @@
   <a class="cs-close" href="index.html" aria-label="Close case study">&times;</a>
 </header>
 
-<div class="cs-gate" id="cs-gate">
-  <h1>This one's under wraps</h1>
-  <p class="cs-gate-copy">The seat selection project is still in active development, so this case study is password protected. Reach out if you'd like access.</p>
-  <form class="cs-gate-form" id="cs-gate-form">
-    <input type="password" id="cs-gate-password" placeholder="Password" autocomplete="off" autofocus>
-    <button type="submit">Unlock</button>
-  </form>
-  <p class="cs-gate-error" id="cs-gate-error"></p>
-</div>
+<main class="cs-main">
 
-<main class="cs-main" id="cs-main-content" hidden></main>
+  <section class="cs-hero">
+    <h1>Modernizing the Seat Selection Experience</h1>
+    <p class="cs-subtitle">Unifying three disconnected seat selection flows into one modern experience across booking, self-serve, and check-in. Currently moving from design into development.</p>
 
-<script>
-  // Content is AES-GCM encrypted at rest — nothing readable ships in this file's
-  // source until the correct password is entered and decryption succeeds client-side.
-  const ENCRYPTED = {
-    salt: "tOWlxWuvlNj7yJZfU32n1A==",
-    iv: "ug9jlphk1hlDdq7Y",
-    iterations: 250000,
-    ciphertext: "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"
-  };
+    <div class="cs-meta">
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Role</span>
+        <span class="cs-meta-value">Lead Product Designer, eCommerce</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Timeline</span>
+        <span class="cs-meta-value">Jan 2026 &ndash; Present</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Platforms</span>
+        <span class="cs-meta-value">Web + Mobile</span>
+      </div>
+      <div class="cs-meta-row">
+        <div class="cs-meta-item">
+          <span class="cs-meta-label">Team</span>
+          <span class="cs-meta-value">Product Designer (me), 1 Junior Designer, 1 UX Writer, 1 Product Owner, 1 Product Manager, Development team</span>
+        </div>
+        <div class="cs-meta-item">
+          <span class="cs-meta-label">Areas</span>
+          <span class="cs-meta-value">Seat value &bull; Price transparency &bull; Accessibility &bull; Shared components &bull; AI-assisted prototyping</span>
+        </div>
+      </div>
+      <div class="cs-stats">
+        <div class="cs-stat">
+          <span class="cs-stat-value">3&rarr;1</span>
+          <span class="cs-stat-label">flows unified into one experience</span>
+        </div>
+        <div class="cs-stat">
+          <span class="cs-stat-value">$50K/yr</span>
+          <span class="cs-stat-label">est. from early A/B content&nbsp;tests</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  function b64ToBytes(b64) {
-    return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-  }
+  <div class="cs-hero-images">
+    <div class="cs-hero-desktop-wrap">
+      <img src="assets/seatselection/public-seat-detail.png" alt="Desktop seat map with a seat detail panel showing legroom, boarding, and price for the selected seat">
+    </div>
+    <div class="cs-hero-phones-wrap">
+      <img src="assets/seatselection/Guest - seat selected -toast.png" alt="Mobile seat map with a confirmation toast after selecting a seat">
+      <img src="assets/seatselection/guest details - opened.png" alt="Mobile seat map with the guest list expanded to switch who is selecting">
+    </div>
+  </div>
 
-  async function tryDecrypt(password) {
-    const enc = new TextEncoder();
-    const salt = b64ToBytes(ENCRYPTED.salt);
-    const iv = b64ToBytes(ENCRYPTED.iv);
-    const ciphertext = b64ToBytes(ENCRYPTED.ciphertext);
-    const baseKey = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
-    const key = await crypto.subtle.deriveKey(
-      { name: 'PBKDF2', salt, iterations: ENCRYPTED.iterations, hash: 'SHA-256' },
-      baseKey,
-      { name: 'AES-GCM', length: 256 },
-      false,
-      ['decrypt']
-    );
-    const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
-    return new TextDecoder().decode(plainBuf);
-  }
+  <section class="cs-section">
+    <h2>TLDR</h2>
+    <div class="cs-tldr">
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Problem</span>
+        <p>Seat selection existed as three separate experiences across booking, self-serve, and check-in. Guests couldn&rsquo;t tell what a seat was worth or what it included, and layers of airline rules made the page hard to use.</p>
+      </div>
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Approach</span>
+        <p>Reused prior research and AI-assisted prototypes to align stakeholders on scope in weeks, not months, then led one unified redesign across all three products, rebuilding the shared components underneath.</p>
+      </div>
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Outcome</span>
+        <p>Now in development. The page is seen by millions of guests a year, and early A/B tests on isolated content changes are already generating an estimated $50K a year.</p>
+      </div>
+    </div>
+  </section>
 
-  const SESSION_KEY = 'cs-seatselection-unlocked';
+  <section class="cs-section">
+    <h2>Background</h2>
+    <h3 class="cs-h1-style">A page working overtime</h3>
+    <p>Over the last few years, the airline added a lot of new products, and the seats page had to do more and more: market seat types, explain rules, and enforce restrictions. Downstream, guests were unhappy when they ended up in undesirable seats without being told ahead of time. Seat selection had also split into three disconnected experiences across booking, self-serve, and check-in, each solving the same interaction differently.</p>
+    <p>I was brought on to lead the full redesign, unifying the experience end to end and working directly with product, engineering, data, optimization, and research through delivery.</p>
+    <div class="cs-callout">Guests didn&rsquo;t understand what was and wasn&rsquo;t included when they bought a seat.</div>
+  </section>
 
-  function reveal(html) {
-    document.getElementById('cs-gate').hidden = true;
-    const main = document.getElementById('cs-main-content');
-    main.innerHTML = html;
-    main.hidden = false;
-    if (window.buildCaseStudyTOC) window.buildCaseStudyTOC();
-  }
+  <section class="cs-section">
+    <h2>The challenge</h2>
+    <h3 class="cs-h1-style">One decision, three interfaces</h3>
+    <p>The interaction guests cared about most, picking their seat, looked and behaved differently depending on which product they landed in, and asked too much of them once they got there.</p>
 
-  (function init() {
-    const cached = sessionStorage.getItem(SESSION_KEY);
-    if (cached) {
-      reveal(cached);
-      return;
-    }
-    const form = document.getElementById('cs-gate-form');
-    const input = document.getElementById('cs-gate-password');
-    const error = document.getElementById('cs-gate-error');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      error.textContent = '';
-      const submitBtn = form.querySelector('button');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Checking…';
-      try {
-        const html = await tryDecrypt(input.value);
-        sessionStorage.setItem(SESSION_KEY, html);
-        reveal(html);
-      } catch (err) {
-        error.textContent = 'Incorrect password — try again.';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Unlock';
-        input.select();
-      }
-    });
-  })();
-</script>
+    <div class="cs-block">
+      <p class="cs-block-label">Challenge #1</p>
+      <h3>Too much to digest, especially on mobile</h3>
+      <p>The interface surfaced a lot of content at once for what should be a quick decision. The cognitive load only got worse on mobile, where most guests actually complete the flow.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Challenge #2</p>
+      <h3>An experience that couldn&rsquo;t keep up</h3>
+      <p>Choosing a seat competed with everything else on the page: distracting upsells, and pop-up after pop-up explaining a different rule or fee. The experience had fallen behind what guests expect from a modern digital product.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Goal</p>
+      <h3>One experience, wherever guests land</h3>
+      <p>Success meant a guest could move between booking, self-serve, and check-in and recognize the same interface doing the same job, with less to think about, not more.</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <h2>The Discovery</h2>
+    <h3 class="cs-h1-style">Starting from what we already knew</h3>
+    <p>Rather than starting from a blank page, I brought in research and workshop findings from earlier initiatives to prioritize which features mattered most. I used AI-assisted prototyping early to get stakeholders aligned on objectives, scope, and requirements before high-fidelity design began.</p>
+
+    <div class="cs-block">
+      <p class="cs-block-label">Research insight #1</p>
+      <h3>Grounding priorities in insights we already had</h3>
+      <p>Because we reused existing research, feature prioritization didn&rsquo;t restart as a debate from zero. Stakeholders aligned on scope quickly, and that set the pace for everything after.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Research insight #2</p>
+      <h3>Prioritizing by business objective, not wishlist</h3>
+      <p>I used the AI-assisted prototypes to sort every possible feature into core and transformational, and required each one to link back to a specific business objective before it earned a place in scope. That filter turned a long backlog into a prioritized one, instead of relitigating each feature one at a time.</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <h2>The Process</h2>
+    <h3 class="cs-h1-style">Designing across booking, self-serve, and check-in</h3>
+    <p>I designed every feature alongside product and technology partners, checking each decision against technical feasibility as well as business and user goals. I directed a Junior Designer on the shared components (header, cart, wayfinding, sign-in) while I owned the overall product decisions.</p>
+    <p>I worked closely with our UX Writer to rewrite the rule and fee copy that used to live in pop-ups, so it could be woven directly into a new progressive disclosure pattern. Throughout, I partnered with user research on insights and kept regular check-ins with revenue and marketing stakeholders.</p>
+  </section>
+
+  <figure class="cs-figure">
+    <div class="cs-panel-row">
+      <img src="assets/seatselection/public-sit-together.png" alt="Seat map with a family seating notice and a 'Sit with your group' option in the side panel">
+      <img src="assets/seatselection/public-price-summary.png" alt="Price summary panel breaking down fare, taxes and fees, and seat charges">
+    </div>
+    <figcaption>Left: rules surfaced in context, like family seating, instead of in pop-ups. Right: a price summary that breaks down every charge.</figcaption>
+  </figure>
+
+  <section class="cs-section">
+    <h2>The Vision</h2>
+    <h3 class="cs-h1-style">A modern, unified interface</h3>
+    <p>The redesign is a full overhaul: a modern dashboard-style layout, integrated discount codes, and reworked shared components (global header, shopping cart, wayfinding, and sign-in), so seat selection looks and behaves the same no matter where a guest starts.</p>
+    <p>The pop-ups that used to explain every rule are gone. Seat details are now surfaced progressively within the page, so guests get what they need to decide, on mobile or desktop, without the overload of the old flow.</p>
+  </section>
+
+  <figure class="cs-figure">
+    <img src="assets/seatselection/hero-phones.png" alt="Two phone screens: a seat detail bottom sheet with price and perks, and the passenger list for choosing who is selecting">
+    <figcaption>On mobile, the seat map stays in view while seat details and guest switching live in a bottom sheet instead of pop-ups.</figcaption>
+  </figure>
+
+  <section class="cs-section">
+    <h2>Key Decisions</h2>
+    <p>Two calls shaped how this redesign got scoped, not just how it looks.</p>
+
+    <div class="cs-decision">
+      <h3>Start research from zero vs. reuse what already existed</h3>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Considered</span>
+        <p>Running fresh research to make sure priorities reflected the current state of all three products, rather than leaning on findings from earlier initiatives.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Decision</span>
+        <p>Brought in prior research and workshop findings to prioritize which features mattered most, and used AI-assisted prototypes to pressure-test them with stakeholders.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Tradeoff</span>
+        <p>Less certainty that older findings still held across all three products, in exchange for aligning stakeholders on scope fast enough to keep pace with the redesign timeline.</p>
+      </div>
+    </div>
+
+    <div class="cs-decision">
+      <h3>Fix the seat picker in isolation vs. rebuild the shared components underneath it</h3>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Considered</span>
+        <p>Redesigning the seat picker within each product and leaving the surrounding header, cart, wayfinding, and sign-in untouched to move faster.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Decision</span>
+        <p>Reworked those shared components alongside seat selection, so the whole flow behaves consistently across booking, self-serve, and check-in.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Tradeoff</span>
+        <p>A larger scope than fixing seat selection alone, in exchange for one consistent system other teams can build on, instead of a well-designed seat picker inside three still-inconsistent products.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <h2>Impact</h2>
+    <p>The redesign is moving from design into development, with the earliest features already handed off and in build. Full outcome data isn&rsquo;t available until launch, but small A/B tests on isolated content changes within the existing flow are already generating an estimated $50K a year: an early signal of the opportunity the full redesign is targeting.</p>
+    <div class="cs-callout">The redesign hasn&rsquo;t shipped yet, but the small tests that came out of this research are already paying for themselves.</div>
+  </section>
+
+  <section class="cs-section">
+    <h2>Takeaways</h2>
+
+    <h4 style="margin-top: 0;">Moving fast means getting everyone on the same page first</h4>
+    <p>The clearest lesson so far is that speed and alignment aren&rsquo;t in tension; they depend on each other. Using AI prototypes to get stakeholder buy-in early meant the team could move quickly afterward without re-litigating scope midway through.</p>
+
+    <h4>Designing across products means designing for handoff</h4>
+    <p>Leading a redesign across three products meant the system had to make sense to teams I wasn&rsquo;t in the room with day to day. Rebuilding the shared components was as much about giving other teams a shared language as it was about the guest experience itself.</p>
+  </section>
+
+  <footer class="cs-footer">Gina Hsu 2026</footer>
+
+</main>
 
 <script src="toc.js"></script>
 <script src="lightbox.js"></script>

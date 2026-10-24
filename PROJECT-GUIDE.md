@@ -300,7 +300,8 @@ script.js                  Card hover tilt, highlights carousel, tab filter + re
 toc.js                      Shared scroll-spy table of contents, included on every case study page
 
 spacecentre.html           Case study — H.R. MacMillan Space Centre (real content + real assets)
-seatselection.html         Case study — seat selection redesign (password protected, WIP)
+seatselection.html         Case study — seat selection redesign (public, NDA-safe version; WIP project)
+designingwithai.html       Case study — building this portfolio with Claude Code (token panel, glass, motion)
 turntool.html               Case study — Turn Tool multi-flight dashboard
 ultrabasic.html             Case study — UltraBasic & Extended Comfort (complete reference example)
 showcase.html               Standalone infinite pannable image grid, linked from the "Showcase" mini-card
@@ -317,7 +318,8 @@ assets/<project>/           Per-case-study images, e.g. assets/spacecentre/, ass
 |---|---|---|
 | UltraBasic | Complete, real | Real (`assets/ultrabasic/`) |
 | Space Centre | Complete, real | Real (`assets/spacecentre/`) — hero, brand colour/typography pair, a "brand in action" collage, and a desktop+mobile page triplet. See §3.9's `has-mobile` modifier for how the triplet is sized. |
-| Seat Selection | Complete, real (kept intentionally generic — project still in development) | Placeholders — see `TODO` comments in `seatselection.html`, target `assets/seatselection/` |
+| Seat Selection | Complete, real, now public (kept generic — no company name in body copy; project still in development) | Real. Desktop shots use `public-*.png` crops with the branded header removed |
+| Designing with AI | Drafted Oct 2026 from repo history; lines marked `CONFIRM` need Gina's sign-off | Real screenshots of this site (`assets/ai/`), incl. an early-build capture from commit `7582091` |
 | Turn Tool | Complete, ported from the live ginahsu.co case study | Hero image real (`assets/turntool/hero-main.png`); remaining figures placeholder — see `TODO` comments |
 | Showcase | — (no body copy, just a title pill + drag hint) | Placeholder colored tiles in `showcase.html`'s `TILES` array — see the `TODO` at the top of its script for how to swap in real Roots Collective / Turn Tool graphics |
 

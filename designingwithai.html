@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Designing in Code with an AI Agent — Gina Hsu</title>
+<link rel="stylesheet" href="case-study.css">
+</head>
+<body>
+
+<header class="cs-topbar">
+  <a class="cs-close" href="index.html" aria-label="Close case study">&times;</a>
+</header>
+
+<main class="cs-main">
+
+  <section class="cs-hero">
+    <h1>Designing in Code with an AI Agent</h1>
+    <p class="cs-subtitle">I rebuilt this portfolio by hand in HTML, CSS, and JavaScript, pairing with Claude Code as my engineer, and turned the tools I made along the way into something reusable.</p>
+
+    <div class="cs-meta">
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Role</span>
+        <span class="cs-meta-value">Designer &amp; builder</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Timeline</span>
+        <span class="cs-meta-value">Aug 2026 &ndash; ongoing</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Platforms</span>
+        <span class="cs-meta-value">Web, desktop + mobile</span>
+      </div>
+      <div class="cs-meta-row">
+        <div class="cs-meta-item">
+          <span class="cs-meta-label">Tools</span>
+          <span class="cs-meta-value">Claude Code &bull; Figma &bull; Obsidian &bull; GitHub Pages</span>
+        </div>
+        <div class="cs-meta-item">
+          <span class="cs-meta-label">Areas</span>
+          <span class="cs-meta-value">Design tokens &bull; Visual material &bull; Motion &bull; Accessibility &bull; Workflow</span>
+        </div>
+      </div>
+      <div class="cs-stats">
+        <div class="cs-stat">
+          <span class="cs-stat-value">13 days</span>
+          <span class="cs-stat-label">from first commit to four case&nbsp;studies</span>
+        </div>
+        <div class="cs-stat">
+          <span class="cs-stat-value">0</span>
+          <span class="cs-stat-label">frameworks or build&nbsp;steps</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <figure class="cs-figure">
+    <img src="assets/ai/token-panel.png" alt="The portfolio homepage with the design-token panel open, showing spacing and shape scale sliders">
+    <figcaption>The live token panel I built to tune the site in the browser, open on the homepage.</figcaption>
+  </figure>
+
+  <section class="cs-section">
+    <h2>TLDR</h2>
+    <div class="cs-tldr">
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Problem</span>
+        <!-- CONFIRM: motivation is Gina's to state - adjust wording if this isn't why. -->
+        <p>I wanted a portfolio where every detail, from the glass material to the motion, was mine to decide rather than a template&rsquo;s, and a real project to sharpen the AI-assisted workflow I now use at work.</p>
+      </div>
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Approach</span>
+        <p>Paired with Claude Code as my engineer. I set direction, reviewed every change in the browser, and kept a living design-system doc so the agent and I worked from the same rules.</p>
+      </div>
+      <div class="cs-tldr-row">
+        <span class="cs-tldr-label">Outcome</span>
+        <p>A hand-built static site with four case studies in 13 days, a two-tier token system with a live tuning panel, and a reusable Claude Code skill that brings that panel to any web project.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <h2>Background</h2>
+    <h3 class="cs-h1-style">A designer directing an engineer</h3>
+    <p>The site is plain HTML, CSS, and JavaScript on GitHub Pages, with no framework and no build step. I didn&rsquo;t want the agent to generate a site for me; I wanted to direct one the way I&rsquo;d work with a front-end engineer: describe the intent, look at what came back, and decide.</p>
+    <p>The loop stayed small on purpose. I described one change, the agent implemented it, and I checked it in the browser at desktop and mobile widths before keeping it. Every change landed as its own commit with the reasoning written out, so the git history reads like a design log of what I tried and why.</p>
+    <div class="cs-callout">The agent made building fast. Deciding what &ldquo;right&rdquo; looked like was still my job.</div>
+  </section>
+
+  <section class="cs-section">
+    <h2>The Material</h2>
+    <h3 class="cs-h1-style">Pushing a glass effect until it felt right</h3>
+    <p>The cards are meant to read as liquid glass, bending the grid behind them the way a real lens would. Getting there took more rounds than anything else on the site, because each round was a judgment call, not a code problem.</p>
+
+    <div class="cs-block">
+      <p class="cs-block-label">Iteration 1</p>
+      <h3>From frosted to refractive</h3>
+      <p>A plain blur looked flat. I pushed toward Apple&rsquo;s Liquid Glass with layered edge highlights and a light source in the top-left, then added real refraction: an SVG displacement filter that warps the pixels behind each card. Each colour channel bends by a slightly different amount, which gives the subtle colour fringing real glass has.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Iteration 2</p>
+      <h3>Too much, then just enough</h3>
+      <p>The first refraction pass pulled blotchy patches of colour across the whole card. Later, matching a reference panel&rsquo;s slider values literally pushed the distortion past 70, which read far too strong in a browser. I dialed it back twice before settling on a much quieter setting.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Guardrail</p>
+      <h3>Never broken, just less fancy</h3>
+      <p>Browsers that can&rsquo;t render SVG filters behind an element quietly keep a plain blur instead. Nobody gets a broken card; some people just get less bend.</p>
+    </div>
+  </section>
+
+  <figure class="cs-figure">
+    <div class="cs-panel-row">
+      <img src="assets/ai/early-version.png" alt="An early version of the portfolio homepage from the second day of the build">
+      <img src="assets/ai/current-version.png" alt="The current portfolio homepage with refined glass cards and reordered projects">
+    </div>
+    <figcaption>Left: day two of the build. Right: today.</figcaption>
+  </figure>
+
+  <section class="cs-section">
+    <h2>The System</h2>
+    <h3 class="cs-h1-style">Making the design tunable, not just coded</h3>
+    <p>Once values were scattered through CSS, adjusting the look meant hunting for numbers. So I restructured everything into a two-tier token system, the same shape Material Design uses: reference tokens define the scales, and role tokens point at one step of a scale.</p>
+
+    <div class="cs-block">
+      <p class="cs-block-label">Design Decision</p>
+      <h3>Pick a step, never a pixel</h3>
+      <p>Spacing and radius roles are chosen from a scale (xs to xxl), not typed in as raw numbers, and colours are named by what they mean (surface, interactive), not by hue. Changing a scale step updates everything that uses it.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Feature</p>
+      <h3>A live tuning panel</h3>
+      <p>I had the agent build a floating panel that exposes every token as a live control: sliders for scales, pickers for roles, and colour pickers labeled by meaning. Changes preview instantly, and &ldquo;Copy CSS&rdquo; exports the finished tokens to make them permanent. The panel never ships. It&rsquo;s excluded from the repo and opens only on my machine.</p>
+    </div>
+    <div class="cs-block">
+      <p class="cs-block-label">Feature</p>
+      <h3>Packaged for reuse</h3>
+      <p>Once the panel proved useful, I turned the whole approach into a Claude Code skill. It refactors any web project&rsquo;s hard-coded values into the same reference and role token structure, then generates the panel for it.</p>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <h2>The Motion</h2>
+    <h3 class="cs-h1-style">Motion that explains what changed</h3>
+    <p>Every transition on the site answers &ldquo;where did that go?&rdquo; rather than adding flourish. Filtering the homepage doesn&rsquo;t hide cards. It dims the ones that don&rsquo;t match, moves matches to the top, and animates each card from its old position to its new one, so you can follow what moved.</p>
+    <p>Dimmed cards are also removed from keyboard tab order, so the filter works the same way for someone navigating without a mouse. Motion uses two easing families, a weighted one for lifts and a soft one for settling in, so the site moves with one consistent feel.</p>
+  </section>
+
+  <section class="cs-section">
+    <h2>Key Decisions</h2>
+    <p>Three calls where a reasonable person could have gone the other way.</p>
+
+    <div class="cs-decision">
+      <h3>A site builder vs. hand-built static code</h3>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Considered</span>
+        <p>A site builder would have been quicker to launch and comes with a content editor.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Decision</span>
+        <p>Plain HTML, CSS, and JavaScript, directed through an AI agent, with full control over material, motion, and markup.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Tradeoff</span>
+        <p>No built-in CMS. I solved that by keeping all site copy in plain notes that the agent syncs to the pages, so editing words never means editing code.</p>
+      </div>
+    </div>
+
+    <div class="cs-decision">
+      <h3>Card-to-page transitions vs. the glass effect</h3>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Considered</span>
+        <p>Project cards originally grew into their case study page with a view transition, which was a nice piece of continuity.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Decision</span>
+        <p>Removed it. In Chromium, the transition isolated each card&rsquo;s rendering and silently stopped the glass from sampling the page behind it.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Tradeoff</span>
+        <p>Gave up a navigation animation to keep the material that defines the whole homepage.</p>
+      </div>
+    </div>
+
+    <div class="cs-decision">
+      <h3>Ship the tuning panel vs. keep it local</h3>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Considered</span>
+        <p>Shipping the panel publicly as a playful &ldquo;tweak my site&rdquo; feature.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Decision</span>
+        <p>Kept it a private tool, excluded from the repo and opened on demand.</p>
+      </div>
+      <div class="cs-decision-row">
+        <span class="cs-decision-tag">Tradeoff</span>
+        <p>Visitors never see it, but the public site stays light, and the panel can be as dense and utilitarian as a working tool should be.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <h2>Working Rules</h2>
+    <h3 class="cs-h1-style">Writing it down so the agent remembers</h3>
+    <p>An agent starts each session without memory of the last one, so I kept a design-system document in the repo as our shared source of truth. It covers tokens, components, patterns, and the gotchas we&rsquo;d already paid for once, like a stacking-order bug that made the background grid vanish.</p>
+    <div class="cs-block">
+      <p class="cs-block-label">Rule</p>
+      <h3>Never invent a number</h3>
+      <p>The most important line in that doc is about content, not code: no fabricated metrics, quotes, or research insights. Anything without real content stays marked as a to-do. This portfolio represents real work, and the agent follows the same rule I do.</p>
+    </div>
+    <p>I use the same approach at work, just earlier in the process. On <a href="seatselection.html">Seat Selection</a>, AI-assisted prototypes helped stakeholders agree on scope in weeks instead of months.</p>
+  </section>
+
+  <section class="cs-section">
+    <h2>Takeaways</h2>
+
+    <!-- CONFIRM: reflective voice - rewrite in your own words if these don't ring true. -->
+    <h4 style="margin-top: 0;">The agent is fast; taste is still the bottleneck</h4>
+    <p>Writing code stopped being the slow part. The slow part was the glass: rounds of looking, deciding it wasn&rsquo;t right, and figuring out why. Working with an agent didn&rsquo;t remove design judgment. It made judgment the whole job.</p>
+
+    <h4>Judge in the real medium</h4>
+    <p>Values that look right in a design tool&rsquo;s panel can read completely differently in a browser. Building in code meant I evaluated the real thing at real sizes, on real screens, instead of approving a picture of it.</p>
+  </section>
+
+  <footer class="cs-footer">Gina Hsu 2026</footer>
+
+</main>
+
+<script src="toc.js"></script>
+<script src="lightbox.js"></script>
+</body>
+</html>

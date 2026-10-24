@@ -527,6 +527,16 @@ a.card.is-disabled:hover {
   margin-top: var(--card-gap-orangesky);
 }
 
+/* Designing with AI: the token panel itself, cropped out of a live
+   screenshot (rounded top corners baked into the PNG's alpha). Centered
+   and narrower than the laptop cards, like the single-phone UltraBasic
+   tile, so the panel reads at roughly its real on-screen size. */
+.card-ai .card-bg-img {
+  width: 62%;
+  margin: var(--card-gap-orangesky) auto 0;
+  filter: drop-shadow(0 12px 28px rgba(48, 30, 24, 0.22));
+}
+
 /* Space Centre: left edge offset from the card's own edge - a plain
    x-position, not a width recalculation, so the right edge keeps bleeding
    off the card's own edge regardless of this value; only the left side
