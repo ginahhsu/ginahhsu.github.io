@@ -487,7 +487,26 @@ a.card:hover {
    One card "selected", the rest of the grid stepping back. The selection
    box itself is a separate fixed element (.card-selection) so it can sit
    outside the card's own overflow: hidden. */
-.masonry.is-linked .card:not(.is-lit):not(.is-disabled) { opacity: 0.5; }
+/* Inactive cards are frosted over rather than faded out: a veil in the
+   glass's own tint sits above the content (::after, z 8 - over the title,
+   image and button) while the glass, its edge and its shadow stay at full
+   strength. Fading the whole card with opacity took the frost with it and
+   let the grid show straight through. */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  border-radius: inherit;
+  pointer-events: none;
+  background: rgba(var(--color-glass-tint), 0.82);
+  opacity: 0;
+  transition: opacity var(--motion-fade) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.masonry.is-linked .card:not(.is-lit):not(.is-disabled)::after { opacity: 0.62; }
+.card.is-disabled::after,
+.mini-row.is-disabled .card::after { opacity: 1; }
 
 .card.is-lit .card-title { color: #b8323d; }
 
@@ -552,8 +571,6 @@ a.card:hover {
 
 .card.is-disabled,
 .mini-row.is-disabled {
-  opacity: 0.32;
-  filter: grayscale(65%);
   pointer-events: none;
 }
 
