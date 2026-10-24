@@ -1,12 +1,12 @@
-// "Show the thinking" - press T (or flip the switch) to overlay the page's
-// own layout reasoning: column bands with their gutters, redlines on text
-// measure, and numbered pins that open a short note about a design decision.
+// "Show the thinking" - press T (or flip the switch) to overlay the
+// reasoning behind the page: numbered pins that open a short note on a
+// product decision (who it serves, what it's for, who it includes), plus a
+// live accessibility check on the text it's pointed at.
 //
 // Everything is authored in the HTML, nothing per page lives here:
 //   data-note="..."    a numbered pin on that element's top-right corner
-//   data-measure       a redline: rendered width + characters per line
-//   data-grid-col      a column band; gutters between side-by-side bands
-//                      are labelled automatically
+//   data-measure       a dashed outline labelled with that text's WCAG
+//                      contrast against what's actually behind it
 //
 // Homepage only: index.html is the one page that loads this script and
 // carries these attributes. The switch sits in the sticky panel, and the
@@ -16,7 +16,6 @@
   if (!notes.length) return;
 
   const measures = [...document.querySelectorAll('[data-measure]')];
-  const cols = [...document.querySelectorAll('[data-grid-col]')];
   const STORAGE_KEY = 'gh-show-thinking';
 
   // ---- Switch ----
@@ -38,9 +37,6 @@
   layer.className = 'thinking-layer';
   layer.hidden = true;
   document.body.appendChild(layer);
-
-  const bands = cols.map(() => layer.appendChild(Object.assign(document.createElement('div'), { className: 'thinking-band' })));
-  const gutters = [];
 
   const redlines = measures.map(() => {
     const el = document.createElement('div');
@@ -89,14 +85,30 @@
     place();
   }
 
-  // Characters per line, counted from the rendered line boxes rather than
-  // estimated from font size - so it stays honest at every breakpoint.
-  const charsPerLine = (el) => {
-    const range = document.createRange();
-    range.selectNodeContents(el);
-    const tops = new Set([...range.getClientRects()].filter((r) => r.width > 1).map((r) => Math.round(r.top)));
-    const length = el.textContent.replace(/\s+/g, ' ').trim().length;
-    return Math.round(length / Math.max(1, tops.size));
+  // WCAG contrast of an element's text against the first solid background
+  // behind it - computed from the live styles, so it stays honest if the
+  // palette changes.
+  const parseRgb = (value) => (value.match(/[\d.]+/g) || []).map(Number);
+  const luminance = ([r, g, b]) => {
+    const channel = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+  };
+  const backgroundOf = (el) => {
+    for (let node = el; node; node = node.parentElement) {
+      const bg = parseRgb(getComputedStyle(node).backgroundColor);
+      if (bg.length >= 3 && (bg[3] === undefined || bg[3] > 0.9)) return bg;
+    }
+    return [255, 255, 255];
+  };
+  const contrastLabel = (el) => {
+    const style = getComputedStyle(el);
+    const a = luminance(parseRgb(style.color));
+    const b = luminance(backgroundOf(el));
+    const ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+    const size = parseFloat(style.fontSize);
+    const large = size >= 24 || (size >= 18.66 && Number(style.fontWeight) >= 700);
+    const level = ratio >= (large ? 4.5 : 7) ? 'AAA' : ratio >= (large ? 3 : 4.5) ? 'AA' : null;
+    return `Contrast ${ratio.toFixed(1)}:1 · ${level ? `passes WCAG ${level}` : 'below WCAG AA'}`;
   };
 
   const visible = (rect) => rect.width > 0 && rect.height > 0;
@@ -105,17 +117,12 @@
     if (layer.hidden) return;
     const vw = document.documentElement.clientWidth;
 
-    const colRects = cols.map((col) => col.getBoundingClientRect());
-    colRects.forEach((r, i) => {
-      Object.assign(bands[i].style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px`, display: visible(r) ? '' : 'none' });
-    });
-
     measures.forEach((el, i) => {
       const r = el.getBoundingClientRect();
       const line = redlines[i];
       line.style.display = visible(r) ? '' : 'none';
       Object.assign(line.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
-      line.firstChild.textContent = `${Math.round(r.width)}px · ${charsPerLine(el)} chars a line`;
+      line.firstChild.textContent = contrastLabel(el);
     });
 
     notes.forEach((el, i) => {
@@ -127,32 +134,6 @@
       // panel) keep their pin on screen rather than half cut off.
       pin.style.top = `${r.top - 14 < 8 && r.bottom > 48 ? 8 : r.top - 14}px`;
     });
-
-    // Gutter labels between bands that sit side by side.
-    gutters.forEach((g) => g.remove());
-    gutters.length = 0;
-    const sorted = colRects.filter(visible).sort((a, b) => a.left - b.left);
-    for (let i = 1; i < sorted.length; i += 1) {
-      const a = sorted[i - 1];
-      const b = sorted[i];
-      const gap = Math.round(b.left - a.right);
-      if (gap <= 0 || b.top > a.bottom || a.top > b.bottom) continue;
-      const g = document.createElement('div');
-      g.className = 'thinking-gutter';
-      g.innerHTML = `<span>${gap}</span>`;
-      // Halfway down the part of the gutter that's on screen.
-      const top = Math.max(a.top, b.top, 0);
-      const bottom = Math.min(a.bottom, b.bottom, window.innerHeight);
-      Object.assign(g.style, { left: `${a.right}px`, width: `${gap}px`, top: `${(top + bottom) / 2}px` });
-      layer.appendChild(g);
-      gutters.push(g);
-      // Step down past any pin that lands on the label.
-      const pinRects = pins.map((pin) => pin.getBoundingClientRect()).filter(visible);
-      const hits = (rect) => pinRects.some((p) => p.left < rect.right && p.right > rect.left && p.top < rect.bottom + 16 && p.bottom > rect.top);
-      for (let tries = 0; tries < 6 && hits(g.getBoundingClientRect()); tries += 1) {
-        g.style.top = `${parseFloat(g.style.top) + 40}px`;
-      }
-    }
 
     if (openIndex >= 0) {
       const pinRect = pins[openIndex].getBoundingClientRect();
@@ -188,7 +169,7 @@
     else if (event.key === 'Escape' && openIndex >= 0) openNote(-1);
   });
 
-  // Cards on the homepage reflow (filter tabs, hover tilt) and images load
+  // Cards on the homepage reflow (filter tabs, hover lift) and images load
   // late, so re-measure on anything that can move an annotated element.
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule);

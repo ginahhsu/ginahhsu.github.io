@@ -24,8 +24,9 @@ if (bgGrid) {
 
 // Card hover + linked intro (desktop pointers only).
 //
-// Hovering a card "selects" it like a frame in Figma - a coral box with
-// corner handles and a "name · W × H" label - dims the rest of the grid,
+// Hovering (or tabbing to) a card selects it - a coral box with corner
+// handles and a label naming the journey it covered and what it moved
+// (the card's data-outcome) - dims the rest of the grid,
 // and lights up the intro sentence about it in the sticky panel. Hovering
 // an intro sentence does the same in reverse. Sentences are tied to cards
 // by data-work="ultrabasic" <-> href="./ultrabasic.html", so there's no
@@ -36,7 +37,8 @@ const intro = document.querySelector('.panel-intro');
 const sentences = intro ? [...intro.querySelectorAll('[data-work]')] : [];
 const workOf = (card) => (card.getAttribute('href') || '').replace(/^\.\//, '').replace(/\.html$/, '');
 
-if (masonry && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+if (masonry) {
+  const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const boxes = [];
   const boxFor = (i) => {
     if (!boxes[i]) {
@@ -60,8 +62,8 @@ if (masonry && matchMedia('(hover: hover) and (pointer: fine)').matches) {
       const r = card.getBoundingClientRect();
       const box = boxFor(i);
       Object.assign(box.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
-      const name = card.querySelector('.card-btn')?.textContent.trim() || '';
-      box.lastChild.textContent = `${name} · ${Math.round(r.width)} × ${Math.round(r.height)}`;
+      const label = card.dataset.outcome || card.querySelector('.card-btn')?.textContent.trim() || '';
+      box.lastChild.textContent = label;
       box.classList.add('is-on');
     });
     boxes.slice(lit.length).forEach((box) => box.classList.remove('is-on'));
@@ -80,6 +82,11 @@ if (masonry && matchMedia('(hover: hover) and (pointer: fine)').matches) {
   };
 
   cards.forEach((card) => {
+    // Keyboard focus gets the same selection and linked sentence as hover,
+    // on every device - only the pointer-driven drift is mouse-only.
+    card.addEventListener('focus', () => light([workOf(card)]));
+    card.addEventListener('blur', () => light([]));
+    if (!canHover) return;
     card.addEventListener('mouseenter', () => light([workOf(card)]));
     card.addEventListener('mouseleave', () => {
       card.style.removeProperty('--px');
@@ -101,7 +108,7 @@ if (masonry && matchMedia('(hover: hover) and (pointer: fine)').matches) {
     });
   });
 
-  sentences.forEach((sentence) => {
+  if (canHover) sentences.forEach((sentence) => {
     sentence.addEventListener('mouseenter', () => light(sentence.dataset.work.split(/\s+/)));
     sentence.addEventListener('mouseleave', () => light([]));
   });
@@ -110,43 +117,72 @@ if (masonry && matchMedia('(hover: hover) and (pointer: fine)').matches) {
 // Highlights card: auto-advancing, one full attribute at a time, crossfading in place.
 // A single fixed-height box swaps its text content on each tick - sized to fit every
 // attribute in full, so nothing ever truncates.
+//
+// Moving content has to be stoppable (WCAG 2.2.2): it pauses on hover and on
+// keyboard focus, the dots are real buttons that step through it, and with
+// reduced motion on it doesn't auto-advance at all.
 const highlightsViewport = document.querySelector('.highlights-viewport');
 if (highlightsViewport) {
+  const card = highlightsViewport.closest('.card-highlights');
   const data = [...document.querySelectorAll('.highlights-data li')].map((li) => li.textContent.trim());
   const activeEl = highlightsViewport.querySelector('.is-active');
   const dotsEl = document.querySelector('.highlights-dots');
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  // Silent while it rotates on its own; announced once someone steps
+  // through it with the dots.
+  activeEl.setAttribute('aria-live', 'off');
   let index = 0;
   let timer;
 
   if (dotsEl) {
-    dotsEl.innerHTML = data.map(() => '<span class="highlights-dot"></span>').join('');
+    dotsEl.innerHTML = data.map((_, i) => `<button type="button" class="highlights-dot" aria-label="Highlight ${i + 1} of ${data.length}"></button>`).join('');
   }
   const dots = dotsEl ? [...dotsEl.children] : [];
 
   const setText = () => {
     const current = index % data.length;
     activeEl.textContent = data[current];
-    dots.forEach((dot, i) => dot.classList.toggle('is-active', i === current));
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('is-active', i === current);
+      dot.setAttribute('aria-current', String(i === current));
+    });
   };
 
   setText();
 
-  const advance = () => {
+  const show = (next) => {
+    if (reduceMotion.matches) {
+      index = next;
+      setText();
+      return;
+    }
     activeEl.classList.add('is-swapping');
     setTimeout(() => {
-      index += 1;
+      index = next;
       setText();
       void activeEl.offsetHeight; // force reflow so removing the class re-triggers the transition
       activeEl.classList.remove('is-swapping');
     }, 400);
   };
 
-  const start = () => { timer = setInterval(advance, 3400); };
   const stop = () => clearInterval(timer);
+  const start = () => {
+    stop();
+    if (!reduceMotion.matches) timer = setInterval(() => show(index + 1), 3400);
+  };
+
+  dots.forEach((dot, i) => dot.addEventListener('click', () => {
+    stop();
+    activeEl.setAttribute('aria-live', 'polite');
+    show(i);
+  }));
 
   start();
-  highlightsViewport.addEventListener('mouseenter', stop);
-  highlightsViewport.addEventListener('mouseleave', start);
+  card.addEventListener('mouseenter', stop);
+  card.addEventListener('mouseleave', () => { if (!card.contains(document.activeElement)) start(); });
+  card.addEventListener('focusin', stop);
+  card.addEventListener('focusout', (e) => { if (!card.contains(e.relatedTarget)) start(); });
+  reduceMotion.addEventListener('change', start);
 }
 
 // Tab filtering (All / About / Projects / For fun). Non-matching cards stay

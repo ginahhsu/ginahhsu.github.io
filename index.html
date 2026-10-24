@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gina Hsu — Product Designer</title>
-<link rel="stylesheet" href="styles.css?v=20261024-hover">
-<link rel="stylesheet" href="site-nav.css?v=20261024">
+<link rel="stylesheet" href="styles.css?v=20261024-product">
+<link rel="stylesheet" href="site-nav.css?v=20261024-product">
 </head>
 <body>
 
@@ -23,14 +23,14 @@
 
   <div class="bg-grid" aria-hidden="true"></div>
 
-  <aside class="sticky-panel" data-note="This panel stays put while the work scrolls past, so my name and contact are never more than a glance away. The scalloped edge is one repeating CSS gradient, not an image.">
+  <aside class="sticky-panel" data-note="Two readers, two paths: a recruiter skimming for two minutes and a hiring manager reading for twenty. This panel answers the skim (who I am, what I&#x27;ve shipped, how to reach me) and stays on screen while the deep read happens on the right.">
     <div class="panel-inner">
       <p class="panel-hello">Hey, I&rsquo;m Gina!</p>
-      <h1 class="panel-tagline" data-measure data-note="The one line I&#x27;d want you to remember. Line breaks are balanced so it reads as a statement, not a paragraph that ran out of room.">A Product Designer who makes complex products feel simple, from Figma to&nbsp;code.</h1>
+      <h1 class="panel-tagline" data-measure data-note="Inclusive by default, starting here: the label above checks this headline&#x27;s contrast against WCAG, live. The site also works by keyboard, follows your reduced-motion setting, and puts phone navigation within thumb reach.">A Product Designer who makes complex products feel simple, from Figma to&nbsp;code.</h1>
       <!-- Each data-work names the case study page it's about (ultrabasic ->
            ultrabasic.html). script.js ties hovering a sentence to its card
            and back. Retag a sentence by changing its data-work. -->
-      <p class="panel-intro" data-note="Each project sentence is wired to its card. Hover one and the work it describes lights up on the right, and hovering a card lights its sentence back up here. The intro doubles as a table of contents."><span class="intro-key">I lead e-commerce design at WestJet, from booking to loyalty.</span> <span data-work="ultrabasic">I designed the launch of two new product offerings in six months,</span> <span data-work="seatselection">and I&rsquo;m now unifying three seat selection flows into one.</span> <span data-work="turntool">I&rsquo;ve also designed dashboards that track airplane arrivals and departures</span> <span data-work="spacecentre">and a brand and design system for the H.R.&nbsp;MacMillan Space Centre.</span> <span data-work="designingwithai">Lately I design in code, too: I built this site with Claude&nbsp;Code.</span></p>
+      <p class="panel-intro" data-note="The intro is the table of contents. Each sentence is one case study, and together they read as one arc: launching products, unifying a journey end to end, designing for the people behind the scenes, then building in code. Hover or tab through the cards to see which is which."><span class="intro-key">I lead e-commerce design at WestJet end to end, from booking to loyalty, for millions of guests a year.</span> <span data-work="ultrabasic">I took two new product offerings from strategy to launch in six months,</span> <span data-work="seatselection">and I&rsquo;m unifying three seat selection flows into one journey across booking, self-serve and check-in.</span> <span data-work="turntool">I also design for the people behind the scenes, like the airport teams who track every arrival and departure,</span> <span data-work="spacecentre">and I built a brand and design system for the H.R.&nbsp;MacMillan Space Centre from the ground up.</span> <span data-work="designingwithai">I prototype in code with AI agents; this site is one.</span> <span class="intro-key intro-close">To me, good design works for everyone it touches: the guest booking a seat, the team turning the plane, and the person getting around by keyboard.</span></p>
       <p class="panel-links">
         <a href="https://www.linkedin.com/in/ginahueihsu/" target="_blank" rel="noopener">LinkedIn</a>
         <span>/</span>
@@ -41,7 +41,7 @@
 
   <main class="content">
 
-    <nav class="tabs" aria-label="Filter and pages" data-note="Filter and site menu in one pill: filtering dims cards instead of removing them, and the menu at the end jumps anywhere on the site. On a phone the whole bar drops to the bottom, where your thumb is.">
+    <nav class="tabs" aria-label="Filter and pages" data-note="Filtering dims and reorders instead of hiding, so you never lose your place. Dimmed cards drop out of the tab order, so keyboard users only stop on what matches. On phones this bar moves to the bottom, where thumbs are.">
       <button class="tab active" data-filter="all">All</button>
       <button class="tab" data-filter="about">About</button>
       <button class="tab" data-filter="projects">Projects</button>
@@ -50,9 +50,9 @@
 
     <div class="masonry">
 
-      <div class="col" data-grid-col>
+      <div class="col">
 
-        <a class="card card-teal" href="./ultrabasic.html" data-category="projects" data-note="Hover selects the card like a frame in Figma, size and all, and lights up the sentence about it on the left. The image drifts a little with your cursor; the rest of the grid steps back.">
+        <a class="card card-teal" href="./ultrabasic.html" data-category="projects" data-note="Cards lead with the problem and the outcome, not the screens. Hover or tab to one to see the journey it covered and what it moved, which is what a product review asks first." data-outcome="Strategy to launch · 6 products · $35M loss averted">
           <div class="card-glass"></div>
           <div class="card-top">
             <p class="card-label">Product Strategy &bull; Team Leadership &bull; E-commerce</p>
@@ -62,7 +62,7 @@
           <span class="card-btn">UltraBasic and Extended Comfort <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>
 
-        <div class="card card-highlights" data-category="about" data-note="Sized to fit the longest highlight, so nothing gets cut off mid-rotation. Hover to pause it and finish reading.">
+        <div class="card card-highlights" data-category="about" data-note="Outcomes up front: revenue, scale, scope. It pauses while you hover or focus it, the dots step through it, and if your system asks for reduced motion it stops rotating on its own.">
           <div class="card-glass"></div>
           <p class="card-eyebrow">Highlights</p>
           <div class="highlights-viewport">
@@ -78,7 +78,7 @@
           </ul>
         </div>
 
-        <a class="card card-purple" href="./seatselection.html" data-category="projects">
+        <a class="card card-purple" href="./seatselection.html" data-category="projects" data-outcome="Booking to check-in · 3 flows into 1 · $50K/yr from A/B tests">
           <div class="card-glass"></div>
           <div class="card-top">
             <p class="card-label">UX Strategy &bull; Mobile + Web &bull; E-commerce &bull; Design Systems</p>
@@ -103,9 +103,9 @@
 
       </div>
 
-      <div class="col" data-grid-col>
+      <div class="col">
 
-        <a class="card card-ai" href="./designingwithai.html" data-category="projects">
+        <a class="card card-ai" href="./designingwithai.html" data-category="projects" data-outcome="Idea to live site in 13 days · built with AI agents">
           <div class="card-glass"></div>
           <div class="card-top">
             <p class="card-label">AI-assisted Prototyping &bull; Design Engineering &bull; Motion</p>
@@ -115,7 +115,7 @@
           <span class="card-btn">Building this portfolio <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>
 
-        <a class="card card-orange" href="./spacecentre.html" data-category="projects">
+        <a class="card card-orange" href="./spacecentre.html" data-category="projects" data-outcome="Brand, system and 20 live pages · from scratch">
           <div class="card-glass"></div>
           <div class="card-top">
             <p class="card-label">Design Systems &bull; Brand Strategy &bull; UX Strategy</p>
@@ -125,7 +125,7 @@
           <span class="card-btn">H.R. MacMillan Space Centre <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>
 
-        <a class="card card-sky" href="./turntool.html" data-category="projects">
+        <a class="card card-sky" href="./turntool.html" data-category="projects" data-outcome="Airport operations · bulk updates replace copy-paste">
           <div class="card-glass"></div>
           <div class="card-top">
             <p class="card-label">0&rarr;1 Product Design &bull; IA &bull; Dashboards</p>
@@ -150,8 +150,8 @@
 </div>
 
 <script src="https://makegradient.com/embed.js"></script>
-<script src="script.js?v=20261024-hover"></script>
+<script src="script.js?v=20261024-product"></script>
 <script src="site-nav.js?v=20261024"></script>
-<script src="thinking.js?v=20261024"></script>
+<script src="thinking.js?v=20261024-product"></script>
 </body>
 </html>

@@ -226,6 +226,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .panel-intro span { transition: color 0.2s ease; }
 .panel-intro .intro-key { color: var(--color-surface-bright); }
+.panel-intro .intro-close { display: block; margin-top: 0.7em; }
 .panel-intro.is-spot span { color: rgba(253, 251, 248, 0.34); }
 .panel-intro.is-spot span.is-on { color: var(--color-surface-bright); }
 
@@ -241,7 +242,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   .panel-inner { max-height: 100vh; overflow-y: auto; scrollbar-width: none; }
 }
 
-@media (min-width: 961px) and (max-height: 860px) {
+@media (min-width: 961px) and (max-height: 940px) {
   .panel-inner { padding-top: 44px; padding-bottom: 32px; gap: 18px; }
   .panel-tagline { font-size: 30px; }
   .panel-intro { font-size: 14px; line-height: 1.55; }
@@ -541,6 +542,12 @@ a.card:hover {
 
 @media (prefers-reduced-motion: reduce) {
   .card-bg-img, .card-mini img, .card-photo img { translate: none; }
+  a.card:hover { transform: none; }
+  .highlights-viewport .highlights-line { transition: none; }
+  /* Page-to-page morphs become a plain cut. */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
 }
 
 .card.is-disabled,
@@ -696,15 +703,30 @@ a.card.is-disabled:hover {
   flex: none;
 }
 
+/* A button with a 24px hit area (WCAG 2.5.8) around a 6px visible dot. */
 .highlights-dot {
-  width: 6px;
-  height: 6px;
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin: -9px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.highlights-dot::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
   border-radius: 50%;
   background: rgba(48, 30, 24, 0.18);
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.highlights-dot.is-active {
+.highlights-dot:focus-visible { outline: 2px solid var(--color-on-surface); outline-offset: -4px; border-radius: 50%; }
+
+.highlights-dot.is-active::before {
   background: var(--color-on-surface);
   transform: scale(1.4);
 }

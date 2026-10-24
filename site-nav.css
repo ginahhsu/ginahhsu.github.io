@@ -13,7 +13,6 @@
   /* Redline coral: reads as "annotation" the way Figma's measurement red
      does, but warm enough to belong to the rest of the palette. */
   --thinking: #e8505b;
-  --thinking-band: rgba(232, 80, 91, 0.1);
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 
@@ -254,34 +253,6 @@
   font-family: var(--font-mono);
 }
 
-.thinking-band {
-  position: absolute;
-  background: var(--thinking-band);
-  outline: 1px solid var(--thinking);
-}
-
-/* Gutter: a measurement line with end ticks, value chip centred on it. */
-.thinking-gutter {
-  position: absolute;
-  height: 0;
-  border-top: 1px solid var(--thinking);
-}
-
-.thinking-gutter::before {
-  content: "";
-  position: absolute;
-  inset: -4px 0 auto;
-  height: 7px;
-  border-inline: 1px solid var(--thinking);
-}
-
-.thinking-gutter span {
-  position: absolute;
-  left: 50%;
-  top: 6px;
-  transform: translateX(-50%);
-}
-
 .thinking-redline {
   position: absolute;
   outline: 1px dashed var(--thinking);
@@ -294,8 +265,7 @@
   left: -3px;
 }
 
-.thinking-redline span,
-.thinking-gutter span {
+.thinking-redline span {
   white-space: nowrap;
   padding: 3px 6px;
   border-radius: 4px;

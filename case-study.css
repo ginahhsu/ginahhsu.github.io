@@ -775,3 +775,10 @@ a { color: inherit; }
   .cs-tldr-row { grid-template-columns: 1fr; gap: 4px; }
   .cs-decision-row { grid-template-columns: 1fr; gap: 4px; }
 }
+
+/* Reduced motion: page-to-page morphs become a plain cut. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}

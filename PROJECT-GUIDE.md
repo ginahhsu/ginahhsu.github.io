@@ -173,10 +173,10 @@ Bottom-left pill CTA, white on glass, with a 12×12 arrow icon (inline SVG, alwa
 A special card (not a link) that auto-advances through a list of bio facts. Anatomy:
 - `.card-eyebrow` — "Highlights" label.
 - `.highlights-viewport` → `.highlights-line.is-active` — the single visible line; text is swapped via JS, not multiple DOM nodes.
-- `.highlights-dots` → generated `.highlights-dot` spans, one per item in `.highlights-data li` — **do not hand-author dots in HTML**, `script.js` builds them from the data list length so they always stay in sync.
+- `.highlights-dots` → generated `.highlights-dot` buttons (24px hit area around a 6px dot), one per item in `.highlights-data li` — **do not hand-author dots in HTML**, `script.js` builds them from the data list length so they always stay in sync.
 - `.highlights-data` — the actual content, a hidden `<ul>`. **This list is the single source of truth** for both the rotating text and the dot count.
 
-Behavior: advances every 3.4s, pauses on hover, crossfades with a 6px vertical drift. To add/remove a bio fact, edit only the `<li>` items — everything else (dot count, cycling) follows automatically.
+Behavior: advances every 3.4s and crossfades with a 6px vertical drift. It pauses on hover and on keyboard focus, the dots step to an item (and only then is the change announced to screen readers), and with reduced motion on it never auto-advances — moving content must be stoppable (WCAG 2.2.2). To add/remove a bio fact, edit only the `<li>` items — everything else (dot count, cycling) follows automatically.
 
 ### 3.7 Mini card / mini row (`.mini-row`, `.card-mini`)
 
@@ -267,19 +267,18 @@ A "← Prev · Page ▾ · Next →" pill on every page, borrowed from karyll.co
 
 ### 4.6 Show the thinking (`thinking.js`)
 
-Press `T` (or flip the switch) to overlay layout reasoning: column bands with labelled gutters, redlines on text measure, and numbered avatar pins that open a design note. All of it is authored as HTML attributes — nothing page-specific lives in the script:
+Press `T` (or flip the switch in the panel) to overlay the reasoning behind the homepage: numbered avatar pins that open a note on a product decision, plus a live accessibility check. Framed through a product lens (who it serves, what it's for, who it includes), not layout specs. Authored as HTML attributes, nothing page-specific in the script:
 
-- `data-note="…"` — a pin on that element's top-right corner. Notes are numbered in DOM order. Write them in first person, one or two sentences, about *why*, not *what*.
-- `data-measure` — a dashed redline labelled with the rendered width and characters per line (counted from the actual line boxes, so it's right at every breakpoint).
-- `data-grid-col` — a column band; gaps between side-by-side bands are labelled automatically.
+- `data-note="…"` — a pin on that element's top-right corner, numbered in DOM order. First person, one or two sentences, about *why*. Every claim in a note must be true of the live site (e.g. the reduced-motion and keyboard claims are backed by §3.6 and §4.7).
+- `data-measure` — a dashed outline labelled with that text's WCAG contrast ratio against the first solid background behind it, computed from live styles (AA/AAA thresholds adjust for large text).
 
-Homepage only, by choice: `thinking.js` is loaded on `index.html` alone, and case studies carry none of these attributes — they stay clean reading pages. The switch sits in the sticky panel; its on/off state is stored in `localStorage`.
+Homepage only, by choice: `thinking.js` is loaded on `index.html` alone. The on/off state is stored in `localStorage`.
 
 ### 4.7 Linked intro + card hover (`script.js`)
 
-Borrowed from karyll.com. Each project sentence in `.panel-intro` carries `data-work="<page>"` matching a card's `href` (`data-work="ultrabasic"` ↔ `href="./ultrabasic.html"`), so there's no second list to keep in sync. On desktop pointers only:
+Borrowed from karyll.com, reframed for a product-designer lens. Each project sentence in `.panel-intro` carries `data-work="<page>"` matching a card's `href` (`data-work="ultrabasic"` ↔ `href="./ultrabasic.html"`), so there's no second list to keep in sync. On desktop pointers only:
 
-- **Hover a card:** a coral Figma-style selection box with corner handles and a `name · W × H` label (name from the card's `.card-btn`), the rest of the grid fades to 50%, the title turns coral, the image drifts against the cursor, and that card's sentence lights up in the panel.
+- **Hover or keyboard-focus a card:** a coral selection box with corner handles labelled with the card's `data-outcome` (the journey it covered and what it moved, e.g. "Booking to check-in · 3 flows into 1 · $50K/yr from A/B tests"), the rest of the grid fades to 50%, the title turns coral, and that card's sentence lights up in the panel. Focus works on every device; the image drift is mouse-only and off under reduced motion.
 - **Hover a sentence:** the same selection on its card. A sentence can name several pages, space-separated.
 
 Cards the filter has dimmed (`.is-disabled`) are never selected. The selection box is its own fixed element (`.card-selection`) so it isn't clipped by the card's `overflow: hidden`. This replaced the old 3D hover tilt — a selection box around a tilted card never lines up.
