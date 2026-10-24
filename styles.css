@@ -212,6 +212,41 @@ ul { margin: 0; padding: 0; list-style: none; }
 .panel-links a { color: var(--color-interactive); text-decoration: underline; }
 .panel-links span { margin: 0 8px; opacity: 0.6; }
 
+/* Intro paragraph: project sentences are tied to their cards (script.js).
+   Muted by default with the role sentence at full strength, like a lede;
+   hovering a sentence or its card brings that sentence forward and steps
+   the rest back. */
+.panel-intro {
+  margin: 0;
+  max-width: 320px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(253, 251, 248, 0.62);
+}
+
+.panel-intro span { transition: color 0.2s ease; }
+.panel-intro .intro-key { color: var(--color-surface-bright); }
+.panel-intro.is-spot span { color: rgba(253, 251, 248, 0.34); }
+.panel-intro.is-spot span.is-on { color: var(--color-surface-bright); }
+
+@media (hover: hover) and (pointer: fine) {
+  .panel-intro [data-work] { cursor: default; }
+}
+
+/* Short laptop screens: the panel is one viewport tall, so tighten it, and
+   if it still doesn't fit let the inner column scroll rather than clip.
+   The scroll lives on .panel-inner, not .sticky-panel, so the scalloped
+   ::after edge isn't clipped with it. */
+@media (min-width: 961px) {
+  .panel-inner { max-height: 100vh; overflow-y: auto; scrollbar-width: none; }
+}
+
+@media (min-width: 961px) and (max-height: 860px) {
+  .panel-inner { padding-top: 44px; padding-bottom: 32px; gap: 18px; }
+  .panel-tagline { font-size: 30px; }
+  .panel-intro { font-size: 14px; line-height: 1.55; }
+}
+
 /* ---- Main content ---- */
 .content {
   position: relative;
@@ -445,6 +480,67 @@ a.card:hover {
     inset 0 14px 24px -18px rgba(48, 30, 24, 0.35),
     0 20px 46px rgba(48, 30, 24, 0.22),
     0 4px 12px rgba(48, 30, 24, 0.1);
+}
+
+/* ---- Linked hover (script.js) ----
+   One card "selected", the rest of the grid stepping back. The selection
+   box itself is a separate fixed element (.card-selection) so it can sit
+   outside the card's own overflow: hidden. */
+.masonry.is-linked .card:not(.is-lit):not(.is-disabled) { opacity: 0.5; }
+
+.card.is-lit .card-title { color: #b8323d; }
+
+/* The image drifts against the cursor - the card stays put and its contents
+   shift, which reads as depth without the whole card tilting. Uses the
+   standalone translate property so it never fights a transform. */
+.card-bg-img,
+.card-mini img,
+.card-photo img {
+  translate: calc(var(--px, 0) * -8px) calc(var(--py, 0) * -6px);
+  transition: translate 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-selection {
+  position: fixed;
+  z-index: 20;
+  pointer-events: none;
+  border: 1.5px solid #e8505b;
+  border-radius: calc(var(--radius) + 6px);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.card-selection.is-on { opacity: 1; }
+
+.card-selection i {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border: 1.5px solid #e8505b;
+  border-radius: 1px;
+}
+
+.card-selection i:nth-child(1) { left: -5px; top: -5px; }
+.card-selection i:nth-child(2) { right: -5px; top: -5px; }
+.card-selection i:nth-child(3) { left: -5px; bottom: -5px; }
+.card-selection i:nth-child(4) { right: -5px; bottom: -5px; }
+
+.card-selection span {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  transform: translateX(-50%);
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: #e8505b;
+  color: #fff;
+  font: 500 10px/1 ui-monospace, "SF Mono", Menlo, monospace;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-bg-img, .card-mini img, .card-photo img { translate: none; }
 }
 
 .card.is-disabled,

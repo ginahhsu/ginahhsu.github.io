@@ -22,27 +22,90 @@ if (bgGrid) {
   window.addEventListener('resize', sizeGrid);
 }
 
-// Subtle tilt/lift on card hover.
-document.querySelectorAll('a.card').forEach((card) => {
-  card.addEventListener('mousemove', (e) => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const rotateX = ((y / rect.height) - 0.5) * -4;
-    const rotateY = ((x / rect.width) - 0.5) * 4;
-    card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-3px)`;
+// Card hover + linked intro (desktop pointers only).
+//
+// Hovering a card "selects" it like a frame in Figma - a coral box with
+// corner handles and a "name · W × H" label - dims the rest of the grid,
+// and lights up the intro sentence about it in the sticky panel. Hovering
+// an intro sentence does the same in reverse. Sentences are tied to cards
+// by data-work="ultrabasic" <-> href="./ultrabasic.html", so there's no
+// second list to keep in sync.
+const cards = [...document.querySelectorAll('a.card')];
+const masonry = document.querySelector('.masonry');
+const intro = document.querySelector('.panel-intro');
+const sentences = intro ? [...intro.querySelectorAll('[data-work]')] : [];
+const workOf = (card) => (card.getAttribute('href') || '').replace(/^\.\//, '').replace(/\.html$/, '');
+
+if (masonry && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  const boxes = [];
+  const boxFor = (i) => {
+    if (!boxes[i]) {
+      const box = document.createElement('div');
+      box.className = 'card-selection';
+      box.setAttribute('aria-hidden', 'true');
+      box.innerHTML = '<i></i><i></i><i></i><i></i><span></span>';
+      document.body.appendChild(box);
+      boxes[i] = box;
+    }
+    return boxes[i];
+  };
+
+  let lit = [];
+  let frame = 0;
+
+  // Re-measured every frame while something is lit: the card lifts on
+  // hover and the page can scroll underneath, so a one-off position drifts.
+  const place = () => {
+    lit.forEach((card, i) => {
+      const r = card.getBoundingClientRect();
+      const box = boxFor(i);
+      Object.assign(box.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
+      const name = card.querySelector('.card-btn')?.textContent.trim() || '';
+      box.lastChild.textContent = `${name} · ${Math.round(r.width)} × ${Math.round(r.height)}`;
+      box.classList.add('is-on');
+    });
+    boxes.slice(lit.length).forEach((box) => box.classList.remove('is-on'));
+    frame = lit.length ? requestAnimationFrame(place) : 0;
+  };
+
+  const light = (works) => {
+    lit = cards.filter((card) => works.includes(workOf(card)) && !card.classList.contains('is-disabled'));
+    masonry.classList.toggle('is-linked', lit.length > 0);
+    cards.forEach((card) => card.classList.toggle('is-lit', lit.includes(card)));
+    const spot = sentences.some((s) => works.includes(s.dataset.work));
+    intro?.classList.toggle('is-spot', spot);
+    sentences.forEach((s) => s.classList.toggle('is-on', works.includes(s.dataset.work)));
+    if (lit.length && !frame) frame = requestAnimationFrame(place);
+    if (!lit.length) place();
+  };
+
+  cards.forEach((card) => {
+    card.addEventListener('mouseenter', () => light([workOf(card)]));
+    card.addEventListener('mouseleave', () => {
+      card.style.removeProperty('--px');
+      card.style.removeProperty('--py');
+      light([]);
+    });
+    // Image drift: -1..1 from the card's centre, scaled in CSS.
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--px', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
+      card.style.setProperty('--py', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
+    });
+    // Settle before navigating, so the view transition captures the card
+    // at rest rather than mid-drift.
+    card.addEventListener('click', () => {
+      card.style.removeProperty('--px');
+      card.style.removeProperty('--py');
+      light([]);
+    });
   });
 
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
+  sentences.forEach((sentence) => {
+    sentence.addEventListener('mouseenter', () => light(sentence.dataset.work.split(/\s+/)));
+    sentence.addEventListener('mouseleave', () => light([]));
   });
-
-  // Clear the hover tilt before navigating away, so a cross-document view
-  // transition captures the card flat rather than mid-tilt.
-  card.addEventListener('click', () => {
-    card.style.transform = '';
-  });
-});
+}
 
 // Highlights card: auto-advancing, one full attribute at a time, crossfading in place.
 // A single fixed-height box swaps its text content on each tick - sized to fit every

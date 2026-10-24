@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gina Hsu — Product Designer</title>
-<link rel="stylesheet" href="styles.css?v=20261024">
+<link rel="stylesheet" href="styles.css?v=20261024-hover">
 <link rel="stylesheet" href="site-nav.css?v=20261024">
 </head>
 <body>
@@ -27,6 +27,10 @@
     <div class="panel-inner">
       <p class="panel-hello">Hey, I&rsquo;m Gina!</p>
       <h1 class="panel-tagline" data-measure data-note="The one line I&#x27;d want you to remember. Line breaks are balanced so it reads as a statement, not a paragraph that ran out of room.">A Product Designer who makes complex products feel simple, from Figma to&nbsp;code.</h1>
+      <!-- Each data-work names the case study page it's about (ultrabasic ->
+           ultrabasic.html). script.js ties hovering a sentence to its card
+           and back. Retag a sentence by changing its data-work. -->
+      <p class="panel-intro" data-note="Each project sentence is wired to its card. Hover one and the work it describes lights up on the right, and hovering a card lights its sentence back up here. The intro doubles as a table of contents."><span class="intro-key">I lead e-commerce design at WestJet, from booking to loyalty.</span> <span data-work="ultrabasic">I designed the launch of two new product offerings in six months,</span> <span data-work="seatselection">and I&rsquo;m now unifying three seat selection flows into one.</span> <span data-work="turntool">I&rsquo;ve also designed dashboards that track airplane arrivals and departures</span> <span data-work="spacecentre">and a brand and design system for the H.R.&nbsp;MacMillan Space Centre.</span> <span data-work="designingwithai">Lately I design in code, too: I built this site with Claude&nbsp;Code.</span></p>
       <p class="panel-links">
         <a href="https://www.linkedin.com/in/ginahueihsu/" target="_blank" rel="noopener">LinkedIn</a>
         <span>/</span>
@@ -48,7 +52,7 @@
 
       <div class="col" data-grid-col>
 
-        <a class="card card-teal" href="./ultrabasic.html" data-category="projects" data-note="Cards lean slightly toward your cursor, then grow into the case study when you click. The curve starts fast and settles without a bounce, the way Apple&#x27;s card expands do.">
+        <a class="card card-teal" href="./ultrabasic.html" data-category="projects" data-note="Hover selects the card like a frame in Figma, size and all, and lights up the sentence about it on the left. The image drifts a little with your cursor; the rest of the grid steps back.">
           <div class="card-glass"></div>
           <div class="card-top">
             <p class="card-label">Product Strategy &bull; Team Leadership &bull; E-commerce</p>
@@ -146,7 +150,7 @@
 </div>
 
 <script src="https://makegradient.com/embed.js"></script>
-<script src="script.js?v=20261024"></script>
+<script src="script.js?v=20261024-hover"></script>
 <script src="site-nav.js?v=20261024"></script>
 <script src="thinking.js?v=20261024"></script>
 </body>

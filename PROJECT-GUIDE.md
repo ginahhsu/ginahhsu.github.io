@@ -135,7 +135,7 @@ The pink ruled-grid pattern behind the landing page cards is a real element (`<d
 
 ### 3.1 Sticky panel (`.sticky-panel`)
 
-Fixed-width bio/nav column, sticky on desktop, stacks to a normal-flow block above content under 960px. Contains greeting (`.panel-hello`), tagline (`.panel-tagline`, the only real `<h1>` on the landing page), and contact links (`.panel-links`). The scalloped edge is a repeating radial-gradient mask (`.sticky-panel::after`), not an image.
+Fixed-width bio/nav column, sticky on desktop, stacks to a normal-flow block above content under 960px. Contains greeting (`.panel-hello`), tagline (`.panel-tagline`, the only real `<h1>` on the landing page), the linked intro (`.panel-intro`, see §4.7), and contact links (`.panel-links`). On desktop screens under 860px tall it tightens, and if it still doesn't fit, `.panel-inner` scrolls on its own rather than clipping. The scalloped edge is a repeating radial-gradient mask (`.sticky-panel::after`), not an image.
 
 ### 3.2 Tab filter (`.tabs` / `.tab`)
 
@@ -275,6 +275,15 @@ Press `T` (or flip the switch) to overlay layout reasoning: column bands with la
 
 Homepage only, by choice: `thinking.js` is loaded on `index.html` alone, and case studies carry none of these attributes — they stay clean reading pages. The switch sits in the sticky panel; its on/off state is stored in `localStorage`.
 
+### 4.7 Linked intro + card hover (`script.js`)
+
+Borrowed from karyll.com. Each project sentence in `.panel-intro` carries `data-work="<page>"` matching a card's `href` (`data-work="ultrabasic"` ↔ `href="./ultrabasic.html"`), so there's no second list to keep in sync. On desktop pointers only:
+
+- **Hover a card:** a coral Figma-style selection box with corner handles and a `name · W × H` label (name from the card's `.card-btn`), the rest of the grid fades to 50%, the title turns coral, the image drifts against the cursor, and that card's sentence lights up in the panel.
+- **Hover a sentence:** the same selection on its card. A sentence can name several pages, space-separated.
+
+Cards the filter has dimmed (`.is-disabled`) are never selected. The selection box is its own fixed element (`.card-selection`) so it isn't clipped by the card's `overflow: hidden`. This replaced the old 3D hover tilt — a selection box around a tilted card never lines up.
+
 ---
 
 ## 5. Content & voice
@@ -314,7 +323,7 @@ index.html              Landing page — hero panel, tab filter, masonry card gr
 styles.css                Landing-page styling
 case-study.css             Case-study-page styling, shared by every case study
 case-study-template.html  Starting scaffold for a new case study (not linked from the site)
-script.js                  Card hover tilt, highlights carousel, tab filter + reorder, bg-grid sizing
+script.js                  Card hover selection + linked intro, highlights carousel, tab filter + reorder, bg-grid sizing
 toc.js                      Shared scroll-spy table of contents, included on every case study page
 site-nav.js / site-nav.css  Prev/page/next pill (every page) + "Show the thinking" styles
 Edit site.command           Double-click to start the local browser editor (§6.6)
